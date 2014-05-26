@@ -37,31 +37,17 @@ class step {
     //_motion = _timeline.call(this, "init", 0);
     
     _motion = _timeline.call(this, "uno", 1);
-    _motion.addEventListener(new CallbackEventListener());
    
     _tween = new Tween(this, "uno", -width, width, 100).onBegin(this, "onUnoBegin").onEnd(this, "onUnoEnd").onChange(this, "onUnoChange");
     _tween.addEventListener(new TweenEventListener());
 
     _motion = _timeline.call(this, "dos", 2);
-    _motion.addEventListener(new CallbackEventListener());
-    
-    _motion = _timeline.call(this, "tres", 3);
-    _motion.addEventListener(new CallbackEventListener());
-    
+    _motion = _timeline.call(this, "tres", 3);   
     _motion = _timeline.call(this, "cuatro", 4);
-    _motion.addEventListener(new CallbackEventListener());
-    
     _motion = _timeline.call(this, "cinco", 5);
-    _motion.addEventListener(new CallbackEventListener());
-    
     _motion = _timeline.call(this, "seis", 6);
-    _motion.addEventListener(new CallbackEventListener());
-    
     _motion = _timeline.call(this, "siete", 7);
-    _motion.addEventListener(new CallbackEventListener());
-    
     _motion = _timeline.call(this, "ocho", 8);
-    _motion.addEventListener(new CallbackEventListener());
     
     //_motion = _timeline.call(this, "done", 9);
  

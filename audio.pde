@@ -102,6 +102,7 @@ class audio {
   }
 
   void close() {
+    _player.removeListener(_visuals[0]);
     _player.close();
     _out.close();
     _input.close();

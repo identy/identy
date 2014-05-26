@@ -213,3 +213,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+data/__theme.mp3
+data/_theme.mp3

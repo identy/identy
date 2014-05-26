@@ -1,4 +1,12 @@
-
+                                                      
+ //  Music Visualizer                                        
+ //                                                          
+ //  a quick sketch to do WimAmp-style music visualization   
+ //  using Processing and the Minim Library ...              
+ //                                                          
+ //  (c) Martin Schneider 2009                               
+ //                                                          
+ 
 import ddf.minim.analysis.*;
 
 abstract class AudioRenderer implements AudioListener {

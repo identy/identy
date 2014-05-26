@@ -44,6 +44,7 @@ class driver {
         //this._arduino.digitalWrite(relay, Arduino.LOW);
         //this._arduinoRelay[relay - 2] = Arduino.LOW;
       }
+      this._arduino.pinMode(13, Arduino.SERVO);
     }
     catch (Exception e) {
       e.printStackTrace();
@@ -80,17 +81,18 @@ class driver {
 
     this._arduino.digitalWrite(relay + 1, Arduino.HIGH);
     this._arduinoRelay[relay - 1] = Arduino.HIGH;
-
-    _gui._particles[relay - 1].update();
       
   }
 
+  void servo(int value) {
+    this._arduino.servoWrite(13, value);
+  }
+  
   void write(int relay, boolean state) {
     
     this._arduino.digitalWrite(relay + 1, state ? Arduino.HIGH : Arduino.LOW);
     this._arduinoRelay[relay - 1] = state ? Arduino.HIGH : Arduino.LOW;
     
-    //_gui._particles[relay - 1].update();
   }
     
 }
@@ -101,4 +103,3 @@ void digitalEvent(int pin, int value) {
 void analogEvent(int pin, int value) {
   println("Analog pin "+pin+" has new value "+value);
 }
-

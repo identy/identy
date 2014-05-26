@@ -41,13 +41,10 @@ class gui {
   private controlP5.CheckBox checkboxAudio;
   
   //controlP5.Knob audioVolume;
+  controlP5.Knob servoAngle;
   
   Println console;
-
-  particle[] _particles = {
-    null, null, null, null, null, null, null, null
-  };
-
+  
   private PApplet context;
     
   public gui(PApplet context) {
@@ -67,7 +64,7 @@ class gui {
     _gui.setColorLabel(0xffdddddd);
     _gui.setColorValue(0xffff88ff);
     _gui.setColorActive(0xffff0000);
-
+    
   }
 
   void setup() {
@@ -210,6 +207,25 @@ class gui {
       toggle.getCaptionLabel().toUpperCase(false);
     }
 
+    servoAngle = _gui.addKnob("servoAngle")
+      .setBroadcast(false)
+      .moveTo(_groupSystem)
+      .setRange(0, 180)
+      .setValue(20)
+      .setPosition(500, 420)
+      .setRadius(30)
+      .setNumberOfTickMarks(8)
+      .setTickMarkLength(5)
+      .snapToTickMarks(true)
+      .setBroadcast(true)
+      .setColorForeground(color(255))
+      .setColorBackground(color(0, 160, 100))
+      .setColorActive(color(255, 255, 0))
+      .setDragDirection(Knob.HORIZONTAL);
+
+    servoAngle.captionLabel().set("angle ");
+    servoAngle.captionLabel().toUpperCase(false);
+
 //    audioVolume = _gui.addKnob("audioVolume")
 //      .setBroadcast(false)
 //      .moveTo(_groupSystem)
@@ -238,10 +254,6 @@ class gui {
     
     _gui.getTooltip().setDelay(500);
     _gui.getTooltip().register("toggleSystem", "System manager.");
-
-    for (int index = 0; index <= 7; index++) {
-      _particles[index] = new particle(new PVector(cos(random(-PI, PI)) * random(100, 150), sin(random(-PI, PI)) * random(100, 150)));      
-    }
   
   }
 
@@ -264,15 +276,7 @@ class gui {
     if (this.vertexDebug())
       _audio.draw(0);
     popMatrix();
-    
-    pushMatrix();   
-    translate(width/2, height/2);
-    if (relayDebug())
-      for (int index = 0; index <= 7; index++) {
-        _particles[index].draw();
-      }
-    popMatrix();
-
+      
     //_gui.show();
     //_gui.draw();
               
@@ -310,6 +314,9 @@ class gui {
 //        if (_event.isFrom(audioVolume)) 
 //          if (_event.getName() == "audioVolume") audioVolume(value);
           
+        if (_event.isFrom(servoAngle)) 
+          if (_event.getName() == "servoAngle") servoAngle(value);
+
         if (_event.getName() == "toggleSystem") toggleSystem();
         
         break;
@@ -343,7 +350,7 @@ class gui {
       _step.stop();
       sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
     }
-    if (this.muteDebug()) this.audioVolume(-20);
+    if (this.muteDebug()) this.audioVolume(-255);
   }
   
   boolean replayDebug() {
@@ -363,6 +370,10 @@ class gui {
   
   void audioVolume(int value) {
     _audio.volume(value);
+  }
+
+  void servoAngle(int value) {
+    _driver.servo(value);
   }
 
   void heading(String name, String caption, int x, int y, int width, int height) {

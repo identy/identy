@@ -10,19 +10,25 @@
 import ddf.minim.analysis.*;
 
 abstract class AudioRenderer implements AudioListener {
+  
   float[] left;
   float[] right;
-  public synchronized void samples(float[] samp) { left = samp; }
-  public synchronized void samples(float[] sampL, float[] sampR) { left = sampL; right = sampR; }
+  
+  public synchronized void samples(float[] sample) { left = sample; }
+  public synchronized void samples(float[] sampleLeft, float[] sampleRight) { left = sampleLeft; right = sampleRight; }
+  
   abstract void setup();
-  abstract void draw(); 
+  abstract void draw();
+  
 }
 
 abstract class FourierRenderer extends AudioRenderer {
+  
   FFT fft; 
   float maxFFT;
   float[] leftFFT;
   float[] rightFFT;
+  
   FourierRenderer(AudioSource source) {
     float gain = .125;
     fft = new FFT(source.bufferSize(), source.sampleRate());
@@ -120,7 +126,6 @@ class VortexRenderer extends FourierRenderer {
 
   void setup() {
     //colorMode(HSB, n, n, n);
-    
     //rectMode(CORNERS);
     //noStroke();     
   }

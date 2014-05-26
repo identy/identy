@@ -24,35 +24,28 @@ void setup() {
   //size(800, 600, P2D) colorMode(HSB) frameRate(30);
 
   size(800, 600, P3D);
-  H.init(this).background(#202020).autoClear(false);  
-  smooth();
   
-  //ambientLight(102, 102, 102);
+  H.init(this).background(#202020).autoClear(true);
   
-  lights();
-  rectMode(RADIUS);
-
   _driver = new driver(this);
   _driver.setup();
-
+  
   _audio = new audio(this);
   _audio.setup("___theme.mp3");
-  //_audio.play();
-
+    
   _step = new step(this);
   _step.setup();
-  //_step.play();
-
+  
   _gui = new gui(this);
   _gui.setup();
-
+    
 }
 
 void draw() {
-      
+  
   _gui.set();
   _gui.draw();
-    
+  
 }
 
 void stop() {

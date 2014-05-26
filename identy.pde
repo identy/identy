@@ -36,7 +36,7 @@ void setup() {
   _driver.setup();
 
   _audio = new audio(this);
-  _audio.setup("__theme.mp3");
+  _audio.setup("___theme.mp3");
   //_audio.play();
 
   _step = new step(this);

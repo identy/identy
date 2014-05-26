@@ -36,7 +36,7 @@ class gui {
 
   controlP5.Button sequencePlay;
   
-  controlP5.CheckBox checkboxLoop;
+  controlP5.CheckBox checkboxReplay;
   controlP5.CheckBox checkboxRelay;
   controlP5.CheckBox checkboxAudio;
   
@@ -155,7 +155,7 @@ class gui {
       .setBroadcast(true)
       .updateSize();
 
-    checkboxLoop = _gui.addCheckBox("checkboxLoop")
+    checkboxReplay = _gui.addCheckBox("checkboxReplay")
       .setPosition(86, 480)
       .setColorForeground(color(120))
       .setColorActive(color(255))
@@ -165,11 +165,11 @@ class gui {
       .setSpacingColumn(64)
       .setSpacingRow(20)
       .moveTo(_groupSystem)
-      .addItem("loop", 0);
+      .addItem("replay", 0);
        
-    //checkboxLoop.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
+    //checkboxReplay.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
     
-    for(Toggle toggle:checkboxLoop.getItems()) {
+    for(Toggle toggle:checkboxReplay.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
     }
 
@@ -183,7 +183,7 @@ class gui {
       .setSpacingColumn(64)
       .setSpacingRow(20)
       .moveTo(_groupSystem)
-      .addItem("vertex Display", 0);
+      .addItem("vertex", 0);
       
     //checkboxAudio.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
     
@@ -201,7 +201,7 @@ class gui {
       .setSpacingColumn(84)
       .setSpacingRow(20)
       .moveTo(_groupSystem)
-      .addItem("relay Display", 0);
+      .addItem("relay", 0);
 
     //checkboxDebug.setImages(loadImage("check_box_normal.png"), loadImage("check_box_selected.png"), loadImage("check_box_normal.png"));
     
@@ -260,13 +260,13 @@ class gui {
     //rotate(frameCount*0.001);
 
     pushMatrix();
-    if (this.vertexDisplayDebug())
+    if (this.vertexDebug())
       _audio.draw(0);
     popMatrix();
     
     pushMatrix();   
     translate(width/2, height/2);
-    if (relayDisplayDebug())
+    if (relayDebug())
       for (int index = 0; index <= 7; index++) {
         _particles[index].draw();
       }
@@ -327,7 +327,7 @@ class gui {
 
   void sequencePlay() {
     if (!_audio.isPlaying()) {
-      if (loopDebug()) {
+      if (replayDebug()) {
         _audio.loop();
         _step.loop();
       }
@@ -344,13 +344,13 @@ class gui {
     }
   }
   
-  boolean loopDebug() {
-    return checkboxLoop.getItem(0).getState();
+  boolean replayDebug() {
+    return checkboxReplay.getItem(0).getState();
   }
-  boolean vertexDisplayDebug() {
+  boolean vertexDebug() {
     return checkboxAudio.getItem(0).getState();
   } 
-  boolean relayDisplayDebug() {
+  boolean relayDebug() {
     return checkboxRelay.getItem(0).getState();
   }
   

@@ -71,7 +71,7 @@ class step {
       .onBegin(new ICallback() {
         public void run(Object t) {
           println(t+" begin");
-          //_driver.write(11, true);
+          _driver.write(11, true);
         }
       })
       .onEnd(new ICallback() {
@@ -92,7 +92,7 @@ class step {
       .onBegin(new ICallback() {
         public void run(Object t) {
           println(t+" begin");
-          //_driver.write(11, false);
+          _driver.write(11, false);
         }
       })
       .onEnd(new ICallback() {

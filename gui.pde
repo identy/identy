@@ -72,7 +72,7 @@ class gui {
 
   void setup() {
                 
-    _buttonSystem = _gui.addButton("toggleSystem", 1, 1, 1, 100, 18);
+    _buttonSystem = _gui.addButton("toggleSystem", 1, 1, 1, 100, 20);
     //_buttonSystem.setLabel("System");
     _buttonSystem.getCaptionLabel().set("System ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
@@ -109,7 +109,7 @@ class gui {
     _listArduinoPort.setValue(0);
     //_listArduinoPort.setBroadcast(true);
     
-    for (int index = 1; index <= 8; index++) {
+    for (int index = 1; index <= 7; index++) {
       Toggle toggleRelay = _gui.addToggle("toggleRelay" + index)
         .setBroadcast(false)
         .setId(index)
@@ -216,9 +216,9 @@ class gui {
       .setRange(0, 180)
       .setValue(20)
       .setPosition(500, 420)
-      .setRadius(30)
-      .setNumberOfTickMarks(8)
-      .setTickMarkLength(5)
+      .setRadius(36)
+      .setNumberOfTickMarks(9)
+      .setTickMarkLength(6)
       .snapToTickMarks(true)
       .setBroadcast(true)
       .setColorForeground(color(255))
@@ -248,7 +248,7 @@ class gui {
 //    audioVolume.captionLabel().set("volume ");
 //    audioVolume.captionLabel().toUpperCase(false);
     
-    _buttonDebug = _gui.addButton("toggleDebug", 1, 1, height - 22, 100, 18);
+    _buttonDebug = _gui.addButton("toggleDebug", 1, 1, height - 22, 100, 20);
     //_buttonDebug.setLabel("System");
     _buttonDebug.getCaptionLabel().set("Debug ");
     _buttonDebug.getCaptionLabel().align(LEFT,CENTER);
@@ -257,7 +257,7 @@ class gui {
     
     _groupDebug = _gui.addGroup("groupDebug", 1, 2, height - 82);
     _groupDebug.setBackgroundHeight(82);
-    _groupDebug.setBackgroundColor(color(0, 100));
+    //_groupDebug.setBackgroundColor(color(0, 100));
     _groupDebug.activateEvent(true);
     _groupDebug.hideBar();
     _groupDebug.hide();
@@ -270,14 +270,15 @@ class gui {
       .setLineHeight(14)
       .bringToFront());
     
-    _gui.getTooltip().setDelay(500);
-    _gui.getTooltip().register("toggleSystem", "System manager.");
+    _gui.getTooltip().setDelay(300);
+    _gui.getTooltip().register("toggleSystem", "system define");
+    _gui.getTooltip().register("toggleDebug", "debug console");
   
   }
 
   void set() {
 
-    for (int relay = 0; relay <= 7; relay++) {
+    for (int relay = 0; relay <= 6; relay++) {
       ((Toggle)(_gui.getController("toggleRelay" + (relay + 1)))).setState(_driver._arduinoRelay[relay] == Arduino.LOW);
     }
   
@@ -290,10 +291,9 @@ class gui {
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
     //rotate(frameCount*0.001);
 
-    pushMatrix();
-    if (this.vertexDebug())
-      _audio.draw(0);
-    popMatrix();
+    //pushMatrix();
+    if (this.vertexDebug()) _audio.draw(0);
+    //popMatrix();
       
     //_gui.show();
     //_gui.draw();
@@ -316,6 +316,7 @@ class gui {
 //        if (_event.isGroup()) {
 //          println(_event.getGroup().getName() + ".");
 //        }
+
         break;
       case CONTROLLER:
         controlP5.Controller _controller = _event.getController();
@@ -335,8 +336,9 @@ class gui {
         if (_event.isFrom(servoAngle)) 
           if (_event.getName() == "servoAngle") this.servoAngle(value);
 
-        if (_event.getName() == "toggleSystem") this.toggleSystem();
         if (_event.getName() == "toggleDebug") this.toggleDebug();
+        
+        if (_event.getName() == "toggleSystem") this.toggleSystem();
         
         break;
     }
@@ -392,7 +394,7 @@ class gui {
     return checkboxAudio.getItem(1).getState();
   }
   
-  boolean relayDebug() {
+  boolean consoleDebug() {
     return checkboxRelay.getItem(0).getState();
   }
   
@@ -480,7 +482,7 @@ class relayRangeListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
     if (_event.isController()) {
       
-      println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
+      if (_gui.consoleDebug()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
       
       //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
       _step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));

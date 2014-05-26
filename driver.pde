@@ -39,12 +39,13 @@ class driver {
 
   void setup() {
     try {
-      for (int relay = 2; relay <= 9; relay++) {
+      for (int relay = 2; relay <= 8; relay++) {
         this._arduino.pinMode(relay, Arduino.OUTPUT);
         //this._arduino.digitalWrite(relay, Arduino.LOW);
         //this._arduinoRelay[relay - 2] = Arduino.LOW;
       }
-      this._arduino.pinMode(13, Arduino.SERVO);
+      this._arduino.pinMode(12, Arduino.OUTPUT);
+      this._arduino.pinMode(12, Arduino.SERVO);
     }
     catch (Exception e) {
       e.printStackTrace();
@@ -69,7 +70,7 @@ class driver {
   }
       
   void reset() {
-    for (int relay = 2; relay <= 9; relay++) {
+    for (int relay = 2; relay <= 8; relay++) {
       this._arduino.digitalWrite(relay, Arduino.LOW);
       this._arduinoRelay[relay - 2] = Arduino.LOW;
     }
@@ -85,7 +86,7 @@ class driver {
   }
 
   void servo(int value) {
-    this._arduino.servoWrite(13, value);
+    this._arduino.servoWrite(12, value);
   }
   
   void write(int relay, boolean state) {

@@ -138,7 +138,7 @@ class VortexRenderer extends FourierRenderer {
       float dx = width / n;
       float dy = height / n * .5;
       super.calc(n);
-
+      pushMatrix();
       //background(0); 
       //lights();
       translate(width/2, height, -width/2);
@@ -161,6 +161,7 @@ class VortexRenderer extends FourierRenderer {
           box(dy, dx + y, dx + y);
         popMatrix();
       }
+      popMatrix();
     }
   }
 }

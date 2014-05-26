@@ -21,7 +21,7 @@ class driver {
   private PApplet context;
   
   int[] _arduinoRelay = { 
-    Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW
+    Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW
   };
 
   public driver(PApplet context) {
@@ -41,8 +41,8 @@ class driver {
     try {
       for (int relay = 2; relay <= 9; relay++) {
         this._arduino.pinMode(relay, Arduino.OUTPUT);
-        this._arduino.digitalWrite(relay, Arduino.LOW);
-        this._arduinoRelay[relay - 2] = Arduino.LOW;
+        //this._arduino.digitalWrite(relay, Arduino.LOW);
+        //this._arduinoRelay[relay - 2] = Arduino.LOW;
       }
     }
     catch (Exception e) {
@@ -87,17 +87,18 @@ class driver {
 
   void write(int relay, boolean state) {
     
-    //this._arduino.digitalWrite(relay + 1, state ? Arduino.HIGH : Arduino.LOW);
-    //this._arduinoRelay[relay - 1] = state ? Arduino.HIGH : Arduino.LOW;
+    this._arduino.digitalWrite(relay + 1, state ? Arduino.HIGH : Arduino.LOW);
+    this._arduinoRelay[relay - 1] = state ? Arduino.HIGH : Arduino.LOW;
     
     //_gui._particles[relay - 1].update();
   }
     
-  void digitalEvent(int pin, int value) {
-    println("Digital pin "+pin+" has new value "+value);}
-  
-  void analogEvent(int pin, int value) {
-    println("Analog pin "+pin+" has new value "+value);
-  }
-
 }
+
+void digitalEvent(int pin, int value) {
+  println("Digital pin "+pin+" has new value "+value);}
+
+void analogEvent(int pin, int value) {
+  println("Analog pin "+pin+" has new value "+value);
+}
+

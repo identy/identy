@@ -18,27 +18,27 @@ class gui {
   final static int CONTROLLER = 0, TAB = 1, GROUP = 2;
   
   //color backgroundColor = color(4, 79, 111);
-  color backgroundColor = color(0, 0, 0);
-  color strokeColor = color(84, 145, 158);
+  private color backgroundColor = color(0, 0, 0);
+  private color strokeColor = color(84, 145, 158);
   
-  color activeColor = color(#818181);
-  color textColor = color(84, 145, 158);
+  private color activeColor = color(#818181);
+  private color textColor = color(84, 145, 158);
 
-  color relayoffColor = color(4, 79, 111);
-  color relayonColor = color(84, 145, 158);
+  private color relayoffColor = color(4, 79, 111);
+  private color relayonColor = color(84, 145, 158);
 
-  controlP5.ControlP5 _gui;
+  private controlP5.ControlP5 _gui;
 
-  controlP5.Button _buttonSystem;
-  controlP5.ControlGroup _groupSystem;
+  private controlP5.Button _buttonSystem;
+  private controlP5.ControlGroup _groupSystem;
 
-  controlP5.ListBox _listArduinoPort;
+  private controlP5.ListBox _listArduinoPort;
 
-  controlP5.Button sequencePlay;
+  private controlP5.Button sequencePlay;
   
-  controlP5.CheckBox checkboxReplay;
-  controlP5.CheckBox checkboxRelay;
-  controlP5.CheckBox checkboxAudio;
+  private controlP5.CheckBox checkboxReplay;
+  private controlP5.CheckBox checkboxRelay;
+  private controlP5.CheckBox checkboxAudio;
   
   //controlP5.Knob audioVolume;
   
@@ -156,7 +156,7 @@ class gui {
       .updateSize();
 
     checkboxReplay = _gui.addCheckBox("checkboxReplay")
-      .setPosition(86, 480)
+      .setPosition(86, 460)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -174,7 +174,7 @@ class gui {
     }
 
     checkboxAudio = _gui.addCheckBox("checkboxAudio")
-      .setPosition(160, 480)
+      .setPosition(86, 480)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -183,7 +183,8 @@ class gui {
       .setSpacingColumn(64)
       .setSpacingRow(20)
       .moveTo(_groupSystem)
-      .addItem("vertex", 0);
+      .addItem("mute", 0)
+      .addItem("vertex", 1);
       
     //checkboxAudio.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
     
@@ -192,7 +193,7 @@ class gui {
     }
 
     checkboxRelay = _gui.addCheckBox("checkboxRelay")
-      .setPosition(260, 480)
+      .setPosition(86, 440)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -342,14 +343,20 @@ class gui {
       _step.stop();
       sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
     }
+    if (this.muteDebug()) this.audioVolume(-20);
   }
   
   boolean replayDebug() {
     return checkboxReplay.getItem(0).getState();
   }
-  boolean vertexDebug() {
+  
+  boolean muteDebug() {
     return checkboxAudio.getItem(0).getState();
   } 
+  boolean vertexDebug() {
+    return checkboxAudio.getItem(1).getState();
+  }
+  
   boolean relayDebug() {
     return checkboxRelay.getItem(0).getState();
   }

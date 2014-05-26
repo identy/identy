@@ -20,12 +20,10 @@ audio _audio;
 step _step;
 
 void setup() {
-  
-  //size(800, 600, P2D) colorMode(HSB) frameRate(30);
 
-  size(800, 600, P3D);
-  
-  H.init(this).background(#202020).autoClear(true);
+  size(800, 600, P3D);  
+  //size(800, 600, P2D) colorMode(HSB) frameRate(30);
+  background(#000000);
   
   _driver = new driver(this);
   _driver.setup();
@@ -38,7 +36,9 @@ void setup() {
   
   _gui = new gui(this);
   _gui.setup();
-    
+
+  H.init(this).background(#202020).autoClear(true);
+  
 }
 
 void draw() {

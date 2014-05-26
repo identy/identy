@@ -42,6 +42,9 @@ class gui {
   
   //controlP5.Knob audioVolume;
   controlP5.Knob servoAngle;
+
+  private controlP5.Button _buttonDebug;
+  private controlP5.ControlGroup _groupDebug;
   
   Println console;
   
@@ -147,13 +150,31 @@ class gui {
       .setBroadcast(false)
       .moveTo(_groupSystem)
       .setValue(128)
-      .setPosition(20, 440)
+      .setPosition(20, 420)
       .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
       .setBroadcast(true)
       .updateSize();
 
+    checkboxRelay = _gui.addCheckBox("checkboxRelay")
+      .setPosition(86, 420)
+      .setColorForeground(color(120))
+      .setColorActive(color(255))
+      .setColorLabel(color(255))
+      .setSize(10, 10)
+      .setItemsPerRow(5)
+      .setSpacingColumn(84)
+      .setSpacingRow(20)
+      .moveTo(_groupSystem)
+      .addItem("relay", 0);
+
+    //checkboxDebug.setImages(loadImage("check_box_normal.png"), loadImage("check_box_selected.png"), loadImage("check_box_normal.png"));
+    
+    for(Toggle toggle:checkboxRelay.getItems()) {
+      toggle.getCaptionLabel().toUpperCase(false);
+    }
+
     checkboxReplay = _gui.addCheckBox("checkboxReplay")
-      .setPosition(86, 460)
+      .setPosition(86, 440)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -171,7 +192,7 @@ class gui {
     }
 
     checkboxAudio = _gui.addCheckBox("checkboxAudio")
-      .setPosition(86, 480)
+      .setPosition(86, 460)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -186,24 +207,6 @@ class gui {
     //checkboxAudio.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
     
     for(Toggle toggle:checkboxAudio.getItems()) {
-      toggle.getCaptionLabel().toUpperCase(false);
-    }
-
-    checkboxRelay = _gui.addCheckBox("checkboxRelay")
-      .setPosition(86, 440)
-      .setColorForeground(color(120))
-      .setColorActive(color(255))
-      .setColorLabel(color(255))
-      .setSize(10, 10)
-      .setItemsPerRow(5)
-      .setSpacingColumn(84)
-      .setSpacingRow(20)
-      .moveTo(_groupSystem)
-      .addItem("relay", 0);
-
-    //checkboxDebug.setImages(loadImage("check_box_normal.png"), loadImage("check_box_selected.png"), loadImage("check_box_normal.png"));
-    
-    for(Toggle toggle:checkboxRelay.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
     }
 
@@ -245,7 +248,22 @@ class gui {
 //    audioVolume.captionLabel().set("volume ");
 //    audioVolume.captionLabel().toUpperCase(false);
     
+    _buttonDebug = _gui.addButton("toggleDebug", 1, 1, height - 22, 100, 18);
+    //_buttonDebug.setLabel("System");
+    _buttonDebug.getCaptionLabel().set("Debug ");
+    _buttonDebug.getCaptionLabel().align(LEFT,CENTER);
+    _buttonDebug.getCaptionLabel().setLetterSpacing(2);
+    _buttonDebug.getCaptionLabel().toUpperCase(false);
+    
+    _groupDebug = _gui.addGroup("groupDebug", 1, 2, height - 82);
+    _groupDebug.setBackgroundHeight(82);
+    _groupDebug.setBackgroundColor(color(0, 100));
+    _groupDebug.activateEvent(true);
+    _groupDebug.hideBar();
+    _groupDebug.hide();
+
     console = _gui.addConsole(_gui.addTextarea("consoleTexter")
+      .moveTo(_groupDebug)
       .setPosition(2, height - 82)
       .setSize(width - 4, 80)
       .setFont(new ControlFont(createFont("Helvetica", 10, true)))
@@ -309,15 +327,16 @@ class gui {
 //        }
 
         if (_event.isFrom(sequencePlay))
-          if (_event.getName() == "sequencePlay") sequencePlay();
+          if (_event.getName() == "sequencePlay") this.sequencePlay();
           
 //        if (_event.isFrom(audioVolume)) 
-//          if (_event.getName() == "audioVolume") audioVolume(value);
+//          if (_event.getName() == "audioVolume") this.audioVolume(value);
           
         if (_event.isFrom(servoAngle)) 
-          if (_event.getName() == "servoAngle") servoAngle(value);
+          if (_event.getName() == "servoAngle") this.servoAngle(value);
 
-        if (_event.getName() == "toggleSystem") toggleSystem();
+        if (_event.getName() == "toggleSystem") this.toggleSystem();
+        if (_event.getName() == "toggleDebug") this.toggleDebug();
         
         break;
     }
@@ -333,6 +352,15 @@ class gui {
     }
   }
 
+  void toggleDebug() {
+    if (_groupDebug.isVisible()) {
+      _groupDebug.hide();
+    } 
+    else {
+      _groupDebug.show();
+    }
+  }
+  
   void sequencePlay() {
     if (!_audio.isPlaying()) {
       if (replayDebug()) {
@@ -415,6 +443,12 @@ void keyPressed() {
         _gui._gui.getGroup("groupSystem").hide();
       else 
         _gui._gui.getGroup("groupSystem").show();
+      break;
+    case 'd' | 'D':
+      if (_gui._gui.getGroup("groupDebug").isVisible()) 
+        _gui._gui.getGroup("groupDebug").hide();
+      else 
+        _gui._gui.getGroup("groupDebug").show();
       break;
   }
 }

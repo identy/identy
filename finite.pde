@@ -3,16 +3,9 @@
  *
  * finite state machine class
  *
- * copyright 2014 by identy [ www.identy.org ] 
+ * copyright 2014 identy [ www.identy.org ] 
  *
-
-   _  _(o)_(o)_  _
- ._\`:_ F S M _:' \_,
-     / (`---'\ `-.
-  ,-`  _)    (_, 
- 
- (not the Flying Spaghetti Monster, but ...)
- 
+  
  A simple Finite State Machine library for Processing!
  
  Based on the AlphaBeta FSM library for Arduino: http://www.arduino.cc/playground/Code/FiniteStateMachine

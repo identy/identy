@@ -1,3 +1,14 @@
+
+/*
+ *
+ * HYPE class
+ *
+ * copyright 2014 identy [ www.identy.org ]
+ * copyright 2013 Joshua Davis & James Cruz
+ * copyright 2009-2010 Branden Hall & Joshua Davis 
+ *
+ */
+ 
 public static abstract class HBehavior extends HNode<HBehavior> { 
   protected HBehaviorRegistry _registry; 
   public HBehavior register() { 

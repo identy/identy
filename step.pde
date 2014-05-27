@@ -3,11 +3,10 @@
  *
  * time line class
  *
- * copyright 2014 by identy [ www.identy.org ] 
+ * copyright 2014 identy [ www.identy.org ] 
  *
  */
 
-// timeline
 import ijeoma.motion.*; 
 import ijeoma.motion.tween.*; 
 

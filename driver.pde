@@ -1,9 +1,11 @@
 
 /*
  *
- * arduino class
+ * driver class
  *
- * copyright 2014 by identy [ www.identy.org ] 
+ * arduino
+ *
+ * copyright 2014 identy [ www.identy.org ] 
  *
  */
 

@@ -1,4 +1,12 @@
 
+/*
+ *
+ * messague class
+ * 
+ * copyright 2014 identy [ www.identy.org ]
+ *
+ */
+ 
 class message {
 
   PGraphics messageLayer;

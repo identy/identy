@@ -1,11 +1,16 @@
-                                                      
- //  Music Visualizer                                        
- //                                                          
- //  a quick sketch to do WimAmp-style music visualization   
- //  using Processing and the Minim Library ...              
- //                                                          
- //  (c) Martin Schneider 2009                               
- //                                                          
+
+/*
+ *
+ * fourier class
+ *
+ * audio render & visualizer
+ * a quick sketch to do WimAmp-style music visualization   
+ * using Processing and the Minim Library
+ *
+ * copyright 2014 identy [ www.identy.org ]
+ * copyright 2009 Martin Schneider 
+ *
+ */
  
 import ddf.minim.analysis.*;
 

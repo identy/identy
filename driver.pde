@@ -97,7 +97,9 @@ class driver {
     this._arduinoRelay[relay - 1] = state ? Arduino.HIGH : Arduino.LOW;
     
   }
-    
+  
+  void read() {}
+  
 }
 
 void digitalEvent(int pin, int value) {

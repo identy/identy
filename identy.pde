@@ -9,9 +9,10 @@
  *
  */
 
-// driver :: arduino, serial
+// driver :: arduino
 driver _driver;
-
+// driver :: serial
+driver357 _driver357;
 // gui
 gui _gui;
 // audio
@@ -27,6 +28,9 @@ void setup() {
   
   _driver = new driver(this);
   _driver.setup();
+
+  _driver357 = new driver357(this);
+  _driver357.setup();
   
   _audio = new audio(this);
   _audio.setup("___theme.mp3");
@@ -42,6 +46,8 @@ void setup() {
 void draw() {
   
   _gui.set();
+  //_driver.read();
+  //_driver357.read();
   _gui.draw();
   
 }

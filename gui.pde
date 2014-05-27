@@ -32,12 +32,11 @@ class gui {
   private controlP5.ControlGroup _groupSystem;
 
   private controlP5.ListBox _listArduinoPort;
-
+  private controlP5.ListBox _listSerial357Port;
+  
   private controlP5.Button sequencePlay;
   
-  private controlP5.CheckBox checkboxReplay;
-  private controlP5.CheckBox checkboxRelay;
-  private controlP5.CheckBox checkboxAudio;
+  private controlP5.CheckBox checkboxDebugger;
   
   //controlP5.Knob audioVolume;
   controlP5.Knob servoAngle;
@@ -72,23 +71,20 @@ class gui {
   void setup() {
                 
     _buttonSystem = _gui.addButton("toggleSystem", 1, 1, 1, 100, 20);
-    //_buttonSystem.setLabel("System");
-    _buttonSystem.getCaptionLabel().set("System ");
+    _buttonSystem.getCaptionLabel().set("system ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
     _buttonSystem.getCaptionLabel().setLetterSpacing(2);
     _buttonSystem.getCaptionLabel().toUpperCase(false);
     
     _groupSystem = _gui.addGroup("groupSystem", 1, 22, 680);
-    _groupSystem.setBackgroundHeight(height - (22 * 2));
-    _groupSystem.setBackgroundColor(color(0, 100));
+    _groupSystem.setBackgroundHeight(height / 2);
+    _groupSystem.setBackgroundColor(color(17, 17, 17));
     _groupSystem.activateEvent(true);
     _groupSystem.hideBar();
     _groupSystem.hide();
 
-    _gui.addTextlabel("Port", "Connection", 20, 20)
+    _gui.addTextlabel("PortArduino", "arduino port", 20, 20)
       .moveTo(_groupSystem);
-
-    //_gui.printPublicMethodsFor(ListBox.class);
     
     _listArduinoPort = _gui.addListBox("arduinoPort", 20, 60, 200, 60);
     _listArduinoPort.setBarHeight(18);
@@ -103,18 +99,33 @@ class gui {
     }
    
     _listArduinoPort.addListener(new portListener());
+    //_listArduinoPort.setValue(0);
 
-    //_listArduinoPort.setBroadcast(false);
-    _listArduinoPort.setValue(0);
-    //_listArduinoPort.setBroadcast(true);
+    _gui.addTextlabel("Port357", "serial357 port", 240, 20)
+      .moveTo(_groupSystem);
+    
+    _listSerial357Port = _gui.addListBox("serial357Port", 240, 60, 200, 60);
+    _listSerial357Port.setBarHeight(18);
+    _listSerial357Port.moveTo(_groupSystem);
+    _listSerial357Port.toUpperCase(false);
+    _listSerial357Port.getCaptionLabel().set("port");
+    _listSerial357Port.actAsPulldownMenu(true);
+    _listSerial357Port.setItemHeight(20);
+    
+    for (int i = 0; i < _driver.list().length; i++) {
+      _listSerial357Port.addItem(_driver357.list()[i], i);
+    }
+   
+    _listSerial357Port.addListener(new port357Listener());
+    //_listSerial357Port.setValue(0);
     
     for (int index = 1; index <= 7; index++) {
+      
       Toggle toggleRelay = _gui.addToggle("toggleRelay" + index)
         .setBroadcast(false)
         .setId(index)
         .setPosition(20, 40 + (40 * index))
         .setSize(50, 20)
-        .moveTo(_groupSystem)
         .setValue(false)
         .setBroadcast(true)
         .setMode(ControlP5.SWITCH);
@@ -127,7 +138,6 @@ class gui {
       Range rangeRelay = _gui.addRange("rangeRelay" + index)
         .setBroadcast(false)
         .setId(index)
-        .moveTo(_groupSystem)
         .setPosition(110, 40 + (40 * index))
         .setSize(400, 20)
         .setHandleSize(20)
@@ -145,88 +155,41 @@ class gui {
       
     }
     
-    sequencePlay = _gui.addButton("sequencePlay")
-      .setBroadcast(false)
-      .moveTo(_groupSystem)
-      .setValue(128)
-      .setPosition(20, 420)
-      .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
-      .setBroadcast(true)
-      .updateSize();
-
-    checkboxRelay = _gui.addCheckBox("checkboxRelay")
-      .setPosition(86, 420)
-      .setColorForeground(color(120))
-      .setColorActive(color(255))
-      .setColorLabel(color(255))
-      .setSize(10, 10)
-      .setItemsPerRow(5)
-      .setSpacingColumn(84)
-      .setSpacingRow(20)
-      .moveTo(_groupSystem)
-      .addItem("relay", 0);
-
-    //checkboxDebug.setImages(loadImage("check_box_normal.png"), loadImage("check_box_selected.png"), loadImage("check_box_normal.png"));
-    
-    for(Toggle toggle:checkboxRelay.getItems()) {
-      toggle.getCaptionLabel().toUpperCase(false);
-    }
-
-    checkboxReplay = _gui.addCheckBox("checkboxReplay")
-      .setPosition(86, 440)
-      .setColorForeground(color(120))
-      .setColorActive(color(255))
-      .setColorLabel(color(255))
-      .setSize(10, 10)
-      .setItemsPerRow(1)
-      .setSpacingColumn(64)
-      .setSpacingRow(20)
-      .moveTo(_groupSystem)
-      .addItem("replay", 0);
-       
-    //checkboxReplay.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
-    
-    for(Toggle toggle:checkboxReplay.getItems()) {
-      toggle.getCaptionLabel().toUpperCase(false);
-    }
-
-    checkboxAudio = _gui.addCheckBox("checkboxAudio")
-      .setPosition(86, 460)
-      .setColorForeground(color(120))
-      .setColorActive(color(255))
-      .setColorLabel(color(255))
-      .setSize(10, 10)
-      .setItemsPerRow(2)
-      .setSpacingColumn(64)
-      .setSpacingRow(20)
-      .moveTo(_groupSystem)
-      .addItem("mute", 0)
-      .addItem("vertex", 1);
+    for (int index = 1; index <= 8; index++) {
       
-    //checkboxAudio.setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_selected.png"));
-    
-    for(Toggle toggle:checkboxAudio.getItems()) {
-      toggle.getCaptionLabel().toUpperCase(false);
+      Toggle relayControl = _gui.addToggle("relayControl" + index)
+        .setBroadcast(false)
+        .setId(index)
+        .setPosition(580, 40 + (40 * index))
+        .setSize(50, 20)
+        .setValue(false)
+        .setBroadcast(true)
+        .setMode(ControlP5.SWITCH);
+        
+      relayControl.getCaptionLabel().set("relay " + index);
+      relayControl.getCaptionLabel().toUpperCase(false);
+      
+      _gui.getController("relayControl" + index).addListener(new relayControlListener());
+
     }
-
-    servoAngle = _gui.addKnob("servoAngle")
-      .setBroadcast(false)
-      .moveTo(_groupSystem)
-      .setRange(0, 180)
-      .setValue(20)
-      .setPosition(500, 420)
-      .setRadius(36)
-      .setNumberOfTickMarks(9)
-      .setTickMarkLength(6)
-      .snapToTickMarks(true)
-      .setBroadcast(true)
-      .setColorForeground(color(255))
-      .setColorBackground(color(0, 160, 100))
-      .setColorActive(color(255, 255, 0))
-      .setDragDirection(Knob.HORIZONTAL);
-
-    servoAngle.captionLabel().set("angle ");
-    servoAngle.captionLabel().toUpperCase(false);
+    
+//    servoAngle = _gui.addKnob("servoAngle")
+//      .setBroadcast(false)
+//      .setRange(0, 180)
+//      .setValue(20)
+//      .setPosition(30, 400)
+//      .setRadius(30)
+//      .setNumberOfTickMarks(9)
+//      .setTickMarkLength(6)
+//      .snapToTickMarks(true)
+//      .setBroadcast(true)
+//      .setColorForeground(color(255))
+//      .setColorBackground(color(0, 160, 100))
+//      .setColorActive(color(255, 255, 0))
+//      .setDragDirection(Knob.HORIZONTAL);
+//
+//    servoAngle.captionLabel().set("angle ");
+//    servoAngle.captionLabel().toUpperCase(false);
 
 //    audioVolume = _gui.addKnob("audioVolume")
 //      .setBroadcast(false)
@@ -246,25 +209,53 @@ class gui {
 //
 //    audioVolume.captionLabel().set("volume ");
 //    audioVolume.captionLabel().toUpperCase(false);
+
+    sequencePlay = _gui.addButton("sequencePlay")
+      .setBroadcast(false)
+      .setValue(128)
+      .setPosition(680, 480)
+      .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
+      .setBroadcast(true)
+      .updateSize();
+
+    checkboxDebugger = _gui.addCheckBox("checkboxDebugger")
+      .setPosition(20, 120)
+      .setColorForeground(color(120))
+      .setColorActive(color(255))
+      .setColorLabel(color(255))
+      .setSize(10, 10)
+      .setItemsPerRow(4)
+      .setSpacingColumn(86)
+      .setSpacingRow(20)
+      .moveTo(_groupSystem)
+      .addItem("debuger", 0)
+      .addItem("draw", 1)
+      .addItem("mute", 2)
+      .addItem("replay", 3);
+    
+    for(Toggle toggle:checkboxDebugger.getItems()) {
+      toggle.getCaptionLabel().toUpperCase(false);
+    }
+    
+    checkboxDebugger.getItem(0).setState(true);
     
     _buttonDebug = _gui.addButton("toggleDebug", 1, 1, height - 22, 100, 20);
-    //_buttonDebug.setLabel("System");
     _buttonDebug.getCaptionLabel().set("Debug ");
     _buttonDebug.getCaptionLabel().align(LEFT,CENTER);
     _buttonDebug.getCaptionLabel().setLetterSpacing(2);
     _buttonDebug.getCaptionLabel().toUpperCase(false);
     
-    _groupDebug = _gui.addGroup("groupDebug", 1, 2, height - 82);
-    _groupDebug.setBackgroundHeight(82);
+    _groupDebug = _gui.addGroup("groupDebug", 1, 2, height - 120);
+    _groupDebug.setBackgroundHeight(100);
     //_groupDebug.setBackgroundColor(color(0, 100));
     _groupDebug.activateEvent(true);
     _groupDebug.hideBar();
-    _groupDebug.hide();
+    //_groupDebug.hide();
 
     console = _gui.addConsole(_gui.addTextarea("consoleTexter")
       .moveTo(_groupDebug)
-      .setPosition(2, height - 82)
-      .setSize(width - 4, 80)
+      .setPosition(2, height - 120 + 2)
+      .setSize(width - 4, 100 - 2)
       .setFont(new ControlFont(createFont("Helvetica", 10, true)))
       .setLineHeight(14)
       .bringToFront());
@@ -285,14 +276,13 @@ class gui {
 
   void draw() {   
 
-    background(backgroundColor);
     
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
     //rotate(frameCount*0.001);
 
-    //pushMatrix();
-    if (this.vertexDebug()) _audio.draw(0);
-    //popMatrix();
+    background(backgroundColor);
+    
+    if (this.drawDebug()) _audio.draw(0);
       
     //_gui.show();
     //_gui.draw();
@@ -382,21 +372,20 @@ class gui {
     if (this.muteDebug()) this.audioVolume(-255);
   }
   
-  boolean replayDebug() {
-    return checkboxReplay.getItem(0).getState();
-  }
-  
-  boolean muteDebug() {
-    return checkboxAudio.getItem(0).getState();
-  } 
-  boolean vertexDebug() {
-    return checkboxAudio.getItem(1).getState();
-  }
-  
   boolean consoleDebug() {
-    return checkboxRelay.getItem(0).getState();
+    return checkboxDebugger.getItem(0).getState();
+  }
+  boolean drawDebug() {
+    return checkboxDebugger.getItem(1).getState();
+  }
+  boolean muteDebug() {
+    return checkboxDebugger.getItem(2).getState();
+  } 
+  boolean replayDebug() {
+    return checkboxDebugger.getItem(3).getState();
   }
   
+    
   void audioVolume(int value) {
     _audio.volume(value);
   }
@@ -466,6 +455,18 @@ class portListener implements ControlListener {
   }
 }
 
+class port357Listener implements ControlListener {
+  public void controlEvent(ControlEvent _event) {
+    try {
+      if (_event.isGroup()) {
+        _driver357.setup(_driver357.list()[(int)_event.getGroup().getValue()]);
+      }
+      if (_event.isController()) {}       
+    }
+    catch (Exception e) {}
+  }
+}
+
 class relayToggleListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
     if (_event.isController()) {
@@ -476,6 +477,17 @@ class relayToggleListener implements ControlListener {
   }
 
 }
+class relayControlListener implements ControlListener {
+  public void controlEvent(ControlEvent _event) {
+    if (_event.isController()) {
+      
+      _driver357.write(_event.getController().getId(), _event.getController().getValue() == 0);
+          
+    }
+  }
+
+}
+
 
 class relayRangeListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {

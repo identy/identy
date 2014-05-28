@@ -22,13 +22,15 @@ class driver357 {
   
   private PApplet context;
   
-  byte[] _portRelay = { 
-    0, 2, 4, 8, 16, 32, 64, 127
+  boolean[] _portRelay = { 
+    false, false, false, false, false, false, false, false
   };
 
   public driver357(PApplet context) {
     try {
+      
       this.context = context;
+      
       this._port = new Serial(context, Serial.list()[1], 9600);
     }
     catch (Exception e) {
@@ -65,22 +67,41 @@ class driver357 {
     return Serial.list();
   }
       
-  void reset() {}
+  void reset() {
+    for (int relay = 0; relay <= 7; relay++) {
+      this._portRelay[relay] = false;
+    }
+  }
   
   // [*][*][relay pattern][#]
   void toggle(int relay) {
+    
     this.reset();
-  }
-  // [*][*][relay pattern][#]
-  void write(int relay, boolean state) {
+    
+    this._portRelay[relay - 1] = !this._portRelay[relay - 1];
 
     _write = (byte)pow(2, relay - 1);
     println("write :: " + binary(_write, 8));
     
-//    _mask |= _write;
-//    println("mask or :: " + binary(_mask, 8));
-//    _mask &= _write;
-//    println("mask and :: " + binary(_mask, 8));
+//    _mask |= _write; _mask &= _write;
+    _mask ^= _write;
+    println("mask xor :: " + binary(_mask, 8));
+    _write &= _mask;
+    
+    this._port.write(new byte[] {new String("*").getBytes()[0], new String("*").getBytes()[0], _write, new String("#").getBytes()[0]});
+    
+  }
+  // [*][*][relay pattern][#]
+  void write(int relay, boolean state) {
+
+    //this.reset();
+    
+    this._portRelay[relay - 1] = state;
+    
+    _write = (byte)pow(2, relay - 1);
+    println("write :: " + binary(_write, 8));
+    
+//    _mask |= _write; _mask &= _write;
     _mask ^= _write;
     println("mask xor :: " + binary(_mask, 8));
     _write &= _mask;

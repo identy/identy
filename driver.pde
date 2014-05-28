@@ -21,6 +21,11 @@ class driver {
   Arduino _arduino;
 
   private PApplet context;
+
+  private byte pinInit = 13;  
+  private byte pinDone = 13;
+  
+  private byte pinServo = 12;
   
   int[] _arduinoRelay = { 
     Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW, Arduino.LOW
@@ -30,8 +35,6 @@ class driver {
     try {
       this.context = context;
       
-      //_arduino = new Arduino(context, "COM2", 57600);
-      //this._arduino = new Arduino(context, Arduino.list()[0], 57600);
       this._arduino = new Arduino(context, Arduino.list()[0]);
     }
     catch (Exception e) {
@@ -41,13 +44,21 @@ class driver {
 
   void setup() {
     try {
+      this._arduino.pinMode(pinInit, Arduino.OUTPUT);
+
+      for (int index = 0; index <= 13; index++) {
+        this._arduinoRelay[index] = Arduino.LOW;
+      }
+      
       for (int relay = 2; relay <= 8; relay++) {
         this._arduino.pinMode(relay, Arduino.OUTPUT);
-        //this._arduino.digitalWrite(relay, Arduino.LOW);
-        //this._arduinoRelay[relay - 2] = Arduino.LOW;
+        this._arduino.digitalWrite(relay, Arduino.LOW);
       }
-      this._arduino.pinMode(12, Arduino.OUTPUT);
-      this._arduino.pinMode(12, Arduino.SERVO);
+      
+      this._arduino.pinMode(pinServo, Arduino.OUTPUT);
+      this._arduino.pinMode(pinServo, Arduino.SERVO);
+      
+      this._arduino.pinMode(pinDone, Arduino.OUTPUT);
     }
     catch (Exception e) {
       e.printStackTrace();
@@ -67,44 +78,57 @@ class driver {
     }
   }
    
+  void init(boolean state) {
+    this._arduinoRelay[pinInit] = state ? Arduino.HIGH : Arduino.LOW;    
+    this._arduino.digitalWrite(pinInit, state ? Arduino.HIGH : Arduino.LOW);
+  }
+  void done(boolean state) {
+    this._arduinoRelay[pinDone] = state ? Arduino.HIGH : Arduino.LOW;    
+    this._arduino.digitalWrite(pinDone, state ? Arduino.HIGH : Arduino.LOW);
+  }
+
   public String[] list() {
     return Arduino.list();
   }
       
   void reset() {
+    this._arduino.digitalWrite(pinInit, Arduino.LOW);
+    for (int index = 0; index <= 13; index++) {
+      this._arduinoRelay[index] = Arduino.LOW;
+    }
     for (int relay = 2; relay <= 8; relay++) {
       this._arduino.digitalWrite(relay, Arduino.LOW);
-      this._arduinoRelay[relay - 2] = Arduino.LOW;
     }
+    this._arduino.digitalWrite(pinDone, Arduino.LOW);
   }
 
   void toggle(int relay) {
 
     this.reset();
-
-    this._arduino.digitalWrite(relay + 1, Arduino.HIGH);
+    
     this._arduinoRelay[relay - 1] = Arduino.HIGH;
+    this._arduino.digitalWrite(relay + 1, Arduino.HIGH);
       
-  }
-
-  void servo(int value) {
-    this._arduino.servoWrite(12, value);
   }
   
   void write(int relay, boolean state) {
-    
+
+    this._arduinoRelay[relay - 1] = state ? Arduino.HIGH : Arduino.LOW;    
     this._arduino.digitalWrite(relay + 1, state ? Arduino.HIGH : Arduino.LOW);
-    this._arduinoRelay[relay - 1] = state ? Arduino.HIGH : Arduino.LOW;
     
+  }
+
+  void servo(int value) {
+    this._arduino.servoWrite(pinServo, value);
   }
   
   void read() {}
   
-}
+  void digitalEvent(int pin, int value) {
+    println("Digital pin "+pin+" has new value "+value);}
+  
+  void analogEvent(int pin, int value) {
+    println("Analog pin "+pin+" has new value "+value);
+  }
 
-void digitalEvent(int pin, int value) {
-  println("Digital pin "+pin+" has new value "+value);}
-
-void analogEvent(int pin, int value) {
-  println("Analog pin "+pin+" has new value "+value);
 }

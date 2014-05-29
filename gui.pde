@@ -16,16 +16,10 @@ class gui {
 
   final static int CONTROLLER = 0, TAB = 1, GROUP = 2;
   
-  //color backgroundColor = color(4, 79, 111);
   private color backgroundColor = color(0, 0, 0);
-  private color strokeColor = color(84, 145, 158);
+  private color strokeColor = color(255, 255, 255);
+  private color fillColor = color(4, 79, 111);
   
-  private color activeColor = color(#818181);
-  private color textColor = color(84, 145, 158);
-
-  private color relayoffColor = color(4, 79, 111);
-  private color relayonColor = color(84, 145, 158);
-
   private controlP5.ControlP5 _gui;
 
   private controlP5.Button _buttonSystem;
@@ -36,13 +30,11 @@ class gui {
   
   private controlP5.Button sequencePlay;
   
+  private controlP5.Textarea consoleDebug;
   private controlP5.CheckBox checkboxDebugger;
   
   //controlP5.Knob audioVolume;
-  controlP5.Knob servoAngle;
-
-  private controlP5.Button _buttonDebug;
-  private controlP5.ControlGroup _groupDebug;
+  //controlP5.Knob servoAngle;
   
   Println console;
   
@@ -70,15 +62,16 @@ class gui {
 
   void setup() {
                 
-    _buttonSystem = _gui.addButton("toggleSystem", 1, 1, 1, 100, 20);
+    _buttonSystem = _gui.addButton("menuSystem", 1, 1, 1, 100, 20);
     _buttonSystem.getCaptionLabel().set("system ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
     _buttonSystem.getCaptionLabel().setLetterSpacing(2);
     _buttonSystem.getCaptionLabel().toUpperCase(false);
     
     _groupSystem = _gui.addGroup("groupSystem", 1, 22, width - 2);
-    _groupSystem.setBackgroundHeight(height / 3);
+    _groupSystem.setBackgroundHeight(height - 140);
     //_groupSystem.setBackgroundColor(color(17, 17, 17));
+    _groupSystem.setBackgroundColor(color(0,51,102,200));
     _groupSystem.activateEvent(true);
     _groupSystem.hideBar();
     _groupSystem.hide();
@@ -87,12 +80,13 @@ class gui {
       .moveTo(_groupSystem);
     
     _listArduinoPort = _gui.addListBox("arduinoPort", 20, 60, 200, 60);
-    _listArduinoPort.setBarHeight(18);
     _listArduinoPort.moveTo(_groupSystem);
+    _listArduinoPort.setBarHeight(18);
     _listArduinoPort.toUpperCase(false);
     _listArduinoPort.getCaptionLabel().set("port");
     _listArduinoPort.actAsPulldownMenu(true);
     _listArduinoPort.setItemHeight(20);
+    _listArduinoPort.enableCollapse();
     
     for (int i = 0; i < _driver.list().length; i++) {
       _listArduinoPort.addItem(_driver.list()[i], i);
@@ -105,12 +99,13 @@ class gui {
       .moveTo(_groupSystem);
     
     _listSerial357Port = _gui.addListBox("serial357Port", 240, 60, 200, 60);
-    _listSerial357Port.setBarHeight(18);
     _listSerial357Port.moveTo(_groupSystem);
+    _listSerial357Port.setBarHeight(18);
     _listSerial357Port.toUpperCase(false);
     _listSerial357Port.getCaptionLabel().set("port");
     _listSerial357Port.actAsPulldownMenu(true);
     _listSerial357Port.setItemHeight(20);
+    _listSerial357Port.enableCollapse();
     
     for (int i = 0; i < _driver.list().length; i++) {
       _listSerial357Port.addItem(_driver357.list()[i], i);
@@ -122,9 +117,10 @@ class gui {
     for (int index = 1; index <= 7; index++) {
       
       Toggle relayToggle = _gui.addToggle("relayToggle" + index)
+        .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(20, 40 + (40 * index))
+        .setPosition(20, 60 + (40 * index))
         .setSize(50, 20)
         .setValue(false)
         .setBroadcast(true)
@@ -136,9 +132,10 @@ class gui {
       _gui.getController("relayToggle" + index).addListener(new relayToggleListener());
       
       Range rangeRelay = _gui.addRange("rangeRelay" + index)
+        .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(110, 40 + (40 * index))
+        .setPosition(110, 60 + (40 * index))
         .setSize(400, 20)
         .setHandleSize(20)
         .setRange(0, 100)
@@ -158,9 +155,10 @@ class gui {
     for (int index = 1; index <= 8; index++) {
       
       Toggle relayControl = _gui.addToggle("relayControl" + index)
+        .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(580, 40 + (40 * index))
+        .setPosition(580, 60 + (40 * index))
         .setSize(50, 20)
         .setValue(false)
         .setBroadcast(true)
@@ -174,9 +172,10 @@ class gui {
     }
 
     sequencePlay = _gui.addButton("sequencePlay")
+      .moveTo(_groupSystem)
       .setBroadcast(false)
       .setValue(128)
-      .setPosition(680, 80)
+      .setPosition(720, 20)
       .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
       .setBroadcast(true)
       .updateSize();
@@ -219,7 +218,8 @@ class gui {
 //    audioVolume.captionLabel().toUpperCase(false);
 
     checkboxDebugger = _gui.addCheckBox("checkboxDebugger")
-      .setPosition(20, 120)
+      .moveTo(_groupSystem)
+      .setPosition(20, 440)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -227,7 +227,6 @@ class gui {
       .setItemsPerRow(4)
       .setSpacingColumn(86)
       .setSpacingRow(20)
-      .moveTo(_groupSystem)
       .addItem("debuger", 0)
       .addItem("draw", 1)
       .addItem("mute", 2)
@@ -236,37 +235,21 @@ class gui {
     for(Toggle toggle:checkboxDebugger.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
     }
-    
-    _buttonDebug = _gui.addButton("toggleDebug", 1, 1, height - 22, 100, 20);
-    _buttonDebug.getCaptionLabel().set("debug ");
-    _buttonDebug.getCaptionLabel().align(LEFT,CENTER);
-    _buttonDebug.getCaptionLabel().setLetterSpacing(2);
-    _buttonDebug.getCaptionLabel().toUpperCase(false);
-    
-    _groupDebug = _gui.addGroup("groupDebug", 1, height - 100 - 22 - 2, width - 4);
-    _groupDebug.setBackgroundHeight(100);
-    //_groupDebug.setBackgroundColor(color(17, 17, 17));
-    _groupDebug.activateEvent(true);
-    _groupDebug.hideBar();
-    _groupDebug.hide();
-    
-    Textarea consoleTexter = _gui.addTextarea("consoleTexter")
-      //.moveTo(_groupDebug)
-      .setPosition(4, height - 100 - 22 - 8)
-      .setSize(width - 8 - 4, 102)
-      //.setColorBackground(color(37, 37, 37))
+        
+    consoleDebug = _gui.addTextarea("consoleDebug")
+      .setPosition(4, height - 100 - 8)
+      .setSize(width - 8 - 4, 100)
+      .setColorBackground(color(27, 27, 27))
       .setFont(new ControlFont(createFont("Helvetica", 10, true)))
-      .bringToFront()
       .setLineHeight(14);
 
-    console = _gui.addConsole(consoleTexter);
+    console = _gui.addConsole(consoleDebug);
 
-    _gui.getTooltip().setDelay(300);
-    
-    _gui.getTooltip().register("toggleSystem", "system define");
-    _gui.getTooltip().register("toggleDebug", "debug console");
+    _gui.getTooltip().setDelay(300);   
+    _gui.getTooltip().register("buttonSystem", "system define");
 
-    checkboxDebugger.getItem(0).setState(true);
+    checkboxDebugger.activate("debuger");
+    checkboxDebugger.activate("draw");
     
   }
 
@@ -294,75 +277,17 @@ class gui {
     //rotate(frameCount*0.001);
 
     background(backgroundColor);
+    stroke(strokeColor);
+    fill(fillColor);
+    
+    smooth();
+    lights();
     
     if (this.drawDebug()) _audio.draw(0);
       
     //_gui.show();
     //_gui.draw();
               
-  }
-
-  public void controlEvent(ControlEvent _event) {
-
-    int value;
-    int id;
-
-    int type = _event.getType();
-    
-    switch ( type ) {
-      case GROUP:
-        controlP5.ControlGroup _group = _event.getGroup();
-        id = _group.getId();
-        value = (int) _group.getValue();
-        
-//        if (_event.isGroup()) {
-//          println(_event.getGroup().getName() + ".");
-//        }
-
-        break;
-      case CONTROLLER:
-        controlP5.Controller _controller = _event.getController();
-        value = (int) _controller.getValue();
-        id = _controller.getId();
-        
-//        if (_event.isController()) {
-//          println(_event.getController().getName() + ".");
-//        }
-
-        if (_event.isFrom(sequencePlay))
-          if (_event.getName() == "sequencePlay") this.sequencePlay();
-          
-//        if (_event.isFrom(audioVolume)) 
-//          if (_event.getName() == "audioVolume") this.audioVolume(value);
-          
-        if (_event.isFrom(servoAngle)) 
-          if (_event.getName() == "servoAngle") this.servoAngle(value);
-
-        if (_event.getName() == "toggleDebug") this.toggleDebug();
-        
-        if (_event.getName() == "toggleSystem") this.toggleSystem();
-        
-        break;
-    }
-        
-  }
-
-  void toggleSystem() {
-    if (_groupSystem.isVisible()) {
-      _groupSystem.hide();
-    } 
-    else {
-      _groupSystem.show();
-    }
-  }
-
-  void toggleDebug() {
-    if (_groupDebug.isVisible()) {
-      _groupDebug.hide();
-    } 
-    else {
-      _groupDebug.show();
-    }
   }
   
   void sequencePlay() {
@@ -396,6 +321,24 @@ class gui {
     
   }
   
+  void menuSystem() {
+    if (_groupSystem.isVisible()) {
+      _groupSystem.hide();
+    } 
+    else {
+      _groupSystem.show();
+    }
+  }
+  
+  void debugSystem() {
+    if (consoleDebug.isVisible()) {
+      consoleDebug.hide();
+    } 
+    else {
+      consoleDebug.show();
+    }
+  }
+
   void audioVolume(int value) {
     _audio.volume(value);
   }
@@ -417,6 +360,48 @@ class gui {
     return checkboxDebugger.getItem(3).getState();
   }
   
+  public void controlEvent(ControlEvent _event) {
+
+    int value;
+    int id;
+
+    int type = _event.getType();
+    
+    switch ( type ) {
+      case GROUP:
+        controlP5.ControlGroup _group = _event.getGroup();
+        id = _group.getId();
+        value = (int) _group.getValue();
+        
+//        if (_event.isGroup()) {
+//          println(_event.getGroup().getName() + ".");
+//        }
+
+        break;
+      case CONTROLLER:
+        controlP5.Controller _controller = _event.getController();
+        value = (int) _controller.getValue();
+        id = _controller.getId();
+        
+//        if (_event.isController()) {
+//          println(_event.getController().getName() + ".");
+//        }
+
+        if (_event.isFrom(_buttonSystem))
+          if (_event.getName() == "menuSystem") this.menuSystem();
+
+        if (_event.isFrom(sequencePlay))
+          if (_event.getName() == "sequencePlay") this.sequencePlay();
+        //if (_event.isFrom(audioVolume)) 
+        //  if (_event.getName() == "audioVolume") this.audioVolume(value);
+        //if (_event.isFrom(servoAngle)) 
+        //  if (_event.getName() == "servoAngle") this.servoAngle(value);
+                
+        break;
+    }
+        
+  }
+
 }
 
 void controlEvent(ControlEvent _event) {
@@ -428,16 +413,10 @@ void keyPressed() {
     case ' ':
       break;
     case 'm' | 'M':
-      if (_gui._gui.getGroup("groupSystem").isVisible()) 
-        _gui._gui.getGroup("groupSystem").hide();
-      else 
-        _gui._gui.getGroup("groupSystem").show();
+      _gui.menuSystem();
       break;
     case 'd' | 'D':
-      if (_gui._gui.getGroup("groupDebug").isVisible()) 
-        _gui._gui.getGroup("groupDebug").hide();
-      else 
-        _gui._gui.getGroup("groupDebug").show();
+      _gui.debugSystem();
       break;
   }
 }
@@ -478,8 +457,11 @@ class relayToggleListener implements ControlListener {
       
       //if (_gui.consoleDebug()) println(_event);
       
-      _driver.write(_event.getController().getId(), _event.getController().getValue() > 0);
-          
+      try {      
+        _driver.write(_event.getController().getId(), _event.getController().getValue() > 0);
+      }
+      catch(Exception e) {}
+      
     }
   }
 
@@ -490,8 +472,11 @@ class relayControlListener implements ControlListener {
       
       //if (_gui.consoleDebug()) println(_event);
       
-      _driver357.write(_event.getController().getId(), _event.getController().getValue() > 0);
-          
+      try {      
+        _driver357.write(_event.getController().getId(), _event.getController().getValue() > 0);
+      }
+      catch(Exception e) {}
+
     }
   }
 

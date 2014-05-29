@@ -40,10 +40,10 @@ class driver357 {
 
   void setup() {
     try {
-      //_port.setDTR(false);
-      //_port.setRTS(false);
+      _port.setDTR(false);
+      _port.setRTS(false);
       
-      //_port.bufferUntil(Integer.decode("#"));
+      //_port.bufferUntil(new String("#").getBytes()[0]);
     }
     catch (Exception e) {
       e.printStackTrace();
@@ -85,7 +85,7 @@ class driver357 {
     
 //    _mask |= _write; _mask &= _write;
     _mask ^= _write;
-    println("mask xor :: " + binary(_mask, 8));
+    println("mask :: " + binary(_mask, 8));
     _write &= _mask;
     
     this._port.write(new byte[] {new String("*").getBytes()[0], new String("*").getBytes()[0], _write, new String("#").getBytes()[0]});
@@ -103,7 +103,7 @@ class driver357 {
     
 //    _mask |= _write; _mask &= _write;
     _mask ^= _write;
-    println("mask xor :: " + binary(_mask, 8));
+    println("mask :: " + binary(_mask, 8));
     _write &= _mask;
     
     this._port.write(new byte[] {new String("*").getBytes()[0], new String("*").getBytes()[0], _write, new String("#").getBytes()[0]});
@@ -117,8 +117,7 @@ class driver357 {
 }
 
 void serialEvent(Serial __port) {
-
-  //__port.clear();          
-  //println("read :: " + binary(__port.read(), 8));
+         
+  println("read :: " + binary(__port.read(), 8));
     
 }

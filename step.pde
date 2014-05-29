@@ -30,9 +30,13 @@ class step {
   Tween _tween;
   
   private PApplet context;
-  
-  float y1, y2;
 
+  float control1, control2, control3, control4, control5, control6, control7, control8;
+  
+  float relay1, relay2, relay3, relay4, relay5, relay6, relay7;
+  
+  float relayInit = 0, relayDone = 0;
+  
   public step(PApplet context) {
 
     this.context = context;
@@ -41,13 +45,28 @@ class step {
     
     _timeline = new Timeline("relay timeline");
     _timeline.setTimeMode(Motion.SECONDS);
-    _timeline.addEventListener(new TimelineEventListener());
+    _timeline.addEventListener(new TimelineListener());
     
   }
 
   void setup() {
-
-    _motion = _timeline.call(this, "init", 0);
+            
+//    _motion = _timeline.call(this, "init", 1);
+//    _tween = new Tween("init", 1).add(this, "relayInit", (float)height)
+//      .onBegin(new ICallback() {
+//        public void run(Object t) {
+//          println(t+" init [begin]");
+//          _driver.init(true);
+//        }
+//      })
+//      .onEnd(new ICallback() {
+//        public void run(Object t) {
+//          println(t+" end");
+//        }
+//      })
+//      .onChange(new ICallback() { public void run(Object t) {} });
+//    //_tween.addEventListener(new TweenEventListener());
+//    _timeline.add(_tween, 1);
     
     _motion = _timeline.call(this, "uno", 1);
         
@@ -57,53 +76,52 @@ class step {
     _motion = _timeline.call(this, "cinco", 5);
     _motion = _timeline.call(this, "seis", 6);
     _motion = _timeline.call(this, "siete", 7);
-    
-    _motion = _timeline.call(this, "done", 8);
+            
+    TweenListener _tweenListener = new TweenListener();
 
-    y1 = y2 = -height;
+    _tween = new Tween("control1", 1).add(this, "control1", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 1);
+    _tween = new Tween("control2", 2).add(this, "control2", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 2);
+    _tween = new Tween("control3", 3).add(this, "control3", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 3);
+    _tween = new Tween("control4", 4).add(this, "control4", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 4);
+    _tween = new Tween("control5", 5).add(this, "control5", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 5);
+    _tween = new Tween("control6", 6).add(this, "control6", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 6);
+    _tween = new Tween("control7", 7).add(this, "control7", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 7);
+    _tween = new Tween("control8", 8).add(this, "control8", (float)width);
+    _tween.addEventListener(_tweenListener);
+    _timeline.add(_tween, 8);
     
-    _tween = new Tween("init", 5).add(this, "y1", (float)height)
-      .onBegin(new ICallback() {
-        public void run(Object t) {
-          println(t+" begin");
-          _driver.init(true);
-        }
-      })
-      .onEnd(new ICallback() {
-        public void run(Object t) {
-          println(t+" end");
-        }
-      })
-      .onChange(new ICallback() {
-        public void run(Object t) {
-          //println(t+" change");
-        }
-      });
-      
-    //_tween.addEventListener(new TweenEventListener());
-    _timeline.add(_tween, 10);
+//    _tween = new Tween("done", 1).add(this, "relayDone", (float)height)
+//      .onBegin(new ICallback() {
+//        public void run(Object t) {
+//          println(t+" done [begin]");
+//          _driver.done(false);
+//        }
+//      })
+//      .onEnd(new ICallback() {
+//        public void run(Object t) {
+//          println(t+" end");
+//        }
+//      })
+//      .onChange(new ICallback() { public void run(Object t) {} });
+//    //_tween.addEventListener(new TweenEventListener());
+//    _timeline.add(_tween, 9);
+//    _motion = _timeline.call(this, "done", 10);
     
-    _tween = new Tween("done", 5).add(this, "y2", (float)height)
-      .onBegin(new ICallback() {
-        public void run(Object t) {
-          println(t+" begin");
-          _driver.done(false);
-        }
-      })
-      .onEnd(new ICallback() {
-        public void run(Object t) {
-          println(t+" end");
-        }
-      })
-      .onChange(new ICallback() {
-        public void run(Object t) {
-          //println(t+" change");
-        }
-      });
 
-    //_tween.addEventListener(new TweenEventListener());
-    _timeline.add(_tween, 15);
-    
   }
 
   void play() {
@@ -143,9 +161,6 @@ class step {
   void init() {
     _driver.reset();
   }
-  void done() {
-    _driver.reset();
-  }
 
   void uno() {
     _driver.toggle(1);
@@ -168,16 +183,10 @@ class step {
   void siete() {
     _driver.toggle(7);
   }
-
-//  void onUnoBegin() {
-//    _driver.toggle(1);
-//  }
-//  void onUnoChange() {
-//    _driver.toggle(1);
-//  }
-//  void onUnoEnd() {
-//    _driver.toggle(1);
-//  }
+  
+  void done() {
+    _driver.reset();
+  }
 
 //  void tweenStarted(Tween _t) {
 //    println(_t + " started");
@@ -197,16 +206,6 @@ class step {
   
 }
 
-//void onUnoBegin() {
-//  _driver.toggle(1);
-//}
-//void onUnoChange() {
-//  _driver.toggle(1);
-//}
-//void onUnoEnd() {
-//  _driver.toggle(1);
-//}
-//
 //void tweenStarted(Tween _t) {
 //  println(_t + " started");
 //}
@@ -223,86 +222,97 @@ class step {
 //  println(_t + " repeated");
 //}
 
-public class TimelineEventListener implements MotionEventListener {
+public class TimelineListener implements MotionEventListener {
   
   void onMotionEvent(MotionEvent te) {
-    
-    //((Timeline) te.getSource()).printKeyFrames();
+       
+    //println(te);
     
     if (te.type == MotionEvent.TIMELINE_STARTED)
-      println(((Timeline) te.getSource()).getName() + " started");
+      println(((Timeline)te.getSource()).getName() + " started");
     else if (te.type == MotionEvent.TIMELINE_CHANGED)
-      println(((Timeline) te.getSource()).getName() + " changed");
+      println(((Timeline)te.getSource()).getName() + " changed");
     else if (te.type == MotionEvent.TIMELINE_REPEATED)
-      println(((Timeline) te.getSource()).getName() + " repeated");
+      println(((Timeline)te.getSource()).getName() + " repeated");
     else if (te.type == MotionEvent.TIMELINE_ENDED)
-      println(((Timeline) te.getSource()).getName() + " ended");
-     
-//    if (te.type == MotionEvent.MOTION_STARTED)
-//      println(((Motion) te.getSource()).getName() + " started");
-//    else if (te.type == MotionEvent.MOTION_CHANGED)
-//     println(((Motion) te.getSource()).getName() + " changed");
-//    else if (te.type == MotionEvent.MOTION_REPEATED)
-//      println(((Motion) te.getSource()).getName() + " repeated");
-//    else if (te.type == MotionEvent.MOTION_ENDED)
-//      println(((Motion) te.getSource()).getName() + " ended");
-//
-//    if (te.type == MotionEvent.TWEEN_SEQUENCE_STARTED)
-//      println(((Sequence) te.getSource()).getName() + " started");
-//    else if (te.type == MotionEvent.TWEEN_SEQUENCE_CHANGED)
-//      println(((Sequence) te.getSource()).getName() + " changed");
-//    else if (te.type == MotionEvent.TWEEN_SEQUENCE_REPEATED)
-//      println(((Sequence) te.getSource()).getName() + " repeated");
-//    else if (te.type == MotionEvent.TWEEN_SEQUENCE_ENDED)
-//      println(((Sequence) te.getSource()).getName() + " ended");
-//      
-//    if (te.type == MotionEvent.KEYFRAME_STARTED)
-//      println(((KeyFrame) te.getSource()).getName() + " started");
-//    else if (te.type == MotionEvent.KEYFRAME_CHANGED)
-//      println(((KeyFrame) te.getSource()).getName() + " changed");
-//    else if (te.type == MotionEvent.KEYFRAME_REPEATED)
-//      println(((KeyFrame) te.getSource()).getName() + " repeated");
-//    else if (te.type == MotionEvent.KEYFRAME_ENDED)
-//      println(((KeyFrame) te.getSource()).getName() + " ended");
-//  
-//    if (te.type == MotionEvent.TWEEN_PARALLEL_STARTED)
-//      println(((Parallel) te.getSource()).getName() + " started");
-//    else if (te.type == MotionEvent.TWEEN_PARALLEL_CHANGED)
-//      println(((Parallel) te.getSource()).getName() + " changed");
-//    else if (te.type == MotionEvent.TWEEN_PARALLEL_REPEATED)
-//      println(((Parallel) te.getSource()).getName() + " repeated");
-//    else if (te.type == MotionEvent.TWEEN_PARALLEL_ENDED)
-//      println(((Parallel) te.getSource()).getName() + " ended");
+      println(((Timeline)te.getSource()).getName() + " ended");
+    
+  }
+  
+}
+
+public class SecuenceListener implements MotionEventListener {
+  
+  void onMotionEvent(MotionEvent te) {
+
+    //println(te);
+    
+    if (te.type == MotionEvent.TWEEN_SEQUENCE_STARTED)
+      println(((Sequence)te.getSource()).getName() + " started");
+    else if (te.type == MotionEvent.TWEEN_SEQUENCE_CHANGED)
+      println(((Sequence)te.getSource()).getName() + " changed");
+    else if (te.type == MotionEvent.TWEEN_SEQUENCE_REPEATED)
+      println(((Sequence)te.getSource()).getName() + " repeated");
+    else if (te.type == MotionEvent.TWEEN_SEQUENCE_ENDED)
+      println(((Sequence)te.getSource()).getName() + " ended");
 
   }
   
 } 
 
-public class CallbackEventListener implements MotionEventListener {
+public class TweenListener implements MotionEventListener {
   
   void onMotionEvent(MotionEvent te) {
     
-    if (te.type == MotionEvent.CALLBACK_STARTED)
-      println(((Motion) te.getSource()).getName() + " started");
-    else if (te.type == MotionEvent.CALLBACK_ENDED)
-      println(((Motion) te.getSource()).getName() + " ended");
+    println(te);
+    
+    if (te.type == MotionEvent.TWEEN_STARTED)
+      println(((Tween)te.getSource()).getName() + " started");
+    else if (te.type == MotionEvent.TWEEN_CHANGED)
+     println(((Tween)te.getSource()).getName() + " changed");
+    else if (te.type == MotionEvent.TWEEN_REPEATED)
+      println(((Tween)te.getSource()).getName() + " repeated");
+    else if (te.type == MotionEvent.TWEEN_ENDED)
+      println(((Tween)te.getSource()).getName() + " ended");
+
+    try {
+      _driver357.toggle(Integer.parseInt(((Tween)te.getSource()).getName().substring(((Tween)te.getSource()).getName().length() - 1)));
+    }
+    catch(Exception e) { e.printStackTrace(); }
 
   }
   
 }
 
-public class TweenEventListener implements MotionEventListener {
+public class CallbackListener implements MotionEventListener {
   
   void onMotionEvent(MotionEvent te) {
     
-    if (te.type == MotionEvent.TWEEN_STARTED)
-      println(((Tween) te.getSource()).getName() + " started");
-    else if (te.type == MotionEvent.TWEEN_CHANGED)
-     println(((Tween) te.getSource()).getName() + " changed");
-    else if (te.type == MotionEvent.TWEEN_REPEATED)
-      println(((Tween) te.getSource()).getName() + " repeated");
-    else if (te.type == MotionEvent.TWEEN_ENDED)
-      println(((Tween) te.getSource()).getName() + " ended");
+    println(te);
+    
+    if (te.type == MotionEvent.CALLBACK_STARTED)
+      println(((Motion)te.getSource()).getName() + " started");
+    else if (te.type == MotionEvent.CALLBACK_ENDED)
+      println(((Motion)te.getSource()).getName() + " ended");
+
+  }
+  
+}
+
+public class MotionListener implements MotionEventListener {
+  
+  void onMotionEvent(MotionEvent te) {
+    
+    println(te);
+    
+    if (te.type == MotionEvent.MOTION_STARTED)
+      println(((Motion)te.getSource()).getName() + " started");
+    else if (te.type == MotionEvent.MOTION_CHANGED)
+     println(((Motion)te.getSource()).getName() + " changed");
+    else if (te.type == MotionEvent.MOTION_REPEATED)
+      println(((Motion)te.getSource()).getName() + " repeated");
+    else if (te.type == MotionEvent.MOTION_ENDED)
+      println(((Motion)te.getSource()).getName() + " ended");
 
   }
   

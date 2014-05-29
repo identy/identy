@@ -20,7 +20,8 @@ class audio {
   ddf.minim.AudioInput _input; 
   ddf.minim.AudioOutput _out; 
 
-  AudioRenderer _vortex, _iso;
+  AudioRenderer _vortex, _iso, _radar;
+  
   AudioRenderer[] _visuals; 
 
   public audio(PApplet context) {
@@ -34,8 +35,9 @@ class audio {
     
     _vortex = new VortexRenderer(_player);
     _iso = new IsometricRenderer(_player);
-  
-    _visuals = new AudioRenderer[] {_vortex,  _iso};
+    _radar = new RadarRenderer(_player);
+    
+    _visuals = new AudioRenderer[] {_vortex, _radar, _iso};
     
     _player.addListener(_visuals[0]);
     

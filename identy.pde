@@ -13,6 +13,7 @@
 driver _driver;
 // driver :: serial
 driver357 _driver357;
+
 // gui
 gui _gui;
 // audio
@@ -20,11 +21,16 @@ audio _audio;
 // step
 step _step;
 
+//effect
+star _star;
+
 void setup() {
 
   size(800, 600, P3D);  
   //size(800, 600, P2D) colorMode(HSB) frameRate(30);
   H.init(this).background(#202020).autoClear(true);
+  
+  _star = new star(new PVector(width/2.0, height/2.0), 40, max(width, height));
   
   _driver = new driver(this);
   _driver.setup();
@@ -46,8 +52,10 @@ void setup() {
 void draw() {
   
   _gui.set();
+  
   //_driver.read();
   //_driver357.read();
+  
   _gui.draw();
   
 }

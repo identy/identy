@@ -51,7 +51,6 @@ class step {
 
   void setup() {
             
-//    _motion = _timeline.call(this, "init", 1);
 //    _tween = new Tween("init", 1).add(this, "relayInit", (float)height)
 //      .onBegin(new ICallback() {
 //        public void run(Object t) {
@@ -67,42 +66,43 @@ class step {
 //      .onChange(new ICallback() { public void run(Object t) {} });
 //    //_tween.addEventListener(new TweenEventListener());
 //    _timeline.add(_tween, 1);
-    
-    _motion = _timeline.call(this, "uno", 1);
-        
-    _motion = _timeline.call(this, "dos", 2);
-    _motion = _timeline.call(this, "tres", 3);   
-    _motion = _timeline.call(this, "cuatro", 4);
-    _motion = _timeline.call(this, "cinco", 5);
-    _motion = _timeline.call(this, "seis", 6);
-    _motion = _timeline.call(this, "siete", 7);
-            
+
+//    _motion = _timeline.call(this, "init", 0);    
+//    _motion = _timeline.call(this, "uno", 1);
+//    _motion = _timeline.call(this, "dos", 2);
+//    _motion = _timeline.call(this, "tres", 3);   
+//    _motion = _timeline.call(this, "cuatro", 4);
+//    _motion = _timeline.call(this, "cinco", 5);
+//    _motion = _timeline.call(this, "seis", 6);
+//    _motion = _timeline.call(this, "siete", 7);
+//    _motion = _timeline.call(this, "done", 8);
+
     TweenListener _tweenListener = new TweenListener();
 
-    _tween = new Tween("control1", 1).add(this, "control1", (float)width);
+    _tween = new Tween("control1", 10).add(this, "control1", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 1);
-    _tween = new Tween("control2", 2).add(this, "control2", (float)width);
+    _timeline.add(_tween, 10);
+    _tween = new Tween("control2", 10).add(this, "control2", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 2);
-    _tween = new Tween("control3", 3).add(this, "control3", (float)width);
+    _timeline.add(_tween, 20);
+    _tween = new Tween("control3", 10).add(this, "control3", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 3);
-    _tween = new Tween("control4", 4).add(this, "control4", (float)width);
+    _timeline.add(_tween, 30);
+    _tween = new Tween("control4", 10).add(this, "control4", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 4);
-    _tween = new Tween("control5", 5).add(this, "control5", (float)width);
+    _timeline.add(_tween, 40);
+    _tween = new Tween("control5", 10).add(this, "control5", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 5);
-    _tween = new Tween("control6", 6).add(this, "control6", (float)width);
+    _timeline.add(_tween, 50);
+    _tween = new Tween("control6", 10).add(this, "control6", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 6);
-    _tween = new Tween("control7", 7).add(this, "control7", (float)width);
+    _timeline.add(_tween, 60);
+    _tween = new Tween("control7", 10).add(this, "control7", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 7);
-    _tween = new Tween("control8", 8).add(this, "control8", (float)width);
+    _timeline.add(_tween, 70);
+    _tween = new Tween("control8", 10).add(this, "control8", (float)width);
     _tween.addEventListener(_tweenListener);
-    _timeline.add(_tween, 8);
+    _timeline.add(_tween, 80);
     
 //    _tween = new Tween("done", 1).add(this, "relayDone", (float)height)
 //      .onBegin(new ICallback() {
@@ -119,7 +119,6 @@ class step {
 //      .onChange(new ICallback() { public void run(Object t) {} });
 //    //_tween.addEventListener(new TweenEventListener());
 //    _timeline.add(_tween, 9);
-//    _motion = _timeline.call(this, "done", 10);
     
 
   }
@@ -129,6 +128,7 @@ class step {
   }
 
   void loop() {
+    //_timeline.reverse().repeat().play();
     _timeline.repeat().play();
   }
 
@@ -188,21 +188,21 @@ class step {
     _driver.reset();
   }
 
-//  void tweenStarted(Tween _t) {
-//    println(_t + " started");
-//  }
-//  
-//  void tweenEnded(Tween _t) {
-//    println(_t + " ended");
-//  }
-//  
-//  void tweenChanged(Tween _t) {
-//    println(_t + " changed");
-//  }
-//  
-//  void tweenRepeated(Tween _t) {
-//    println(_t + " repeated");
-//  }
+  void tweenStarted(Tween _t) {
+    println(_t + " started");
+  }
+  
+  void tweenEnded(Tween _t) {
+    println(_t + " ended");
+  }
+  
+  void tweenChanged(Tween _t) {
+    println(_t + " changed");
+  }
+  
+  void tweenRepeated(Tween _t) {
+    println(_t + " repeated");
+  }
   
 }
 
@@ -226,7 +226,7 @@ public class TimelineListener implements MotionEventListener {
   
   void onMotionEvent(MotionEvent te) {
        
-    //println(te);
+    println(te);
     
     if (te.type == MotionEvent.TIMELINE_STARTED)
       println(((Timeline)te.getSource()).getName() + " started");
@@ -245,7 +245,7 @@ public class SecuenceListener implements MotionEventListener {
   
   void onMotionEvent(MotionEvent te) {
 
-    //println(te);
+    println(te);
     
     if (te.type == MotionEvent.TWEEN_SEQUENCE_STARTED)
       println(((Sequence)te.getSource()).getName() + " started");

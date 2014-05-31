@@ -1,8 +1,16 @@
 
 /*
-  //_star.update(mouseY*1.0/height, mouseX*0.2/width);
-  //_star.draw();
-*/
+ *
+ * star class
+ *
+ * copyright 2014 identy [ www.identy.org ] 
+ *
+ * _star = new star(new PVector(width/2.0, height/2.0), 40, max(width, height));
+ * 
+ * _star.update(mouseY*1.0/height, mouseX*0.2/width);
+ * _star.draw();
+ *
+ */
 
 public class star {
   

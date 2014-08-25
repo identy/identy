@@ -47,8 +47,10 @@ class gui {
   PGraphics offscreen;
 
   private PApplet context;
- 
-   Println console;
+
+    private boolean _logo = true;
+    
+    private Println console;
    
   public gui(PApplet context) {
 
@@ -77,7 +79,7 @@ class gui {
     fill(fillColor);
 
     _audio = new audio(context);
-    _audio.setup("__theme.mp3");    
+    _audio.setup("___theme.mp3");    
 
     _environment = new environment("cassini.obj", context);
 
@@ -276,12 +278,12 @@ class gui {
     _gui.getTooltip().setDelay(300);   
     _gui.getTooltip().register("buttonSystem", "system define");
 
+    //checkboxDebugger.activate("draw");
+    //checkboxDebugger.activate("repeat");
+
     //checkboxDebugger.activate("debuger");
     consoleDebug.hide();
-      
-    checkboxDebugger.activate("draw");
-    checkboxDebugger.activate("repeat");
-    
+          
   }
 
   void set() {
@@ -309,27 +311,30 @@ class gui {
   }
 
   void draw() {   
-
     
+    background(backgroundColor);
+    stroke(strokeColor);
+    fill(fillColor);
+
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
     //rotate(frameCount*0.001);
 
   PVector surfaceMouse = surface.getTransformedMouse();
 
   // Draw the scene, offscreen
-  offscreen.beginDraw();
-  offscreen.background(0);
-  offscreen.stroke(204, 102, 0);
-  
-  //offscreen.fill(0, 255, 0);
-  //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
-  offscreen.endDraw();
+//  offscreen.beginDraw();
+//  offscreen.background(0);
+//  offscreen.stroke(204, 102, 0);
+//  
+//  //offscreen.fill(0, 255, 0);
+//  //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
+//  offscreen.endDraw();
   
   //_driver.read();
   //_driver357.read();
  
    // render the scene, transformed using the corner pin surface
-  surface.render(offscreen);
+//  surface.render(offscreen);
 
   if (_audio.isPlaying()) if (this.drawDebug()) _audio.draw(0);
     
@@ -337,12 +342,14 @@ class gui {
   noStroke();
   translate(width - 80, 80, 0);
     rotateY(radians(frameCount)/2);
-    if (this.drawDebug()) _environment.draw();
+    if (this.drawDebug() & _logo) _environment.draw();
     
   popMatrix();
 
     float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
-    
+
+    _audio.mute(muteDebug());
+        
     for (int index = 1; index <= 7; index++) {
 
     float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio._player.length(), 0, 400);
@@ -354,6 +361,7 @@ class gui {
         else _driver.write(_id, false);
       if (_audio.isPlaying())
         if (consoleDebug()) println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+
     }
     
     //_gui.show();
@@ -362,6 +370,9 @@ class gui {
   }
   
   void sequencePlay() {
+    
+    _audio.mute(this.muteDebug());
+    
     if (!_audio.isPlaying()) {
       if (repeatDebug()) {
         _audio.loop();
@@ -391,9 +402,7 @@ class gui {
 //    }
 //    
 //    }
-    
-    if (this.muteDebug()) this.audioVolume(-255);
-    
+        
   }
   
   void stop() {
@@ -405,7 +414,7 @@ class gui {
     _audio.move();
 
   }
-
+  
   void menuSystem() {
     if (_groupSystem.isVisible()) {
       _groupSystem.hide();
@@ -419,12 +428,13 @@ class gui {
     return _groupSystem.isVisible();
   }
   
-  void debugSystem() {
-    if (consoleDebug.isVisible()) {
-      consoleDebug.hide();
+  void debugSystemToggle(boolean activate) {
+    //if (consoleDebug.isVisible()) {
+    if (activate) {
+      if (!consoleDebug.isVisible()) consoleDebug.show();
     } 
     else {
-      consoleDebug.show();
+      if (consoleDebug.isVisible()) consoleDebug.hide();
     }
   }
 
@@ -466,8 +476,28 @@ class gui {
         value = (int) _group.getValue();
         
 //        if (_event.isGroup()) {
-//          println(_event.getGroup().getName() + ".");
+//          println(_event.getGroup().getName() + ".group");
 //        }
+
+        if (_event.isFrom(checkboxDebugger)) {
+
+          //.addItem("debuger", 0)
+            //int n = (int)checkbox.getArrayValue()[0];
+            this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
+          //.addItem("draw", 1)     
+            //int n = (int)checkbox.getArrayValue()[1];
+            //..
+          //.addItem("mute", 2)
+            //int n = (int)checkbox.getArrayValue()[2];
+            _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
+          //.addItem("repeat", 3)
+            //int n = (int)checkbox.getArrayValue()[3];
+            //..
+          //.addItem("motion", 4);
+            //int n = (int)checkbox.getArrayValue()[4];
+            //..
+          
+        }
 
         break;
       case CONTROLLER:
@@ -475,9 +505,9 @@ class gui {
         value = (int) _controller.getValue();
         id = _controller.getId();
         
-//        if (_event.isController()) {
-//          println(_event.getController().getName() + ".");
-//        }
+        if (_event.isController()) {
+          println(_event.getController().getName() + ".controller");
+        }
 
         if (_event.isFrom(_buttonSystem))
           if (_event.getName() == "menuSystem") this.menuSystem();
@@ -488,8 +518,27 @@ class gui {
         //  if (_event.getName() == "audioVolume") this.audioVolume(value);
         //if (_event.isFrom(servoAngle)) 
         //  if (_event.getName() == "servoAngle") this.servoAngle(value);
-                
-        break;
+              
+        if (_event.isFrom(checkboxDebugger)) {
+
+          //.addItem("debuger", 0)
+            //int n = (int)checkbox.getArrayValue()[0];
+            this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
+          //.addItem("draw", 1)     
+            //int n = (int)checkbox.getArrayValue()[1];
+            //..
+          //.addItem("mute", 2)
+            //int n = (int)checkbox.getArrayValue()[2];
+            _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
+          //.addItem("repeat", 3)
+            //int n = (int)checkbox.getArrayValue()[3];
+            //..
+          //.addItem("motion", 4);
+            //int n = (int)checkbox.getArrayValue()[4];
+            //..
+          
+        }
+        
     }
         
   }

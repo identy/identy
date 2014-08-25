@@ -33,7 +33,7 @@ void setup() {
       
   //cursor(CROSS);
   
-  H.init(this).background(#202020).autoClear(true);
+  //H.init(this).background(#202020).autoClear(true);
   
   _driver = new driver(this);
   _driver.setup();
@@ -91,7 +91,7 @@ void keyPressed() {
     _gui.menuSystem();
     break;
   case 'd' | 'D':
-    _gui.debugSystem();
+    _gui.debugSystemToggle(true);
     break;
   }
   

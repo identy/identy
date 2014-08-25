@@ -85,6 +85,10 @@ class audio {
     }
   }
 
+  void mute(boolean activate) {
+    this.volume(activate? -255: 255);
+  }
+  
   boolean isPlaying() {
     if (_player != null) return _player.isPlaying();
     return false;
@@ -114,21 +118,21 @@ class audio {
 
   void draw(int type) {
 
-      //stroke(204, 102, 0);
-      stroke( 128, 0, 0 );
       strokeWeight(1);
+      stroke(204, 102, 0);
         
       // perform a forward FFT on the samples in jingle's mix buffer,
       // which contains the mix of both the left and right channels of the file
       _fft.forward( _player.mix );
   
-//      for(int i = 0; i < _fft.specSize(); i++)
-//      {
-//        // draw the line for frequency band i, scaling it up a bit so we can see it
-//        line( i, height, i, height - _fft.getBand(i)*8 );
-//      }
+      for(int i = 0; i < _fft.specSize(); i++)
+      {
+        // draw the line for frequency band i, scaling it up a bit so we can see it
+        line( i, height, i, height - _fft.getBand(i)*8 );
+      }
   
-
+      stroke( 128, 0, 0 );
+      
      for (int i = 0; i < _player.bufferSize() - 1;  i++)
       {
         line(i, height - 50 - 8 - _player.left.get(i)*50, i+1, height - 100 - 8 - _player.left.get(i+1)*10);
@@ -139,8 +143,8 @@ class audio {
     float _position = map(_player.position(), 0, _player.length(), 0, 400);
      stroke(255, 0, 0);
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-  if (_gui.menuSystemisVisible())
-     line(_position + 110, 120, _position + 110, height - 200 - 8 + 20);
+     if (_gui.menuSystemisVisible())
+       line(_position + 110, 120, _position + 110, height - 200 - 8 + 20);
 
       //_player.removeListener(_visuals[0]);
       //_player.addListener(_visuals[0]);

@@ -46,6 +46,8 @@ class gui {
   audio _audio;
   environment _environment;
 
+  time _time;
+  
   JSONObject serializerjson;
 
   Keystone ks;
@@ -92,6 +94,7 @@ class gui {
 
       int __id = serializerjson.getInt("id");
       String __specie = serializerjson.getString("specie");
+      
       String __environment = serializerjson.getString("environment");
 
    } 
@@ -101,8 +104,9 @@ class gui {
       serializerjson = new JSONObject();
   
       serializerjson.setInt("id", 0);
-      serializerjson.setString("specie", "_theme.mp3");
-      serializerjson.setString("environment", "Box.obj");
+      serializerjson.setString("specie", "Audio/_theme.mp3");
+      serializerjson.setString("specie.description", _audio.meta.title());
+      serializerjson.setString("environment", "Objects/cassini.obj");
 
    }
 
@@ -112,6 +116,9 @@ class gui {
     
     //_environment = new environment(serializerjson.getString("environment"), context);
 
+    _time = new time(context);
+    _time.setup();
+    
     ks = new Keystone(context);
     surface = ks.createCornerPinSurface(800, 600, 2);
     
@@ -250,7 +257,7 @@ class gui {
       .setBroadcast(false)
       .setValue(0)
       .setPosition(580, 20)
-      .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
+      .setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"))
       .setBroadcast(true)
       .updateSize();
     
@@ -260,7 +267,7 @@ class gui {
 //      .setValue(-1)
 //      .setPosition(540, 30)
 //      .setSize(20, 20)
-//      .setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_normal.png"))
+//      .setImages(loadImage("Texture/_box_.png"), loadImage("Texture/_box_.png"), loadImage("Texture/_box_.png"))
 //      .setBroadcast(true);
 //
 //    sequenceForward = _gui.addButton("sequenceForward")
@@ -269,7 +276,7 @@ class gui {
 //      .setValue(1)
 //      .setPosition(540, 60)
 //      .setSize(20, 20)
-//      .setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_normal.png"))
+//      .setImages(loadImage("Texture/_box_.png"), loadImage("Texture/_box_.png"), loadImage("Texture/_box_.png"))
 //      .setBroadcast(true);
 
 //    servoAngle = _gui.addKnob("servoAngle")
@@ -362,9 +369,9 @@ class gui {
       //    }
       
           if (_audio.isPlaying()) 
-            sequencePlay.setImages(loadImage("pause_red.png"), loadImage("pause_blue.png"), loadImage("pause_green.png"));
+            sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
           else 
-            sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
+            sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
   
        }
     catch (Exception e) {
@@ -448,28 +455,28 @@ class gui {
       else {
         _audio.play();
       }
-      sequencePlay.setImages(loadImage("pause_red.png"), loadImage("pause_blue.png"), loadImage("pause_green.png"));
+      //sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
     }
     else {
       _audio.stop();
-      sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
+      //sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
     }
     
-//    if (!motionDebug()) {
-//      
-//    if (!_step.isPlaying()) {
-//      if (repeatDebug()) {
-//        _step.loop();
-//      }
-//      else {
-//        _step.play();
-//      }
-//    }
-//    else {
-//      _step.stop();
-//    }
-//    
-//    }
+    if (!motionDebug()) {
+      
+      if (!_time.isPlaying()) {
+        if (repeatDebug()) {
+          _time.loop();
+        }
+        else {
+          _time.play();
+        }
+      }
+      else {
+        _time.stop();
+      }
+    
+    }
         
   }
   

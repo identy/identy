@@ -18,7 +18,8 @@ class audio {
 
   ddf.minim.Minim _minim;
   ddf.minim.AudioPlayer _player;
-
+  ddf.minim.AudioMetaData meta;
+  
   ddf.minim.AudioInput _input; 
   ddf.minim.AudioOutput _out; 
 
@@ -35,9 +36,12 @@ class audio {
   }
 
   void setup(String sound) {
+    
     _player = _minim.loadFile(sound, 1024);
     _input = _minim.getLineIn();
     _out = _minim.getLineOut();
+    
+    meta = _player.getMetaData();
     
     // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
     //_wave = new Oscil( 440, 0.5f, Waves.SINE );

@@ -171,7 +171,7 @@ class gui {
         .setRange(0, _audio._player.length())
         //.setRange(0, _audio._player.bufferSize())
         
-        .setRangeValues((_audio._player.length() / 7) * index, _audio._player.length() / 7)
+        .setRangeValues(((_audio._player.length() / 7) * (index - 1)), ((_audio._player.length() / 7) * (index - 1 )) + (_audio._player.length() / 7))
         .setSliderMode(Slider.FLEXIBLE)
         .setBroadcast(true)
         .setColorForeground(color(255, 40))
@@ -212,23 +212,23 @@ class gui {
       .setBroadcast(true)
       .updateSize();
     
-    sequenceRewind = _gui.addButton("sequenceRewind")
-      .moveTo(_groupSystem)
-      .setBroadcast(false)
-      .setValue(-1)
-      .setPosition(540, 20)
-      .setSize(20, 20)
-      .setImages(loadImage("play_red.png"), loadImage("play_red.png"), loadImage("play_red.png"))
-      .setBroadcast(true);
-
-    sequenceForward = _gui.addButton("sequenceForward")
-      .moveTo(_groupSystem)
-      .setBroadcast(false)
-      .setValue(1)
-      .setPosition(540, 60)
-      .setSize(20, 20)
-      .setImages(loadImage("play_red.png"), loadImage("play_red.png"), loadImage("play_red.png"))
-      .setBroadcast(true);
+//    sequenceRewind = _gui.addButton("sequenceRewind")
+//      .moveTo(_groupSystem)
+//      .setBroadcast(false)
+//      .setValue(-1)
+//      .setPosition(540, 30)
+//      .setSize(20, 20)
+//      .setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_normal.png"))
+//      .setBroadcast(true);
+//
+//    sequenceForward = _gui.addButton("sequenceForward")
+//      .moveTo(_groupSystem)
+//      .setBroadcast(false)
+//      .setValue(1)
+//      .setPosition(540, 60)
+//      .setSize(20, 20)
+//      .setImages(loadImage("check_box_normal.png"), loadImage("check_box_normal.png"), loadImage("check_box_normal.png"))
+//      .setBroadcast(true);
 
 //    servoAngle = _gui.addKnob("servoAngle")
 //      .setBroadcast(false)

@@ -158,7 +158,7 @@ class audio {
      stroke(255, 0, 0);
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
      if (_gui.menuSystemVisible())
-       line(_position + 110, 100, _position + 110, 360);
+       line(_position + 110, 110, _position + 110, 390);
 
       //_player.removeListener(_visuals[0]);
       //_player.addListener(_visuals[0]);

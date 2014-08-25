@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 
 import controlP5.*;
 
+import deadpixel.keystone.*;
+
 class gui {
 
   final static int CONTROLLER = 0, TAB = 1, GROUP = 2;
@@ -36,10 +38,18 @@ class gui {
   //controlP5.Knob audioVolume;
   //controlP5.Knob servoAngle;
   
-  Println console;
+  audio _audio;
+  environment _environment;
+
+  Keystone ks;
+  CornerPinSurface surface;
   
+  PGraphics offscreen;
+
   private PApplet context;
-    
+ 
+   Println console;
+   
   public gui(PApplet context) {
 
     this.context = context;
@@ -61,7 +71,21 @@ class gui {
   }
 
   void setup() {
-                
+
+    background(backgroundColor);
+    stroke(strokeColor);
+    fill(fillColor);
+
+    _audio = new audio(context);
+    _audio.setup("__theme.mp3");    
+
+    _environment = new environment("cassini.obj", context);
+
+    ks = new Keystone(context);
+    surface = ks.createCornerPinSurface(800, 600, 2);
+    
+    offscreen = createGraphics(800, 600, P3D);
+
     _buttonSystem = _gui.addButton("menuSystem", 1, 1, 1, 100, 20);
     _buttonSystem.getCaptionLabel().set("system ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
@@ -95,27 +119,27 @@ class gui {
     _listArduinoPort.addListener(new portListener());
     //_listArduinoPort.setValue(0);
 
-    _gui.addTextlabel("Port357", "serial357 port", 240, 20)
-      .moveTo(_groupSystem);
-    
-    _listSerial357Port = _gui.addListBox("serial357Port", 240, 60, 200, 60);
-    _listSerial357Port.moveTo(_groupSystem);
-    _listSerial357Port.setBarHeight(18);
-    _listSerial357Port.toUpperCase(false);
-    _listSerial357Port.getCaptionLabel().set("port");
-    _listSerial357Port.actAsPulldownMenu(true);
-    _listSerial357Port.setItemHeight(20);
-    _listSerial357Port.enableCollapse();
-    
-    for (int i = 0; i < _driver.list().length; i++) {
-      _listSerial357Port.addItem(_driver357.list()[i], i);
-    }
-   
-    _listSerial357Port.addListener(new port357Listener());
-    //_listSerial357Port.setValue(0);
+//    _gui.addTextlabel("Port357", "serial357 port", 240, 20)
+//      .moveTo(_groupSystem);
+//    
+//    _listSerial357Port = _gui.addListBox("serial357Port", 240, 60, 200, 60);
+//    _listSerial357Port.moveTo(_groupSystem);
+//    _listSerial357Port.setBarHeight(18);
+//    _listSerial357Port.toUpperCase(false);
+//    _listSerial357Port.getCaptionLabel().set("port");
+//    _listSerial357Port.actAsPulldownMenu(true);
+//    _listSerial357Port.setItemHeight(20);
+//    _listSerial357Port.enableCollapse();
+//    
+//    for (int i = 0; i < _driver.list().length; i++) {
+//      _listSerial357Port.addItem(_driver357.list()[i], i);
+//    }
+//   
+//    _listSerial357Port.addListener(new port357Listener());
+//    //_listSerial357Port.setValue(0);
     
     for (int index = 1; index <= 7; index++) {
-      
+
       Toggle relayToggle = _gui.addToggle("relayToggle" + index)
         .moveTo(_groupSystem)
         .setBroadcast(false)
@@ -137,9 +161,12 @@ class gui {
         .setId(index)
         .setPosition(110, 60 + (40 * index))
         .setSize(400, 20)
-        .setHandleSize(20)
-        .setRange(0, 100)
-        .setRangeValues(10, 40)
+        .setHandleSize(1)
+        
+        .setRange(0, _audio._player.length())
+        //.setRange(0, _audio._player.bufferSize())
+        
+        .setRangeValues(50, _audio._player.length() / 2)
         .setSliderMode(Slider.FLEXIBLE)
         .setBroadcast(true)
         .setColorForeground(color(255, 40))
@@ -152,30 +179,30 @@ class gui {
       
     }
     
-    for (int index = 1; index <= 8; index++) {
-      
-      Toggle relayControl = _gui.addToggle("relayControl" + index)
-        .moveTo(_groupSystem)
-        .setBroadcast(false)
-        .setId(index)
-        .setPosition(580, 60 + (40 * index))
-        .setSize(50, 20)
-        .setValue(false)
-        .setBroadcast(true)
-        .setMode(ControlP5.SWITCH);
-        
-      relayControl.getCaptionLabel().set("relay " + index);
-      relayControl.getCaptionLabel().toUpperCase(false);
-      
-      _gui.getController("relayControl" + index).addListener(new relayControlListener());
-
-    }
+//    for (int index = 1; index <= 8; index++) {
+//      
+//      Toggle relayControl = _gui.addToggle("relayControl" + index)
+//        .moveTo(_groupSystem)
+//        .setBroadcast(false)
+//        .setId(index)
+//        .setPosition(580, 60 + (40 * index))
+//        .setSize(50, 20)
+//        .setValue(false)
+//        .setBroadcast(true)
+//        .setMode(ControlP5.SWITCH);
+//        
+//      relayControl.getCaptionLabel().set("relay " + index);
+//      relayControl.getCaptionLabel().toUpperCase(false);
+//      
+//      _gui.getController("relayControl" + index).addListener(new relayControlListener());
+//
+//    }
 
     sequencePlay = _gui.addButton("sequencePlay")
       .moveTo(_groupSystem)
       .setBroadcast(false)
       .setValue(128)
-      .setPosition(720, 20)
+      .setPosition(580, 20)
       .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
       .setBroadcast(true)
       .updateSize();
@@ -219,19 +246,20 @@ class gui {
 
     checkboxDebugger = _gui.addCheckBox("checkboxDebugger")
       .moveTo(_groupSystem)
-      .setPosition(20, 440)
+      .setPosition(670, 280)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
       .setSize(10, 10)
-      .setItemsPerRow(4)
+      .setItemsPerRow(1)
       .setSpacingColumn(86)
       .setSpacingRow(20)
       .addItem("debuger", 0)
       .addItem("draw", 1)
       .addItem("mute", 2)
-      .addItem("repeat", 3);
-    
+      .addItem("repeat", 3)
+      .addItem("motion", 4);
+      
     for(Toggle toggle:checkboxDebugger.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
     }
@@ -248,13 +276,18 @@ class gui {
     _gui.getTooltip().setDelay(300);   
     _gui.getTooltip().register("buttonSystem", "system define");
 
-    checkboxDebugger.activate("debuger");
+    //checkboxDebugger.activate("debuger");
+    consoleDebug.hide();
+      
     checkboxDebugger.activate("draw");
+    checkboxDebugger.activate("repeat");
     
   }
 
   void set() {
 
+     try {
+       
     for (int relay = 0; relay <= 6; relay++) {
       ((Toggle)(_gui.getController("relayToggle" + (relay + 1)))).setState(_driver._arduinoRelay[relay] == Arduino.HIGH);
     }
@@ -263,11 +296,16 @@ class gui {
 //      ((Toggle)(_gui.getController("relayControl" + (relay + 1)))).setState(_driver357._portRelay[relay]);
 //    }
 
-    if (_step.isPlaying() | _audio.isPlaying()) 
+    if (_audio.isPlaying()) 
       sequencePlay.setImages(loadImage("pause_red.png"), loadImage("pause_blue.png"), loadImage("pause_green.png"));
     else 
       sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
   
+     }
+  catch (Exception e) {
+    //
+  } 
+
   }
 
   void draw() {   
@@ -276,18 +314,51 @@ class gui {
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
     //rotate(frameCount*0.001);
 
-    background(backgroundColor);
-    stroke(strokeColor);
-    fill(fillColor);
+  PVector surfaceMouse = surface.getTransformedMouse();
+
+  // Draw the scene, offscreen
+  offscreen.beginDraw();
+  offscreen.background(0);
+  offscreen.stroke(204, 102, 0);
+  
+  //offscreen.fill(0, 255, 0);
+  //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
+  offscreen.endDraw();
+  
+  //_driver.read();
+  //_driver357.read();
+ 
+   // render the scene, transformed using the corner pin surface
+  surface.render(offscreen);
+
+  if (_audio.isPlaying()) if (this.drawDebug()) _audio.draw(0);
     
-    smooth();
-    lights();
+  pushMatrix();
+  noStroke();
+  translate(width - 80, 80, 0);
+    rotateY(radians(frameCount)/2);
+    if (this.drawDebug()) _environment.draw();
     
-    if (this.drawDebug()) _audio.draw(0);
-      
+  popMatrix();
+
+    float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
+    
+    for (int index = 1; index <= 7; index++) {
+
+    float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio._player.length(), 0, 400);
+    float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio._player.length(), 0, 400);
+    int _id =_gui.getController("rangeRelay" + index).getId();
+
+      if (_audio.isPlaying())
+        if (_position > _init  &&  _done > _position) _driver.write(_id, true);
+        else _driver.write(_id, false);
+      if (_audio.isPlaying())
+        if (consoleDebug()) println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+    }
+    
     //_gui.show();
     //_gui.draw();
-              
+    
   }
   
   void sequencePlay() {
@@ -305,22 +376,36 @@ class gui {
       sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
     }
     
-    if (!_step.isPlaying()) {
-      if (repeatDebug()) {
-        _step.loop();
-      }
-      else {
-        _step.play();
-      }
-    }
-    else {
-      _step.stop();
-    }
+//    if (!motionDebug()) {
+//      
+//    if (!_step.isPlaying()) {
+//      if (repeatDebug()) {
+//        _step.loop();
+//      }
+//      else {
+//        _step.play();
+//      }
+//    }
+//    else {
+//      _step.stop();
+//    }
+//    
+//    }
     
     if (this.muteDebug()) this.audioVolume(-255);
     
   }
   
+  void stop() {
+    _audio.close();
+  }
+
+  void move() {
+    
+    _audio.move();
+
+  }
+
   void menuSystem() {
     if (_groupSystem.isVisible()) {
       _groupSystem.hide();
@@ -328,6 +413,10 @@ class gui {
     else {
       _groupSystem.show();
     }
+  }
+  
+  boolean menuSystemisVisible() {
+    return _groupSystem.isVisible();
   }
   
   void debugSystem() {
@@ -358,6 +447,9 @@ class gui {
   } 
   boolean repeatDebug() {
     return checkboxDebugger.getItem(3).getState();
+  }
+  boolean motionDebug() {
+    return checkboxDebugger.getItem(4).getState();
   }
   
   public void controlEvent(ControlEvent _event) {
@@ -408,18 +500,18 @@ void controlEvent(ControlEvent _event) {
   _gui.controlEvent(_event);
 }
 
-void keyPressed() {
-  switch( key ) {
-    case ' ':
-      break;
-    case 'm' | 'M':
-      _gui.menuSystem();
-      break;
-    case 'd' | 'D':
-      _gui.debugSystem();
-      break;
-  }
-}
+//void keyPressed() {
+//  switch( key ) {
+//    case ' ':
+//      break;
+//    case 'm' | 'M':
+//      _gui.menuSystem();
+//      break;
+//    case 'd' | 'D':
+//      _gui.debugSystem();
+//      break;
+//  }
+//}
 
 class portListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
@@ -466,6 +558,22 @@ class relayToggleListener implements ControlListener {
   }
 
 }
+
+class relayRangeListener implements ControlListener {
+  public void controlEvent(ControlEvent _event) {
+    if (_event.isController()) {
+      
+      if (_gui.consoleDebug()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
+      
+      //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
+      //_step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));
+      
+      //if (_gui._audio.isPlaying()) _driver.write(_event.getController().getId(), _event.getController().getArrayValue(0) > _gui._audio._player.position() &  _event.getController().getArrayValue(1) < _gui._audio._player.position());
+    }
+  }
+
+}
+
 class relayControlListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
     if (_event.isController()) {
@@ -482,17 +590,3 @@ class relayControlListener implements ControlListener {
 
 }
 
-
-class relayRangeListener implements ControlListener {
-  public void controlEvent(ControlEvent _event) {
-    if (_event.isController()) {
-      
-      if (_gui.consoleDebug()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
-      
-      //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
-      _step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));
-          
-    }
-  }
-
-}

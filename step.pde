@@ -67,15 +67,15 @@ class step {
 //    //_tween.addEventListener(new TweenEventListener());
 //    _timeline.add(_tween, 1);
 
-//    _motion = _timeline.call(this, "init", 0);    
-//    _motion = _timeline.call(this, "uno", 1);
-//    _motion = _timeline.call(this, "dos", 2);
-//    _motion = _timeline.call(this, "tres", 3);   
-//    _motion = _timeline.call(this, "cuatro", 4);
-//    _motion = _timeline.call(this, "cinco", 5);
-//    _motion = _timeline.call(this, "seis", 6);
-//    _motion = _timeline.call(this, "siete", 7);
-//    _motion = _timeline.call(this, "done", 8);
+    _motion = _timeline.call(this, "init", 0);    
+    _motion = _timeline.call(this, "uno", 1);
+    _motion = _timeline.call(this, "dos", 2);
+    _motion = _timeline.call(this, "tres", 3);   
+    _motion = _timeline.call(this, "cuatro", 4);
+    _motion = _timeline.call(this, "cinco", 5);
+    _motion = _timeline.call(this, "seis", 6);
+    _motion = _timeline.call(this, "siete", 7);
+    _motion = _timeline.call(this, "done", 8);
 
     TweenListener _tweenListener = new TweenListener();
 
@@ -124,16 +124,31 @@ class step {
   }
 
   void play() {
-    _timeline.play();
+    
+    _timeline.play();    
+    for (Tween _tween : _timeline.getTweenList()) {
+      _tween.play(); 
+    }
+
   }
 
   void loop() {
-    //_timeline.reverse().repeat().play();
+
+   
+    for (Tween _tween : _timeline.getTweenList()) {
+      _tween.repeat().play(); 
+    }
     _timeline.repeat().play();
+    
   }
 
   void stop() {
+    
+    for (Tween _tween : _timeline.getTweenList()) {
+      _tween.repeat().stop(); 
+    }
     _timeline.stop();
+    
   }
 
   boolean isPlaying() {
@@ -276,7 +291,7 @@ public class TweenListener implements MotionEventListener {
       println(((Tween)te.getSource()).getName() + " ended");
 
     try {
-      _driver357.toggle(Integer.parseInt(((Tween)te.getSource()).getName().substring(((Tween)te.getSource()).getName().length() - 1)));
+      // lock // _driver357.toggle(Integer.parseInt(((Tween)te.getSource()).getName().substring(((Tween)te.getSource()).getName().length() - 1)));
     }
     catch(Exception e) { e.printStackTrace(); }
 

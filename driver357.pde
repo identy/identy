@@ -31,7 +31,7 @@ class driver357 {
       
       this.context = context;
       
-      this._port = new Serial(context, Serial.list()[1], 9600);
+      //this._port = new Serial(context, Serial.list()[1], 9600);
     }
     catch (Exception e) {
       e.printStackTrace();

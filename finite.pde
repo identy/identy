@@ -6,9 +6,10 @@
  * copyright 2014 identy [ www.identy.org ] 
  *
  */
- 
- /*
- 
+
+
+/*
+
  A simple Finite State Machine library for Processing!
  
  Based on the AlphaBeta FSM library for Arduino: http://www.arduino.cc/playground/Code/FiniteStateMachine

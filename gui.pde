@@ -204,8 +204,10 @@ class gui {
         .setColorBackground(color(255, 40));
       
          try { 
+           
             JSONObject jrangeRelay = serializerjson.getJSONObject("rangeRelay" + index);
             rangeRelay.setRangeValues(jrangeRelay.getFloat("value0"), jrangeRelay.getFloat("value1"));
+            
          } 
          catch (Exception E) {
            
@@ -213,10 +215,10 @@ class gui {
             
             jrangeRelay.setFloat("value0", ((_audio._player.length() / 7) * (index - 1)));
             jrangeRelay.setFloat("value1", ((_audio._player.length() / 7) * (index - 1 )) + (_audio._player.length() / 7));
-            
-             serializerjson.setJSONObject("rangeRelay" + index, jrangeRelay); 
+
+             serializerjson.setJSONObject("rangeRelay" + index, jrangeRelay);            
          } 
-   
+             
       rangeRelay.getCaptionLabel().set("range " + index);
       rangeRelay.getCaptionLabel().toUpperCase(false);
       
@@ -351,23 +353,23 @@ class gui {
 
      try {
        
-    for (int relay = 0; relay <= 6; relay++) {
-      ((Toggle)(_gui.getController("relayToggle" + (relay + 1)))).setState(_driver._arduinoRelay[relay] == Arduino.HIGH);
-    }
-
-//    for (int relay = 0; relay <= 7; relay++) {
-//      ((Toggle)(_gui.getController("relayControl" + (relay + 1)))).setState(_driver357._portRelay[relay]);
-//    }
-
-    if (_audio.isPlaying()) 
-      sequencePlay.setImages(loadImage("pause_red.png"), loadImage("pause_blue.png"), loadImage("pause_green.png"));
-    else 
-      sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
+          for (int relay = 0; relay <= 6; relay++) {
+            ((Toggle)(_gui.getController("relayToggle" + (relay + 1)))).setState(_driver._arduinoRelay[relay] == Arduino.HIGH);
+          }
+      
+      //    for (int relay = 0; relay <= 7; relay++) {
+      //      ((Toggle)(_gui.getController("relayControl" + (relay + 1)))).setState(_driver357._portRelay[relay]);
+      //    }
+      
+          if (_audio.isPlaying()) 
+            sequencePlay.setImages(loadImage("pause_red.png"), loadImage("pause_blue.png"), loadImage("pause_green.png"));
+          else 
+            sequencePlay.setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"));
   
-     }
-  catch (Exception e) {
-    //
-  } 
+       }
+    catch (Exception e) {
+      //
+    } 
 
   }
 
@@ -478,6 +480,7 @@ class gui {
     } 
     else {
       if (_groupSystem.isVisible()) _groupSystem.hide();
+      saveJSONObject(serializerjson, "data/alpheny.json");
     }
   }
   

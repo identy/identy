@@ -339,7 +339,7 @@ class gui {
       .setItemsPerRow(1)
       .setSpacingColumn(86)
       .setSpacingRow(20)
-      .addItem("debuger", 0)
+      .addItem("debug", 0)
       .addItem("draw", 1)
       .addItem("mute", 2)
       .addItem("repeat", 3);
@@ -369,7 +369,7 @@ class gui {
       if (serializerjson.getBoolean("repeat"))
         checkboxDebugger.activate("repeat");
 
-    //checkboxDebugger.activate("debuger");
+    //checkboxDebugger.activate("debug");
     consoleDebug.hide();
           
   }
@@ -411,20 +411,20 @@ class gui {
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
     //rotate(frameCount*0.001);
 
-  PVector surfaceMouse = surface.getTransformedMouse();
-
-  // Draw the scene, offscreen
-  offscreen.beginDraw();
-  offscreen.background(0);
-  offscreen.stroke(204, 102, 0);
+    PVector surfaceMouse = surface.getTransformedMouse();
   
-  if (_audio.isPlaying()) _audio.draw(offscreen);
-  //offscreen.fill(0, 255, 0);
-  //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
-  offscreen.endDraw();
- 
-  // render the scene, transformed using the corner pin surface
-  surface.render(offscreen);
+    // Draw the scene, offscreen
+    offscreen.beginDraw();
+    offscreen.background(0);
+    offscreen.stroke(204, 102, 0);
+    
+    if (_audio.isPlaying()) _audio.draw(offscreen);
+    //offscreen.fill(0, 255, 0);
+    //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
+    offscreen.endDraw();
+   
+    // render the scene, transformed using the corner pin surface
+    surface.render(offscreen);
  
   //_driver.read();
   //_driver357.read();
@@ -439,8 +439,10 @@ class gui {
 
     float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
 
-    _audio.mute(muteDebug());
-        
+    _audio.mute(muteisActive());
+    
+    this.debugToggle(debugisActive());
+    
     for (int index = 1; index <= 7; index++) {
 
     float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio._player.length(), 0, 400);
@@ -452,11 +454,10 @@ class gui {
         if (_position > _init  &&  _done > _position) _driver.write(_id, true);
         else _driver.write(_id, false);
         
-      if (_audio.isPlaying())
-        if (consoleDebugisVisible()) println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+        println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
 
     }
-    
+         
     //_gui.show();
     //_gui.draw();
     
@@ -467,7 +468,7 @@ class gui {
     //_audio.mute(this.muteDebug());
     
     if (!_audio.isPlaying()) {
-      if (repeatDebug()) {
+      if (repeatisActive()) {
         _audio.loop();
       }
       else {
@@ -479,45 +480,37 @@ class gui {
       _audio.stop();
       //sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
     }
-    
-//    if (!motionDebug()) {
-//      
-//      if (!_time.isPlaying()) {
-//        if (repeatDebug()) {
-//          _time.loop();
-//        }
-//        else {
-//          _time.play();
-//        }
-//      }
-//      else {
-//        _time.stop();
-//      }
-//    
-//    }
-        
+            
   }
   
-  boolean menuSystemisVisible() {
+  boolean systemisVisible() {
       return _groupSystem.isVisible();
   }
-  boolean audioFFTisVisible() {
+  
+  boolean FFTisActive() {
     return checkboxDebugger.getItem(1).getState();
   }
-  boolean consoleDebugisVisible() {
+  boolean debugisActive() {
       return checkboxDebugger.getItem(0).getState();
   }
-  void menuSystemToggle(boolean activate) {
+  boolean muteisActive() {
+    return checkboxDebugger.getItem(2).getState();
+  } 
+  boolean repeatisActive() {
+    return checkboxDebugger.getItem(3).getState();
+  }
+
+  void menuToggle(boolean activate) {
     if (activate) {
       if (!_groupSystem.isVisible()) _groupSystem.show();
     } 
     else {
-      saveJSONObject(serializerjson, "data/alpheny.json");
+      //saveJSONObject(serializerjson, "data/alpheny.json");
       if (_groupSystem.isVisible()) _groupSystem.hide();
     }
   }
   
-  void debugSystemToggle(boolean activate) {
+  void debugToggle(boolean activate) {
     //if (consoleDebug.isVisible()) {
     if (activate) {
       if (!consoleDebug.isVisible()) consoleDebug.show();
@@ -534,27 +527,11 @@ class gui {
 //  void servoAngle(int value) {
 //    _driver.servo(value);
 //  }
-
-//  boolean consoleDebug() {
-//    return checkboxDebugger.getItem(0).getState();
-//  }
-//  boolean drawDebug() {
-//    return checkboxDebugger.getItem(1).getState();
-//  }
-  boolean muteDebug() {
-    return checkboxDebugger.getItem(2).getState();
-  } 
-  boolean repeatDebug() {
-    return checkboxDebugger.getItem(3).getState();
-  }
-//  boolean motionDebug() {
-//    return checkboxDebugger.getItem(4).getState();
-//  }
   
   public void controlEvent(ControlEvent _event) {
 
-    int value;
-    int id;
+    int value = 0;
+    int id = 0;
 
     int type = _event.getType();
     
@@ -570,16 +547,16 @@ class gui {
 
         if (_event.isFrom(checkboxDebugger)) {
 
-          //.addItem("debuger", 0)
+          //.addItem("debug", 0)
             //int n = (int)checkbox.getArrayValue()[0];
-            this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
+            //this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
           //.addItem("draw", 1)     
             //int n = (int)checkbox.getArrayValue()[1];
             serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
           //.addItem("mute", 2)
             //int n = (int)checkbox.getArrayValue()[2];
-            _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
+            //_audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
             serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
           //.addItem("repeat", 3)
             //int n = (int)checkbox.getArrayValue()[3];
@@ -599,7 +576,7 @@ class gui {
         }
 
         if (_event.isFrom(_buttonSystem))
-          if (_event.getName() == "menuSystem") this.menuSystemToggle(!_groupSystem.isVisible());
+          if (_event.getName() == "menuSystem") this.menuToggle(!_groupSystem.isVisible());
 
         if (_event.isFrom(sequencePlay))
           if (_event.getName() == "sequencePlay") this.sequencePlay();
@@ -616,16 +593,16 @@ class gui {
               
         if (_event.isFrom(checkboxDebugger)) {
 
-          //.addItem("debuger", 0)
+          //.addItem("debug", 0)
             //int n = (int)checkbox.getArrayValue()[0];
-            this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
+            //this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
           //.addItem("draw", 1)     
             //int n = (int)checkbox.getArrayValue()[1];
             serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
           //.addItem("mute", 2)
             //int n = (int)checkbox.getArrayValue()[2];
-            _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
+            //_audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
             serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
           //.addItem("repeat", 3)
             //int n = (int)checkbox.getArrayValue()[3];
@@ -662,7 +639,7 @@ class portListener implements ControlListener {
     try {
       if (_event.isGroup()) {
         
-        if (_gui.consoleDebugisVisible()) println(_event);
+        if (_gui.debugisActive()) println(_event);
       
         _driver.setup(_driver.list()[(int)_event.getGroup().getValue()]);
       }
@@ -677,7 +654,7 @@ class port357Listener implements ControlListener {
     try {
       if (_event.isGroup()) {
         
-        if (_gui.consoleDebugisVisible()) println(_event);
+        if (_gui.debugisActive()) println(_event);
       
         _driver357.setup(_driver357.list()[(int)_event.getGroup().getValue()]);
       }
@@ -707,7 +684,7 @@ class relayRangeListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
     if (_event.isController()) {
       
-      if (_gui.consoleDebugisVisible()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
+      if (_gui.debugisActive()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
       
       //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
       //_step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));

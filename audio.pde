@@ -142,7 +142,7 @@ class audio {
       // which contains the mix of both the left and right channels of the file
       _fft.forward( _player.mix );
   
-       if (_gui.audioFFTisVisible())
+       if (_gui.FFTisActive())
           for(int i = 0; i < _fft.specSize(); i++)
           {
             // draw the line for frequency band i, scaling it up a bit so we can see it
@@ -162,7 +162,7 @@ class audio {
     float _position = map(_player.position(), 0, _player.length(), 0, 400);
      stroke(255, 0, 0);
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     if (_gui.menuSystemisVisible())
+     if (_gui.systemisVisible())
        line(_position + 110, 110, _position + 110, 400);
 
       //_player.removeListener(_visuals[0]);

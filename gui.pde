@@ -90,7 +90,7 @@ class gui {
  try 
    { 
    
-      serializerjson = loadJSONObject("data/alpheny.json");
+      serializerjson = loadJSONObject("alpheny.json");
 
       int __id = serializerjson.getInt("id");
       String __specie = serializerjson.getString("specie");
@@ -108,6 +108,8 @@ class gui {
       serializerjson.setString("specie.description", _audio.meta.title());
       serializerjson.setString("environment", "Objects/cassini.obj");
 
+      saveJSONObject(serializerjson, "alpheny.json");
+      
    }
 
     _audio = new audio(context);
@@ -223,7 +225,10 @@ class gui {
             jrangeRelay.setFloat("value0", ((_audio._player.length() / 7) * (index - 1)));
             jrangeRelay.setFloat("value1", ((_audio._player.length() / 7) * (index - 1 )) + (_audio._player.length() / 7));
 
-             serializerjson.setJSONObject("rangeRelay" + index, jrangeRelay);            
+             serializerjson.setJSONObject("rangeRelay" + index, jrangeRelay);
+ 
+            saveJSONObject(serializerjson, "alpheny.json");
+           
          } 
              
       rangeRelay.getCaptionLabel().set("range " + index);
@@ -381,7 +386,7 @@ class gui {
   }
 
   void close() {
-    saveJSONObject(serializerjson, "data/alpheny.json");
+    saveJSONObject(serializerjson, "alpheny.json");
   }
   
   void draw() {   
@@ -489,7 +494,7 @@ class gui {
       if (!_groupSystem.isVisible()) _groupSystem.show();
     } 
     else {
-      saveJSONObject(serializerjson, "data/alpheny.json");
+      saveJSONObject(serializerjson, "alpheny.json");
       if (_groupSystem.isVisible()) _groupSystem.hide();
     }
   }

@@ -1,4 +1,7 @@
 identy interactive
 ======
 
-arduino firmata processing ddf minim
+functions and models.
+
+references
+ arduino firmata ddf minim

@@ -101,7 +101,7 @@ class gui {
       serializerjson = new JSONObject();
   
       serializerjson.setInt("id", 0);
-      serializerjson.setString("specie", "___theme.mp3");
+      serializerjson.setString("specie", "_theme.mp3");
       serializerjson.setString("environment", "cassini.obj");
 
    }
@@ -415,6 +415,7 @@ class gui {
 
     float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio._player.length(), 0, 400);
     float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio._player.length(), 0, 400);
+    
     int _id =_gui.getController("rangeRelay" + index).getId();
 
       if (_audio.isPlaying())

@@ -1,33 +1,33 @@
 {
+  "id": 0,
   "rangeRelay1": {
     "value0": 0,
-    "value1": 6870
+    "value1": 18185
   },
-  "id": 0,
   "rangeRelay3": {
-    "value0": 28153.77734375,
-    "value1": 35041.18359375
-  },
-  "rangeRelay2": {
-    "value0": 9304.037109375,
-    "value1": 16191.4423828125
+    "value0": 36370,
+    "value1": 54555
   },
   "environment": "cassini.obj",
+  "rangeRelay2": {
+    "value0": 18185,
+    "value1": 36370
+  },
   "rangeRelay6": {
-    "value0": 34350,
-    "value1": 41220
+    "value0": 90925,
+    "value1": 109110
   },
+  "specie": "_theme.mp3",
   "rangeRelay7": {
-    "value0": 41220,
-    "value1": 48090
+    "value0": 109110,
+    "value1": 127295
   },
-  "specie": "___theme.mp3",
   "rangeRelay4": {
-    "value0": 20610,
-    "value1": 27480
+    "value0": 54555,
+    "value1": 72740
   },
   "rangeRelay5": {
-    "value0": 27480,
-    "value1": 34350
+    "value0": 72740,
+    "value1": 90925
   }
 }

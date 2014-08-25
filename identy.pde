@@ -61,7 +61,7 @@ void draw() {
 }
 
 void stop() {
-//  _audio.close();
+  _gui.close();
   super.stop();
 }
 

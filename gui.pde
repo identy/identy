@@ -55,7 +55,7 @@ class gui {
 
   private PApplet context;
 
-    private boolean _logo = true;
+    private boolean _logo = false;
     
     private Println console;
    
@@ -102,7 +102,7 @@ class gui {
   
       serializerjson.setInt("id", 0);
       serializerjson.setString("specie", "_theme.mp3");
-      serializerjson.setString("environment", "cassini.obj");
+      serializerjson.setString("environment", "Box.obj");
 
    }
 
@@ -110,7 +110,7 @@ class gui {
     //_audio.setup("___theme.mp3");    
     _audio.setup(serializerjson.getString("specie"));
     
-    _environment = new environment(serializerjson.getString("environment"), context);
+    //_environment = new environment(serializerjson.getString("environment"), context);
 
     ks = new Keystone(context);
     surface = ks.createCornerPinSurface(800, 600, 2);
@@ -373,6 +373,10 @@ class gui {
 
   }
 
+  void close() {
+    saveJSONObject(serializerjson, "data/alpheny.json");
+  }
+  
   void draw() {   
     
     background(backgroundColor);
@@ -401,13 +405,13 @@ class gui {
  
   if (_audio.isPlaying()) if (this.drawDebug()) _audio.draw(0);
     
-  pushMatrix();
-  noStroke();
-  translate(width - 80, 80, 0);
-    rotateY(radians(frameCount)/2);
-    if (this.drawDebug() & _logo) _environment.draw();
-    
-  popMatrix();
+//  pushMatrix();
+//  noStroke();
+//  translate(width - 80, 80, 0);
+//    rotateY(radians(frameCount)/2);
+//    if (this.drawDebug() & _logo) _environment.draw();
+//    
+//  popMatrix();
 
     float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
 
@@ -469,8 +473,7 @@ class gui {
         
   }
   
-  boolean menuSystemVisible() {
-      saveJSONObject(serializerjson, "data/alpheny.json");
+  boolean menuSystemisVisible() {
       return _groupSystem.isVisible();
   }
   
@@ -479,8 +482,8 @@ class gui {
       if (!_groupSystem.isVisible()) _groupSystem.show();
     } 
     else {
-      if (_groupSystem.isVisible()) _groupSystem.hide();
       saveJSONObject(serializerjson, "data/alpheny.json");
+      if (_groupSystem.isVisible()) _groupSystem.hide();
     }
   }
   

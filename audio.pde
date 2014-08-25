@@ -157,7 +157,7 @@ class audio {
     float _position = map(_player.position(), 0, _player.length(), 0, 400);
      stroke(255, 0, 0);
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     if (_gui.menuSystemVisible())
+     if (_gui.menuSystemisVisible())
        line(_position + 110, 110, _position + 110, 400);
 
       //_player.removeListener(_visuals[0]);

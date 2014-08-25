@@ -205,7 +205,7 @@ class gui {
       
          try { 
             JSONObject jrangeRelay = serializerjson.getJSONObject("rangeRelay" + index);
-            rangeRelay.setRangeValues(jrangeRelay.getFloat("value0"), jrangeRelay.getFloat("value1"))
+            rangeRelay.setRangeValues(jrangeRelay.getFloat("value0"), jrangeRelay.getFloat("value1"));
          } 
          catch (Exception E) {
            
@@ -676,15 +676,21 @@ class relayRangeListener implements ControlListener {
       //_step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));
       
          try { 
+            JSONObject jrangeRelay = _gui.serializerjson.getJSONObject("rangeRelay" + _event.getController().getId());
+            
+            jrangeRelay.setFloat("value0", _event.getController().getArrayValue(0));
+            jrangeRelay.setFloat("value1", _event.getController().getArrayValue(1));
+
+             _gui.serializerjson.setJSONObject("rangeRelay" + _event.getController().getId(), jrangeRelay);
+         } 
+         catch (Exception E) {
             JSONObject jrangeRelay = new JSONObject();
             
             jrangeRelay.setFloat("value0", _event.getController().getArrayValue(0));
             jrangeRelay.setFloat("value1", _event.getController().getArrayValue(1));
             
-             serializerjson.setJSONObject("rangeRelay" + _event.getController().getId(), jrangeRelay); 
-         } 
-         catch (Exception E) {
-           // ..        
+            _gui.serializerjson.setJSONObject("rangeRelay" + _event.getController().getId(), jrangeRelay); 
+        
          } 
 
       //if (_gui._audio.isPlaying()) _driver.write(_event.getController().getId(), _event.getController().getArrayValue(0) > _gui._audio._player.position() &  _event.getController().getArrayValue(1) < _gui._audio._player.position());

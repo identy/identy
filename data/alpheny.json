@@ -1,0 +1,33 @@
+{
+  "rangeRelay1": {
+    "value0": 0,
+    "value1": 6870
+  },
+  "id": 0,
+  "rangeRelay3": {
+    "value0": 28153.77734375,
+    "value1": 35041.18359375
+  },
+  "rangeRelay2": {
+    "value0": 9304.037109375,
+    "value1": 16191.4423828125
+  },
+  "environment": "cassini.obj",
+  "rangeRelay6": {
+    "value0": 34350,
+    "value1": 41220
+  },
+  "rangeRelay7": {
+    "value0": 41220,
+    "value1": 48090
+  },
+  "specie": "___theme.mp3",
+  "rangeRelay4": {
+    "value0": 20610,
+    "value1": 27480
+  },
+  "rangeRelay5": {
+    "value0": 27480,
+    "value1": 34350
+  }
+}

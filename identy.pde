@@ -89,5 +89,4 @@ void mouseMoved()
   // but this is a quick and easy way to turn the screen into
   // an x-y control for them.
  // _gui.move();
-  
 }

@@ -108,6 +108,11 @@ class gui {
       //serializerjson.setString("specie.description", _audio.meta.title());
       serializerjson.setString("environment", "Objects/cassini.obj");
 
+      serializerjson.setBoolean("debug", false);
+      serializerjson.setBoolean("draw", false);
+      serializerjson.setBoolean("mote", false);
+      serializerjson.setBoolean("repeat", false);
+      
       saveJSONObject(serializerjson, "data/alpheny.json");
       
    }
@@ -337,8 +342,7 @@ class gui {
       .addItem("debuger", 0)
       .addItem("draw", 1)
       .addItem("mute", 2)
-      .addItem("repeat", 3)
-      .addItem("motion", 4);
+      .addItem("repeat", 3);
       
     for(Toggle toggle:checkboxDebugger.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
@@ -418,7 +422,7 @@ class gui {
   //_driver.read();
   //_driver357.read();
  
-  if (_audio.isPlaying()) if (this.drawDebug()) _audio.draw(0);
+  if (_audio.isPlaying()) _audio.draw();
     
 //  pushMatrix();
 //  noStroke();
@@ -443,7 +447,7 @@ class gui {
         if (_position > _init  &&  _done > _position) _driver.write(_id, true);
         else _driver.write(_id, false);
       if (_audio.isPlaying())
-        if (consoleDebug()) println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+        if (consoleDebugisVisible()) println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
 
     }
     
@@ -470,28 +474,33 @@ class gui {
       //sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
     }
     
-    if (!motionDebug()) {
-      
-      if (!_time.isPlaying()) {
-        if (repeatDebug()) {
-          _time.loop();
-        }
-        else {
-          _time.play();
-        }
-      }
-      else {
-        _time.stop();
-      }
-    
-    }
+//    if (!motionDebug()) {
+//      
+//      if (!_time.isPlaying()) {
+//        if (repeatDebug()) {
+//          _time.loop();
+//        }
+//        else {
+//          _time.play();
+//        }
+//      }
+//      else {
+//        _time.stop();
+//      }
+//    
+//    }
         
   }
   
   boolean menuSystemisVisible() {
       return _groupSystem.isVisible();
   }
-  
+  boolean audioFFTisVisible() {
+    return checkboxDebugger.getItem(1).getState();
+  }
+  boolean consoleDebugisVisible() {
+      return checkboxDebugger.getItem(0).getState();
+  }
   void menuSystemToggle(boolean activate) {
     if (activate) {
       if (!_groupSystem.isVisible()) _groupSystem.show();
@@ -520,21 +529,21 @@ class gui {
 //    _driver.servo(value);
 //  }
 
-  boolean consoleDebug() {
-    return checkboxDebugger.getItem(0).getState();
-  }
-  boolean drawDebug() {
-    return checkboxDebugger.getItem(1).getState();
-  }
+//  boolean consoleDebug() {
+//    return checkboxDebugger.getItem(0).getState();
+//  }
+//  boolean drawDebug() {
+//    return checkboxDebugger.getItem(1).getState();
+//  }
   boolean muteDebug() {
     return checkboxDebugger.getItem(2).getState();
   } 
   boolean repeatDebug() {
     return checkboxDebugger.getItem(3).getState();
   }
-  boolean motionDebug() {
-    return checkboxDebugger.getItem(4).getState();
-  }
+//  boolean motionDebug() {
+//    return checkboxDebugger.getItem(4).getState();
+//  }
   
   public void controlEvent(ControlEvent _event) {
 
@@ -558,18 +567,18 @@ class gui {
           //.addItem("debuger", 0)
             //int n = (int)checkbox.getArrayValue()[0];
             this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
+            serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
           //.addItem("draw", 1)     
             //int n = (int)checkbox.getArrayValue()[1];
-            //..
+            serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
           //.addItem("mute", 2)
             //int n = (int)checkbox.getArrayValue()[2];
             _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
+            serializerjson.setBoolean("mote", (int)checkboxDebugger.getArrayValue()[2] == 1);
           //.addItem("repeat", 3)
             //int n = (int)checkbox.getArrayValue()[3];
-            //..
-          //.addItem("motion", 4);
-            //int n = (int)checkbox.getArrayValue()[4];
-            //..
+            serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
+
           
         }
 
@@ -613,9 +622,6 @@ class gui {
           //.addItem("repeat", 3)
             //int n = (int)checkbox.getArrayValue()[3];
             //..
-          //.addItem("motion", 4);
-            //int n = (int)checkbox.getArrayValue()[4];
-            //..
           
         }
         
@@ -647,7 +653,7 @@ class portListener implements ControlListener {
     try {
       if (_event.isGroup()) {
         
-        if (_gui.consoleDebug()) println(_event);
+        if (_gui.consoleDebugisVisible()) println(_event);
       
         _driver.setup(_driver.list()[(int)_event.getGroup().getValue()]);
       }
@@ -662,7 +668,7 @@ class port357Listener implements ControlListener {
     try {
       if (_event.isGroup()) {
         
-        if (_gui.consoleDebug()) println(_event);
+        if (_gui.consoleDebugisVisible()) println(_event);
       
         _driver357.setup(_driver357.list()[(int)_event.getGroup().getValue()]);
       }
@@ -692,7 +698,7 @@ class relayRangeListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
     if (_event.isController()) {
       
-      if (_gui.consoleDebug()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
+      if (_gui.consoleDebugisVisible()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
       
       //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
       //_step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));
@@ -736,4 +742,3 @@ class relayControlListener implements ControlListener {
   }
 
 }
-

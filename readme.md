@@ -1,7 +1,7 @@
 identy interactive
 ======
 
-functions and models.
+functions and models. time function model
 
 references
- arduino firmata ddf minim
+ arduino firmata controlP5 minim

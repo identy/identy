@@ -32,6 +32,9 @@ class gui {
   
   private controlP5.Button sequencePlay;
   
+  private controlP5.Button sequenceRewind;
+  private controlP5.Button sequenceForward;
+  
   private controlP5.Textarea consoleDebug;
   private controlP5.CheckBox checkboxDebugger;
   
@@ -168,7 +171,7 @@ class gui {
         .setRange(0, _audio._player.length())
         //.setRange(0, _audio._player.bufferSize())
         
-        .setRangeValues(50, _audio._player.length() / 2)
+        .setRangeValues((_audio._player.length() / 7) * index, _audio._player.length() / 7)
         .setSliderMode(Slider.FLEXIBLE)
         .setBroadcast(true)
         .setColorForeground(color(255, 40))
@@ -203,12 +206,30 @@ class gui {
     sequencePlay = _gui.addButton("sequencePlay")
       .moveTo(_groupSystem)
       .setBroadcast(false)
-      .setValue(128)
+      .setValue(0)
       .setPosition(580, 20)
       .setImages(loadImage("play_red.png"), loadImage("play_blue.png"), loadImage("play_green.png"))
       .setBroadcast(true)
       .updateSize();
     
+    sequenceRewind = _gui.addButton("sequenceRewind")
+      .moveTo(_groupSystem)
+      .setBroadcast(false)
+      .setValue(-1)
+      .setPosition(540, 20)
+      .setSize(20, 20)
+      .setImages(loadImage("play_red.png"), loadImage("play_red.png"), loadImage("play_red.png"))
+      .setBroadcast(true);
+
+    sequenceForward = _gui.addButton("sequenceForward")
+      .moveTo(_groupSystem)
+      .setBroadcast(false)
+      .setValue(1)
+      .setPosition(540, 60)
+      .setSize(20, 20)
+      .setImages(loadImage("play_red.png"), loadImage("play_red.png"), loadImage("play_red.png"))
+      .setBroadcast(true);
+
 //    servoAngle = _gui.addKnob("servoAngle")
 //      .setBroadcast(false)
 //      .setRange(0, 180)
@@ -322,20 +343,20 @@ class gui {
   PVector surfaceMouse = surface.getTransformedMouse();
 
   // Draw the scene, offscreen
-//  offscreen.beginDraw();
-//  offscreen.background(0);
-//  offscreen.stroke(204, 102, 0);
-//  
-//  //offscreen.fill(0, 255, 0);
-//  //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
-//  offscreen.endDraw();
+  offscreen.beginDraw();
+  offscreen.background(0);
+  offscreen.stroke(204, 102, 0);
   
+  //offscreen.fill(0, 255, 0);
+  //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
+  offscreen.endDraw();
+ 
+  // render the scene, transformed using the corner pin surface
+  surface.render(offscreen);
+ 
   //_driver.read();
   //_driver357.read();
  
-   // render the scene, transformed using the corner pin surface
-//  surface.render(offscreen);
-
   if (_audio.isPlaying()) if (this.drawDebug()) _audio.draw(0);
     
   pushMatrix();
@@ -371,7 +392,7 @@ class gui {
   
   void sequencePlay() {
     
-    _audio.mute(this.muteDebug());
+    //_audio.mute(this.muteDebug());
     
     if (!_audio.isPlaying()) {
       if (repeatDebug()) {
@@ -414,18 +435,18 @@ class gui {
     _audio.move();
 
   }
-  
-  void menuSystem() {
-    if (_groupSystem.isVisible()) {
-      _groupSystem.hide();
-    } 
-    else {
-      _groupSystem.show();
-    }
+
+  boolean menuSystemVisible() {
+      return _groupSystem.isVisible();
   }
   
-  boolean menuSystemisVisible() {
-    return _groupSystem.isVisible();
+  void menuSystemToggle(boolean activate) {
+    if (activate) {
+      if (!_groupSystem.isVisible()) _groupSystem.show();
+    } 
+    else {
+      if (_groupSystem.isVisible()) _groupSystem.hide();
+    }
   }
   
   void debugSystemToggle(boolean activate) {
@@ -510,10 +531,16 @@ class gui {
         }
 
         if (_event.isFrom(_buttonSystem))
-          if (_event.getName() == "menuSystem") this.menuSystem();
+          if (_event.getName() == "menuSystem") this.menuSystemToggle(!_groupSystem.isVisible());
 
         if (_event.isFrom(sequencePlay))
           if (_event.getName() == "sequencePlay") this.sequencePlay();
+
+        if (_event.isFrom(sequenceRewind))
+          if (_event.getName() == "sequenceRewind") _audio.rewind();
+        if (_event.isFrom(sequenceForward))
+          if (_event.getName() == "sequenceRewind") _audio.forward();
+
         //if (_event.isFrom(audioVolume)) 
         //  if (_event.getName() == "audioVolume") this.audioVolume(value);
         //if (_event.isFrom(servoAngle)) 

@@ -87,12 +87,12 @@ void keyPressed() {
 
   case ' ':
     break;
-  case 'm' | 'M':
-    _gui.menuSystem();
-    break;
-  case 'd' | 'D':
-    _gui.debugSystemToggle(true);
-    break;
+//  case 'm' | 'M':
+//    _gui.menuSystemToggle(true);
+//    break;
+//  case 'd' | 'D':
+//    _gui.debugSystemToggle(true);
+//    break;
   }
   
 }

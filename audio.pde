@@ -115,6 +115,19 @@ class audio {
 //    _wave.setFrequency( freq );
 
   }
+  
+  void forward() {
+    _player.skip(10);
+    
+    //_player.forward();
+     _player.cue( _player.length() );
+  }
+
+  void rewind() {
+    _player.skip(-10);
+    
+    //_player.rewind();
+  }
 
   void draw(int type) {
 
@@ -128,7 +141,8 @@ class audio {
       for(int i = 0; i < _fft.specSize(); i++)
       {
         // draw the line for frequency band i, scaling it up a bit so we can see it
-        line( i, height, i, height - _fft.getBand(i)*8 );
+        float _position = map(i, 0, _fft.specSize(), 0, width);
+        line( _position, height, _position, height - _fft.getBand(i)*8 );
       }
   
       stroke( 128, 0, 0 );
@@ -143,8 +157,8 @@ class audio {
     float _position = map(_player.position(), 0, _player.length(), 0, 400);
      stroke(255, 0, 0);
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     if (_gui.menuSystemisVisible())
-       line(_position + 110, 120, _position + 110, height - 200 - 8 + 20);
+     if (_gui.menuSystemVisible())
+       line(_position + 110, 100, _position + 110, 360);
 
       //_player.removeListener(_visuals[0]);
       //_player.addListener(_visuals[0]);

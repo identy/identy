@@ -57,7 +57,7 @@ class gui {
 
   private PApplet context;
 
-    private boolean _logo = false;
+    private boolean _logo = true;
     
     private Println console;
    
@@ -110,7 +110,7 @@ class gui {
 
       serializerjson.setBoolean("debug", false);
       serializerjson.setBoolean("draw", false);
-      serializerjson.setBoolean("mote", false);
+      serializerjson.setBoolean("mute", false);
       serializerjson.setBoolean("repeat", false);
       
       saveJSONObject(serializerjson, "data/alpheny.json");
@@ -360,8 +360,14 @@ class gui {
     _gui.getTooltip().setDelay(300);   
     _gui.getTooltip().register("buttonSystem", "system define");
 
-    //checkboxDebugger.activate("draw");
-    //checkboxDebugger.activate("repeat");
+      if (serializerjson.getBoolean("debug"))
+        checkboxDebugger.activate("debug");
+      if (serializerjson.getBoolean("draw"))
+        checkboxDebugger.activate("draw");
+      if (serializerjson.getBoolean("mute"))
+        checkboxDebugger.activate("mute");
+      if (serializerjson.getBoolean("repeat"))
+        checkboxDebugger.activate("repeat");
 
     //checkboxDebugger.activate("debuger");
     consoleDebug.hide();
@@ -412,6 +418,7 @@ class gui {
   offscreen.background(0);
   offscreen.stroke(204, 102, 0);
   
+  if (_audio.isPlaying()) _audio.draw(offscreen);
   //offscreen.fill(0, 255, 0);
   //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
   offscreen.endDraw();
@@ -421,8 +428,6 @@ class gui {
  
   //_driver.read();
   //_driver357.read();
- 
-  if (_audio.isPlaying()) _audio.draw();
     
 //  pushMatrix();
 //  noStroke();
@@ -446,6 +451,7 @@ class gui {
       if (_audio.isPlaying())
         if (_position > _init  &&  _done > _position) _driver.write(_id, true);
         else _driver.write(_id, false);
+        
       if (_audio.isPlaying())
         if (consoleDebugisVisible()) println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
 
@@ -574,12 +580,12 @@ class gui {
           //.addItem("mute", 2)
             //int n = (int)checkbox.getArrayValue()[2];
             _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
-            serializerjson.setBoolean("mote", (int)checkboxDebugger.getArrayValue()[2] == 1);
+            serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
           //.addItem("repeat", 3)
             //int n = (int)checkbox.getArrayValue()[3];
             serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
 
-          
+            saveJSONObject(serializerjson, "data/alpheny.json");
         }
 
         break;
@@ -613,16 +619,19 @@ class gui {
           //.addItem("debuger", 0)
             //int n = (int)checkbox.getArrayValue()[0];
             this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
+            serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
           //.addItem("draw", 1)     
             //int n = (int)checkbox.getArrayValue()[1];
-            //..
+            serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
           //.addItem("mute", 2)
             //int n = (int)checkbox.getArrayValue()[2];
             _audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
+            serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
           //.addItem("repeat", 3)
             //int n = (int)checkbox.getArrayValue()[3];
-            //..
-          
+            serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
+
+            saveJSONObject(serializerjson, "data/alpheny.json");
         }
         
     }

@@ -18,7 +18,7 @@
     "value1": 471025
   },
   "id": 0,
-  "draw": false,
+  "draw": true,
   "rangeRelay1": {
     "value0": 0,
     "value1": 94205
@@ -29,10 +29,10 @@
     "value1": 282615
   },
   "rangeRelay2": {
-    "value0": 94205,
-    "value1": 188410
+    "value0": 26509.94921875,
+    "value1": 120951.640625
   },
   "environment": "Objects/cassini.obj",
-  "mote": false,
-  "specie": "Audio/_theme.mp3"
+  "specie": "Audio/_theme.mp3",
+  "mute": true
 }

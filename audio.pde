@@ -133,7 +133,7 @@ class audio {
     //_player.rewind();
   }
 
-  void draw() {
+  void draw(PGraphics view) {
 
       strokeWeight(1);
       stroke(204, 102, 0);
@@ -147,7 +147,7 @@ class audio {
           {
             // draw the line for frequency band i, scaling it up a bit so we can see it
             float _position = map(i, 0, _fft.specSize(), 0, width);
-            line( _position, height, _position, height - _fft.getBand(i)*8 );
+            view.line( _position, height, _position, height - _fft.getBand(i)*8 );
           }
   
 //      stroke( 128, 0, 0 );

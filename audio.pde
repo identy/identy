@@ -145,12 +145,12 @@ class audio {
         line( _position, height, _position, height - _fft.getBand(i)*8 );
       }
   
-      stroke( 128, 0, 0 );
-      
-     for (int i = 0; i < _player.bufferSize() - 1;  i++)
-      {
-        line(i, height - 50 - 8 - _player.left.get(i)*50, i+1, height - 100 - 8 - _player.left.get(i+1)*10);
-      }
+//      stroke( 128, 0, 0 );
+//      
+//     for (int i = 0; i < _player.bufferSize() - 1;  i++)
+//      {
+//        line(i, height - 50 - 8 - _player.left.get(i)*50, i+1, height - 100 - 8 - _player.left.get(i+1)*10);
+//      }
  
      //float x = map(_player.position(), 0, _player.length(), 0, width);
      //float x = map(_player.position(), 0, _player.length(), 0, width);

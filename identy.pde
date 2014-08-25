@@ -104,6 +104,6 @@ void mouseMoved()
   // you will want to patch something to the amplitude and frequency inputs
   // but this is a quick and easy way to turn the screen into
   // an x-y control for them.
-  _gui.move();
+ // _gui.move();
   
 }

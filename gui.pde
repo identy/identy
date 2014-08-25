@@ -12,6 +12,8 @@ import java.awt.BorderLayout;
 
 import controlP5.*;
 
+//import org.json.*; 
+
 import deadpixel.keystone.*;
 
 class gui {
@@ -43,6 +45,8 @@ class gui {
   
   audio _audio;
   environment _environment;
+
+  JSONObject serializerjson;
 
   Keystone ks;
   CornerPinSurface surface;
@@ -81,10 +85,32 @@ class gui {
     stroke(strokeColor);
     fill(fillColor);
 
-    _audio = new audio(context);
-    _audio.setup("___theme.mp3");    
+ try 
+   { 
+   
+      serializerjson = loadJSONObject("data/alpheny.json");
 
-    _environment = new environment("cassini.obj", context);
+      int __id = serializerjson.getInt("id");
+      String __specie = serializerjson.getString("specie");
+      String __environment = serializerjson.getString("environment");
+
+   } 
+   catch (Exception E) 
+   { 
+ 
+      serializerjson = new JSONObject();
+  
+      serializerjson.setInt("id", 0);
+      serializerjson.setString("specie", "___theme.mp3");
+      serializerjson.setString("environment", "cassini.obj");
+
+   }
+
+    _audio = new audio(context);
+    //_audio.setup("___theme.mp3");    
+    _audio.setup(serializerjson.getString("specie"));
+    
+    _environment = new environment(serializerjson.getString("environment"), context);
 
     ks = new Keystone(context);
     surface = ks.createCornerPinSurface(800, 600, 2);
@@ -176,14 +202,28 @@ class gui {
         .setBroadcast(true)
         .setColorForeground(color(255, 40))
         .setColorBackground(color(255, 40));
-        
+      
+         try { 
+            JSONObject jrangeRelay = serializerjson.getJSONObject("rangeRelay" + index);
+            rangeRelay.setRangeValues(jrangeRelay.getFloat("value0"), jrangeRelay.getFloat("value1"))
+         } 
+         catch (Exception E) {
+           
+            JSONObject jrangeRelay = new JSONObject();
+            
+            jrangeRelay.setFloat("value0", ((_audio._player.length() / 7) * (index - 1)));
+            jrangeRelay.setFloat("value1", ((_audio._player.length() / 7) * (index - 1 )) + (_audio._player.length() / 7));
+            
+             serializerjson.setJSONObject("rangeRelay" + index, jrangeRelay); 
+         } 
+   
       rangeRelay.getCaptionLabel().set("range " + index);
       rangeRelay.getCaptionLabel().toUpperCase(false);
       
       _gui.getController("rangeRelay" + index).addListener(new relayRangeListener());
       
     }
-    
+        
 //    for (int index = 1; index <= 8; index++) {
 //      
 //      Toggle relayControl = _gui.addToggle("relayControl" + index)
@@ -426,17 +466,8 @@ class gui {
         
   }
   
-  void stop() {
-    _audio.close();
-  }
-
-  void move() {
-    
-    _audio.move();
-
-  }
-
   boolean menuSystemVisible() {
+      saveJSONObject(serializerjson, "data/alpheny.json");
       return _groupSystem.isVisible();
   }
   
@@ -459,13 +490,13 @@ class gui {
     }
   }
 
-  void audioVolume(int value) {
-    _audio.volume(value);
-  }
-
-  void servoAngle(int value) {
-    _driver.servo(value);
-  }
+//  void audioVolume(int value) {
+//    _audio.volume(value);
+//  }
+//
+//  void servoAngle(int value) {
+//    _driver.servo(value);
+//  }
 
   boolean consoleDebug() {
     return checkboxDebugger.getItem(0).getState();
@@ -644,6 +675,18 @@ class relayRangeListener implements ControlListener {
       //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
       //_step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));
       
+         try { 
+            JSONObject jrangeRelay = new JSONObject();
+            
+            jrangeRelay.setFloat("value0", _event.getController().getArrayValue(0));
+            jrangeRelay.setFloat("value1", _event.getController().getArrayValue(1));
+            
+             serializerjson.setJSONObject("rangeRelay" + _event.getController().getId(), jrangeRelay); 
+         } 
+         catch (Exception E) {
+           // ..        
+         } 
+
       //if (_gui._audio.isPlaying()) _driver.write(_event.getController().getId(), _event.getController().getArrayValue(0) > _gui._audio._player.position() &  _event.getController().getArrayValue(1) < _gui._audio._player.position());
     }
   }

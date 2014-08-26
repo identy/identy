@@ -14,6 +14,14 @@ import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.ugens.*;
 
+import voce.*;
+
+//import com.getflourish.stt.*;
+
+//import guru.ttslib.*;
+
+//TTS tts;
+
 class audio {
 
   ddf.minim.Minim _minim;
@@ -43,6 +51,13 @@ class audio {
     
     meta = _player.getMetaData();
     
+    voce.SpeechInterface.init("library", true, true, "library/gram", "bit");
+    
+//  tts = new TTS();
+//  //the following settings control the voice sound
+//  tts.setPitch( 180 );
+//  tts.setPitchRange( 90 );
+  
     // create a sine wave Oscil, set to 440 Hz, at 0.5 amplitude
     //_wave = new Oscil( 440, 0.5f, Waves.SINE );
     // patch the Oscil to the output
@@ -127,6 +142,21 @@ class audio {
     //_player.rewind();
   }
 
+  void speech() {
+    if (voce.SpeechInterface.getRecognizerQueueSize() > 0)
+      {
+        String s = voce.SpeechInterface.popRecognizedString();
+        
+        if(-1 != s.indexOf("true")){}
+        else if(-1 != s.indexOf("false")) {}
+        
+        if (-1 != s.indexOf("quit")) {}
+
+        //voce.SpeechInterface.synthesize(s);
+      }
+      
+  }
+  
   void drawFFT(PGraphics view) {
 
       strokeWeight(1);
@@ -158,8 +188,6 @@ class audio {
        stroke(102, 153, 51);
        fill(0, 102, 153, 51);
        line(_position + 110, 110, _position + 110, 400);
-       //textSize(10);
-       //text("." + _position, _position + 110, 110); 
      }
      
       //_player.removeListener(_visuals[0]);
@@ -175,6 +203,9 @@ class audio {
     return map(_player.position(), 0, _player.length(), 0, 400) + 110;
   }
   void close() {
+    
+    voce.SpeechInterface.destroy();
+    
     _player.removeListener(_visuals[0]);
     _player.close();
     _out.close();

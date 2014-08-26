@@ -4,37 +4,37 @@
   "debug": false,
   "repeat": false,
   "rangeRelay6": {
-    "value0": 7972.7236328125,
-    "value1": 64778.37890625
+    "value0": 132546.53125,
+    "value1": 189352.1875
   },
   "rangeRelay7": {
-    "value0": 64778.37890625,
-    "value1": 120587.4453125
+    "value0": 34880.66796875,
+    "value1": 90689.7265625
   },
   "rangeRelay4": {
-    "value0": 52819.296875,
-    "value1": 110621.546875
+    "value0": 169989,
+    "value1": 226652
   },
   "rangeRelay5": {
-    "value0": 18935.21875,
-    "value1": 75740.875
+    "value0": 226652,
+    "value1": 283315
   },
   "id": 0,
   "draw": true,
   "rangeRelay1": {
-    "value0": 29897.712890625,
-    "value1": 85706.7734375
-  },
-  "rangeRelay3": {
-    "value0": 50826.11328125,
-    "value1": 107631.7734375
+    "value0": 8969.314453125,
+    "value1": 64778.37890625
   },
   "specie.description": "",
-  "environment": "Objects/cassini.obj",
-  "rangeRelay2": {
-    "value0": 33884.07421875,
-    "value1": 90689.7265625
+  "rangeRelay3": {
+    "value0": 63781.7890625,
+    "value1": 120587.4453125
   },
+  "rangeRelay2": {
+    "value0": 37870.4375,
+    "value1": 94676.09375
+  },
+  "environment": "Objects/cassini.obj",
   "specie": "Audio/soft.mp3",
-  "mute": true
+  "mute": false
 }

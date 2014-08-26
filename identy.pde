@@ -63,23 +63,19 @@ void stop() {
 void keyPressed() {
   
   switch(key) {
-  case 'c':
-    _gui.ks.toggleCalibration();
-    break;
-  case 'l':
-    _gui.ks.load();
-    break;
-  case 's':
-    _gui.ks.save();
-    break;
-
-
-  case ' ':
-    break;
-    
+    case ' ':
+      break;
+    case 'c':
+      _gui.ks.toggleCalibration();
+      break;
+    case 'l':
+      _gui.ks.load();
+      break;
+    case 's':
+      _gui.ks.save();
+      break;
   }
   
 }
 
-
-void mouseMoved() {}
+void mouseMoved() { }

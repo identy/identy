@@ -20,21 +20,21 @@
     "value1": 104642
   },
   "id": 0,
-  "draw": false,
+  "draw": true,
   "rangeRelay1": {
     "value0": 27904.53125,
     "value1": 83713.6015625
   },
-  "specie.description": "",
   "rangeRelay3": {
     "value0": 74744.2890625,
     "value1": 131549.9375
   },
+  "specie.description": "",
+  "environment": "Objects/cassini.obj",
   "rangeRelay2": {
     "value0": 16942.037109375,
     "value1": 73747.6875
   },
-  "environment": "Objects/cassini.obj",
   "specie": "Audio/soft.mp3",
   "mute": false
 }

@@ -1,7 +1,17 @@
 identy
 ======
 
-functions and models. time function model
+![wellcome](http://www.identy.org/Start/images/hat.png)
 
-references
- arduino firmata controlP5 audio
+### function.
+  audio player and relay control
+### model.
+  activator secuencial range's time
+
+![player](http://www.identy.org/Start/images/unity.player.relay.png)
+
+***
+![souces](http://www.identy.org/Start/images/configure.png)
+by sigfrido rodríguez santos
+### source.
+arduino firmata controlP5 audio

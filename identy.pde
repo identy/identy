@@ -52,9 +52,6 @@ void draw() {
 
 void stop() {
   
-  //_driver.close();
-  //_driver357.close();
-  
   _gui.close();
   
   super.stop();

@@ -702,14 +702,18 @@ class relayRangeListener implements ControlListener {
          catch (Exception E) {
             JSONObject jrangeRelay = new JSONObject();
             
+            try {
             jrangeRelay.setFloat("value0", _event.getController().getArrayValue(0));
             jrangeRelay.setFloat("value1", _event.getController().getArrayValue(1));
             
             _gui.serializerjson.setJSONObject("rangeRelay" + _event.getController().getId(), jrangeRelay); 
-        
+            }
+            catch (Exception _E) {}
+            
          } 
 
       //if (_gui._audio.isPlaying()) _driver.write(_event.getController().getId(), _event.getController().getArrayValue(0) > _gui._audio._player.position() &  _event.getController().getArrayValue(1) < _gui._audio._player.position());
+      
     }
   }
 

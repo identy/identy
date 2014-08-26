@@ -21,8 +21,9 @@ class gui {
   final static int CONTROLLER = 0, TAB = 1, GROUP = 2;
   
   private color backgroundColor = color(0, 0, 0);
-  private color strokeColor = color(255, 255, 255);
-  private color fillColor = color(4, 79, 111);
+  
+  private color strokeColor = color(0xff660000); // color(225, 225, 225);
+  private color fillColor = color(0xffdddddd); // color(245, 245, 245);
   
   private controlP5.ControlP5 _gui;
 
@@ -38,7 +39,10 @@ class gui {
   private controlP5.Button sequenceForward;
   
   private controlP5.Textarea consoleDebug;
+  
   private controlP5.CheckBox checkboxDebugger;
+  
+  private controlP5.Textlabel positionTextlabel;
   
   //controlP5.Knob audioVolume;
   //controlP5.Knob servoAngle;
@@ -87,14 +91,13 @@ class gui {
     stroke(strokeColor);
     fill(fillColor);
 
- try 
+     try 
    { 
    
       serializerjson = loadJSONObject("data/alpheny.json");
 
 //      int __id = serializerjson.getInt("id");
 //      String __specie = serializerjson.getString("specie");
-//      
 //      String __environment = serializerjson.getString("environment");
 
    } 
@@ -104,14 +107,23 @@ class gui {
       serializerjson = new JSONObject();
   
       serializerjson.setInt("id", 0);
-      serializerjson.setString("specie", "Audio/_theme.mp3");
+      serializerjson.setString("specie", "Audio/soft.mp3");
       //serializerjson.setString("specie.description", _audio.meta.title());
       serializerjson.setString("environment", "Objects/cassini.obj");
-
+      
+      saveJSONObject(serializerjson, "data/alpheny.json");
+      
       serializerjson.setBoolean("debug", false);
+      saveJSONObject(serializerjson, "data/alpheny.json");
       serializerjson.setBoolean("draw", false);
+      saveJSONObject(serializerjson, "data/alpheny.json");
       serializerjson.setBoolean("mute", false);
+      saveJSONObject(serializerjson, "data/alpheny.json");
       serializerjson.setBoolean("repeat", false);
+      saveJSONObject(serializerjson, "data/alpheny.json");
+      
+      serializerjson.setString("font", "Fonts/KaiTi-30.vlw");
+      serializerjson.setString("font.secuence", "Fonts/Moire-Light-48.vlw");
       
       saveJSONObject(serializerjson, "data/alpheny.json");
       
@@ -119,12 +131,19 @@ class gui {
 
     _audio = new audio(context);
 
-    //_audio.setup("___theme.mp3");    
+    //_audio.setup("soft.mp3");    
     _audio.setup(serializerjson.getString("specie"));
     
     serializerjson.setString("specie.description", _audio.meta.title());
-      
+    saveJSONObject(serializerjson, "data/alpheny.json");
+             
     _environment = new environment(serializerjson.getString("environment"), context);
+    _environment.setup();
+
+    _gui.setControlFont(loadFont(serializerjson.getString("font")), 13);
+    
+    positionTextlabel = new Textlabel(_gui,"p." , 20, 440, 100, 40);
+    positionTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.secuence")), 17));
 
     _time = new time(context);
     _time.setup();
@@ -351,19 +370,6 @@ class gui {
     _gui.getTooltip().setDelay(300);   
     _gui.getTooltip().register("buttonSystem", "system define");
 
-      if (serializerjson.getBoolean("debug"))
-        checkboxDebugger.activate("debug");
-        else checkboxDebugger.deactivate("debug");
-      if (serializerjson.getBoolean("draw"))
-        checkboxDebugger.activate("draw");
-        else checkboxDebugger.deactivate("draw");
-      if (serializerjson.getBoolean("mute"))
-        checkboxDebugger.activate("mute");
-        else checkboxDebugger.deactivate("mute");
-      if (serializerjson.getBoolean("repeat"))
-        checkboxDebugger.activate("repeat");
-        else checkboxDebugger.deactivate("repeat");
-
     consoleDebug = _gui.addTextarea("consoleDebug")
       .setPosition(4, height - 100 - 8)
       .setSize(width - 8 - 4, 100)
@@ -372,6 +378,19 @@ class gui {
       .setLineHeight(14);
 
     console = _gui.addConsole(consoleDebug);
+
+    if (serializerjson.getBoolean("debug"))
+      checkboxDebugger.activate("debug");
+      else checkboxDebugger.deactivate("debug");
+    if (serializerjson.getBoolean("draw"))
+      checkboxDebugger.activate("draw");
+      else checkboxDebugger.deactivate("draw");
+    if (serializerjson.getBoolean("mute"))
+      checkboxDebugger.activate("mute");
+      else checkboxDebugger.deactivate("mute");
+    if (serializerjson.getBoolean("repeat"))
+      checkboxDebugger.activate("repeat");
+      else checkboxDebugger.deactivate("repeat");
           
   }
 
@@ -404,41 +423,41 @@ class gui {
   }
   
   void draw() {   
+
+    //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
+    //rotate(frameCount*0.001);
     
     background(backgroundColor);
     stroke(strokeColor);
     fill(fillColor);
 
-    //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
-    //rotate(frameCount*0.001);
-
     //this.systemToggle(systemisActive());
-   
+    //this.debugToggle(debugisActive());
+
+    _audio.mute(muteisActive());
+        
     PVector surfaceMouse = surface.getTransformedMouse();
-  
+    
     // scene, offscreen
     offscreen.beginDraw();
     offscreen.background(0);
     offscreen.stroke(204, 102, 0);
     
     if (_audio.isPlaying() && this.FFTisActive()) _audio.drawFFT(offscreen);
-    if (_audio.isPlaying() && this.systemisActive()) _audio.drawPos(null);
-    
+   
+        //_environment.draw();
+        if (_logo) _environment.draw(offscreen);
+
     offscreen.endDraw();
     surface.render(offscreen);
 
-    _audio.mute(muteisActive());
-     
-    this.debugToggle(debugisActive());
+    if (_audio.isPlaying() && this.systemisActive()) {
+      _audio.drawPosition();
+      positionTextlabel.setText(Float.toString(round(_audio.position())));
+      positionTextlabel.setPosition(_audio.position(), positionTextlabel.getPosition().y);
+      positionTextlabel.draw(context);
+    }
     
-  pushMatrix();
-  noStroke();
-  translate(width - 80, 80, 0);
-    rotateY(radians(frameCount)/2);
-    if (_logo) _environment.draw();
-    
-  popMatrix();
-   
     float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
     
     for (int index = 1; index <= 7; index++) {
@@ -536,6 +555,8 @@ class gui {
           //.addItem("debug", 0)
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
             saveJSONObject(serializerjson, "data/alpheny.json");
+           this.debugToggle(debugisActive());
+
           //.addItem("draw", 1)     
             serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
             saveJSONObject(serializerjson, "data/alpheny.json");
@@ -579,6 +600,8 @@ class gui {
           //.addItem("debug", 0)
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
             saveJSONObject(serializerjson, "data/alpheny.json");
+           this.debugToggle(debugisActive());
+           
           //.addItem("draw", 1)     
             serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
             saveJSONObject(serializerjson, "data/alpheny.json");
@@ -676,6 +699,7 @@ class relayRangeListener implements ControlListener {
             jrangeRelay.setFloat("value1", _event.getController().getArrayValue(1));
 
              _gui.serializerjson.setJSONObject("rangeRelay" + _event.getController().getId(), jrangeRelay);
+             saveJSONObject(_gui.serializerjson, "data/alpheny.json");
          } 
          catch (Exception E) {
             JSONObject jrangeRelay = new JSONObject();

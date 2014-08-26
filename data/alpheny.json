@@ -1,38 +1,40 @@
 {
+  "font": "Fonts/KaiTi-30.vlw",
+  "font.secuence": "Fonts/Moire-Light-48.vlw",
   "debug": false,
   "repeat": false,
   "rangeRelay6": {
-    "value0": 471025,
-    "value1": 565230
+    "value0": 7972.7236328125,
+    "value1": 64778.37890625
   },
   "rangeRelay7": {
-    "value0": 435757.3125,
-    "value1": 530199
+    "value0": 64778.37890625,
+    "value1": 120587.4453125
   },
   "rangeRelay4": {
-    "value0": 282615,
-    "value1": 376820
+    "value0": 52819.296875,
+    "value1": 110621.546875
   },
   "rangeRelay5": {
-    "value0": 376820,
-    "value1": 471025
+    "value0": 18935.21875,
+    "value1": 75740.875
   },
   "id": 0,
   "draw": true,
   "rangeRelay1": {
-    "value0": 39764.92578125,
-    "value1": 132549.75
+    "value0": 29897.712890625,
+    "value1": 85706.7734375
+  },
+  "rangeRelay3": {
+    "value0": 50826.11328125,
+    "value1": 107631.7734375
   },
   "specie.description": "",
-  "rangeRelay3": {
-    "value0": 188410,
-    "value1": 282615
-  },
-  "rangeRelay2": {
-    "value0": 26509.94921875,
-    "value1": 120951.640625
-  },
   "environment": "Objects/cassini.obj",
-  "specie": "Audio/_theme.mp3",
-  "mute": false
+  "rangeRelay2": {
+    "value0": 33884.07421875,
+    "value1": 90689.7265625
+  },
+  "specie": "Audio/soft.mp3",
+  "mute": true
 }

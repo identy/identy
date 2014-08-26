@@ -143,26 +143,37 @@ class audio {
   
   }
   
-  void drawPos(PGraphics view) {
+  float drawPosition() {
     
 //      stroke( 128, 0, 0 );
 //      
- 
+     //stroke(255, 0, 0);
+     //stroke(102, 153, 51);
+       
      //float x = map(_player.position(), 0, _player.length(), 0, width);
     float _position = map(_player.position(), 0, _player.length(), 0, 400);
-     stroke(255, 0, 0);
-     //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     if (_gui.systemisActive())
-       line(_position + 110, 110, _position + 110, 400);
 
+     //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
+     if (_gui.systemisActive()) {
+       stroke(102, 153, 51);
+       fill(0, 102, 153, 51);
+       line(_position + 110, 110, _position + 110, 400);
+       //textSize(10);
+       //text("." + _position, _position + 110, 110); 
+     }
+     
       //_player.removeListener(_visuals[0]);
       //_player.addListener(_visuals[0]);
       
       //_visuals[0].setup();
       //_visuals[0].draw();
 
+      return _position;
 }
   
+  float position() {
+    return map(_player.position(), 0, _player.length(), 0, 400) + 110;
+  }
   void close() {
     _player.removeListener(_visuals[0]);
     _player.close();

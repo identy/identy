@@ -161,33 +161,37 @@ class audio {
 
       strokeWeight(1);
       stroke(204, 102, 0);
-        
-      _fft.forward( _player.mix );
-  
-       if (_gui.FFTisActive())
+          
+       if (_gui.FFTisActive()) {
+         
+          _fft.forward( _player.mix );
+               
           for(int i = 0; i < _fft.specSize(); i++)
           {
             float _position = map(i, 0, _fft.specSize(), 0, width);
             view.line( _position, height, _position, height - _fft.getBand(i)*8 );
           }
+          
+       }
   
   }
   
-  float drawPosition() {
+  void drawPosition() {
     
 //      stroke( 128, 0, 0 );
 //      
      //stroke(255, 0, 0);
      //stroke(102, 153, 51);
        
-     //float x = map(_player.position(), 0, _player.length(), 0, width);
-    float _position = map(_player.position(), 0, _player.length(), 0, 400);
-
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
      if (_gui.systemisActive()) {
+       
+      //float x = map(_player.position(), 0, _player.length(), 0, width);
+      float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
+
        stroke(102, 153, 51);
        fill(0, 102, 153, 51);
-       line(_position + 110, 110, _position + 110, 400);
+       line(_position, 110, _position, 400);
      }
      
       //_player.removeListener(_visuals[0]);
@@ -196,11 +200,15 @@ class audio {
       //_visuals[0].setup();
       //_visuals[0].draw();
 
-      return _position;
 }
   
   float position() {
-    return map(_player.position(), 0, _player.length(), 0, 400) + 110;
+    //return map(_player.position(), 0, _player.length(), 0, 400) + 110;
+    return _player.position();
+  }
+  
+  float length() {
+    return _player.length();
   }
   void close() {
     

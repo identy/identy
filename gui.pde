@@ -156,15 +156,24 @@ class gui {
     _groupSystem = _gui.addGroup("groupSystem", 1, 22, width - 2);
     _groupSystem.setBackgroundHeight(height - 140);
     //_groupSystem.setBackgroundColor(color(17, 17, 17));
-    _groupSystem.setBackgroundColor(color(0,51,102,200));
+    _groupSystem.setBackgroundColor(color(0,51,102,100));
     _groupSystem.activateEvent(true);
     _groupSystem.hideBar();
     _groupSystem.hide();
 
-    _gui.addTextlabel("PortArduino", "arduino port", 20, 20)
+    sequencePlay = _gui.addButton("sequencePlay")
+      .moveTo(_groupSystem)
+      .setBroadcast(false)
+      .setValue(0)
+      .setPosition(20, 20)
+      .setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"))
+      .setBroadcast(true)
+      .updateSize();
+
+    _gui.addTextlabel("PortArduino", "arduino port", 110, 20)
       .moveTo(_groupSystem);
     
-    _listArduinoPort = _gui.addListBox("arduinoPort", 20, 60, 200, 60);
+    _listArduinoPort = _gui.addListBox("arduinoPort", 110, 60, 200, 60);
     _listArduinoPort.moveTo(_groupSystem);
     _listArduinoPort.setBarHeight(18);
     _listArduinoPort.toUpperCase(false);
@@ -277,15 +286,6 @@ class gui {
 //      _gui.getController("relayControl" + index).addListener(new relayControlListener());
 //
 //    }
-
-    sequencePlay = _gui.addButton("sequencePlay")
-      .moveTo(_groupSystem)
-      .setBroadcast(false)
-      .setValue(0)
-      .setPosition(580, 20)
-      .setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"))
-      .setBroadcast(true)
-      .updateSize();
     
 //    sequenceRewind = _gui.addButton("sequenceRewind")
 //      .moveTo(_groupSystem)
@@ -450,20 +450,24 @@ class gui {
     surface.render(offscreen);
 
     if (_audio.isPlaying() && this.systemisActive()) {
+      
       _audio.drawPosition();
-      positionTextlabel.setText(Float.toString(round(_audio.position() - 110)));
-      positionTextlabel.setPosition(_audio.position(), positionTextlabel.getPosition().y);
+      
+      float __position = map(_audio.position(), 0, _audio.length(), 0, 400) + 110;
+      
+      positionTextlabel.setText(Float.toString(_audio.position()));
+      positionTextlabel.setPosition(__position, positionTextlabel.getPosition().y);
       positionTextlabel.draw(context);
     }
     
     _audio.speech();
     
-    float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
+    float _position = map(_audio.position(), 0, _audio.length(), 0, 400);
     
     for (int index = 1; index <= 7; index++) {
 
-    float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio._player.length(), 0, 400);
-    float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio._player.length(), 0, 400);
+    float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio.length(), 0, 400);
+    float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio.length(), 0, 400);
     
     int _id =_gui.getController("rangeRelay" + index).getId();
 

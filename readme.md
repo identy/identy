@@ -1,4 +1,4 @@
-identy interactive
+identy
 ======
 
 functions and models. time function model

@@ -92,10 +92,10 @@ class gui {
    
       serializerjson = loadJSONObject("data/alpheny.json");
 
-      int __id = serializerjson.getInt("id");
-      String __specie = serializerjson.getString("specie");
-      
-      String __environment = serializerjson.getString("environment");
+//      int __id = serializerjson.getInt("id");
+//      String __specie = serializerjson.getString("specie");
+//      
+//      String __environment = serializerjson.getString("environment");
 
    } 
    catch (Exception E) 
@@ -124,7 +124,7 @@ class gui {
     
     serializerjson.setString("specie.description", _audio.meta.title());
       
-    //_environment = new environment(serializerjson.getString("environment"), context);
+    _environment = new environment(serializerjson.getString("environment"), context);
 
     _time = new time(context);
     _time.setup();
@@ -134,7 +134,7 @@ class gui {
     
     offscreen = createGraphics(800, 600, P3D);
 
-    _buttonSystem = _gui.addButton("menuSystem", 1, 1, 1, 100, 20);
+    _buttonSystem = _gui.addButton("system", 1, 1, 1, 100, 20);
     _buttonSystem.getCaptionLabel().set("system ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
     _buttonSystem.getCaptionLabel().setLetterSpacing(2);
@@ -348,6 +348,22 @@ class gui {
       toggle.getCaptionLabel().toUpperCase(false);
     }
         
+    _gui.getTooltip().setDelay(300);   
+    _gui.getTooltip().register("buttonSystem", "system define");
+
+      if (serializerjson.getBoolean("debug"))
+        checkboxDebugger.activate("debug");
+        else checkboxDebugger.deactivate("debug");
+      if (serializerjson.getBoolean("draw"))
+        checkboxDebugger.activate("draw");
+        else checkboxDebugger.deactivate("draw");
+      if (serializerjson.getBoolean("mute"))
+        checkboxDebugger.activate("mute");
+        else checkboxDebugger.deactivate("mute");
+      if (serializerjson.getBoolean("repeat"))
+        checkboxDebugger.activate("repeat");
+        else checkboxDebugger.deactivate("repeat");
+
     consoleDebug = _gui.addTextarea("consoleDebug")
       .setPosition(4, height - 100 - 8)
       .setSize(width - 8 - 4, 100)
@@ -356,21 +372,6 @@ class gui {
       .setLineHeight(14);
 
     console = _gui.addConsole(consoleDebug);
-
-    _gui.getTooltip().setDelay(300);   
-    _gui.getTooltip().register("buttonSystem", "system define");
-
-      if (serializerjson.getBoolean("debug"))
-        checkboxDebugger.activate("debug");
-      if (serializerjson.getBoolean("draw"))
-        checkboxDebugger.activate("draw");
-      if (serializerjson.getBoolean("mute"))
-        checkboxDebugger.activate("mute");
-      if (serializerjson.getBoolean("repeat"))
-        checkboxDebugger.activate("repeat");
-
-    //checkboxDebugger.activate("debug");
-    consoleDebug.hide();
           
   }
 
@@ -411,37 +412,34 @@ class gui {
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
     //rotate(frameCount*0.001);
 
+    //this.systemToggle(systemisActive());
+   
     PVector surfaceMouse = surface.getTransformedMouse();
   
-    // Draw the scene, offscreen
+    // scene, offscreen
     offscreen.beginDraw();
     offscreen.background(0);
     offscreen.stroke(204, 102, 0);
     
-    if (_audio.isPlaying()) _audio.draw(offscreen);
-    //offscreen.fill(0, 255, 0);
-    //offscreen.ellipse(surfaceMouse.x, surfaceMouse.y, 7, 7);
-    offscreen.endDraw();
-   
-    // render the scene, transformed using the corner pin surface
-    surface.render(offscreen);
- 
-  //_driver.read();
-  //_driver357.read();
+    if (_audio.isPlaying() && this.FFTisActive()) _audio.drawFFT(offscreen);
+    if (_audio.isPlaying() && this.systemisActive()) _audio.drawPos(null);
     
-//  pushMatrix();
-//  noStroke();
-//  translate(width - 80, 80, 0);
-//    rotateY(radians(frameCount)/2);
-//    if (this.drawDebug() & _logo) _environment.draw();
-//    
-//  popMatrix();
-
-    float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
+    offscreen.endDraw();
+    surface.render(offscreen);
 
     _audio.mute(muteisActive());
-    
+     
     this.debugToggle(debugisActive());
+    
+  pushMatrix();
+  noStroke();
+  translate(width - 80, 80, 0);
+    rotateY(radians(frameCount)/2);
+    if (_logo) _environment.draw();
+    
+  popMatrix();
+   
+    float _position = map(_audio._player.position(), 0, _audio._player.length(), 0, 400);
     
     for (int index = 1; index <= 7; index++) {
 
@@ -468,12 +466,7 @@ class gui {
     //_audio.mute(this.muteDebug());
     
     if (!_audio.isPlaying()) {
-      if (repeatisActive()) {
-        _audio.loop();
-      }
-      else {
         _audio.play();
-      }
       //sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
     }
     else {
@@ -483,24 +476,10 @@ class gui {
             
   }
   
-  boolean systemisVisible() {
+  boolean systemisActive() {
       return _groupSystem.isVisible();
   }
-  
-  boolean FFTisActive() {
-    return checkboxDebugger.getItem(1).getState();
-  }
-  boolean debugisActive() {
-      return checkboxDebugger.getItem(0).getState();
-  }
-  boolean muteisActive() {
-    return checkboxDebugger.getItem(2).getState();
-  } 
-  boolean repeatisActive() {
-    return checkboxDebugger.getItem(3).getState();
-  }
-
-  void menuToggle(boolean activate) {
+  void systemToggle(boolean activate) {
     if (activate) {
       if (!_groupSystem.isVisible()) _groupSystem.show();
     } 
@@ -510,6 +489,9 @@ class gui {
     }
   }
   
+  boolean debugisActive() {
+      return checkboxDebugger.getItem(0).getState();
+  }
   void debugToggle(boolean activate) {
     //if (consoleDebug.isVisible()) {
     if (activate) {
@@ -520,14 +502,18 @@ class gui {
     }
   }
 
-//  void audioVolume(int value) {
-//    _audio.volume(value);
-//  }
-//
-//  void servoAngle(int value) {
-//    _driver.servo(value);
-//  }
+  boolean FFTisActive() {
+    return checkboxDebugger.getItem(1).getState();
+  }
   
+  boolean muteisActive() {
+    return checkboxDebugger.getItem(2).getState();
+  }
+  
+  boolean repeatisActive() {
+    return checkboxDebugger.getItem(3).getState();
+  }
+    
   public void controlEvent(ControlEvent _event) {
 
     int value = 0;
@@ -548,21 +534,18 @@ class gui {
         if (_event.isFrom(checkboxDebugger)) {
 
           //.addItem("debug", 0)
-            //int n = (int)checkbox.getArrayValue()[0];
-            //this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
-          //.addItem("draw", 1)     
-            //int n = (int)checkbox.getArrayValue()[1];
-            serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
-          //.addItem("mute", 2)
-            //int n = (int)checkbox.getArrayValue()[2];
-            //_audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
-            serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
-          //.addItem("repeat", 3)
-            //int n = (int)checkbox.getArrayValue()[3];
-            serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
-
             saveJSONObject(serializerjson, "data/alpheny.json");
+          //.addItem("draw", 1)     
+            serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
+          //.addItem("mute", 2)
+            serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
+          //.addItem("repeat", 3)
+            serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
+            
         }
 
         break;
@@ -576,7 +559,7 @@ class gui {
         }
 
         if (_event.isFrom(_buttonSystem))
-          if (_event.getName() == "menuSystem") this.menuToggle(!_groupSystem.isVisible());
+          if (_event.getName() == "system") this.systemToggle(!_groupSystem.isVisible());
 
         if (_event.isFrom(sequencePlay))
           if (_event.getName() == "sequencePlay") this.sequencePlay();
@@ -594,21 +577,18 @@ class gui {
         if (_event.isFrom(checkboxDebugger)) {
 
           //.addItem("debug", 0)
-            //int n = (int)checkbox.getArrayValue()[0];
-            //this.debugSystemToggle((int)checkboxDebugger.getArrayValue()[0] == 1);
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
-          //.addItem("draw", 1)     
-            //int n = (int)checkbox.getArrayValue()[1];
-            serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
-          //.addItem("mute", 2)
-            //int n = (int)checkbox.getArrayValue()[2];
-            //_audio.mute((int)checkboxDebugger.getArrayValue()[2] == 1);
-            serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
-          //.addItem("repeat", 3)
-            //int n = (int)checkbox.getArrayValue()[3];
-            serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
-
             saveJSONObject(serializerjson, "data/alpheny.json");
+          //.addItem("draw", 1)     
+            serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
+          //.addItem("mute", 2)
+            serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
+          //.addItem("repeat", 3)
+            serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
+            
         }
         
     }
@@ -626,10 +606,10 @@ void controlEvent(ControlEvent _event) {
 //    case ' ':
 //      break;
 //    case 'm' | 'M':
-//      _gui.menuSystem();
+//      _gui.System();
 //      break;
 //    case 'd' | 'D':
-//      _gui.debugSystem();
+//      _gui.Debug();
 //      break;
 //  }
 //}

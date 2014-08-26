@@ -111,12 +111,6 @@ class audio {
   }
 
   void move() {
-    
-//    float amp = map( mouseY, 0, height, 1, 0 );
-//    _wave.setAmplitude( amp );
-//  
-//    float freq = map( mouseX, 0, width, 110, 880 );
-//    _wave.setFrequency( freq );
 
   }
   
@@ -133,36 +127,32 @@ class audio {
     //_player.rewind();
   }
 
-  void draw(PGraphics view) {
+  void drawFFT(PGraphics view) {
 
       strokeWeight(1);
       stroke(204, 102, 0);
         
-      // perform a forward FFT on the samples in jingle's mix buffer,
-      // which contains the mix of both the left and right channels of the file
       _fft.forward( _player.mix );
   
        if (_gui.FFTisActive())
           for(int i = 0; i < _fft.specSize(); i++)
           {
-            // draw the line for frequency band i, scaling it up a bit so we can see it
             float _position = map(i, 0, _fft.specSize(), 0, width);
             view.line( _position, height, _position, height - _fft.getBand(i)*8 );
           }
   
+  }
+  
+  void drawPos(PGraphics view) {
+    
 //      stroke( 128, 0, 0 );
 //      
-//     for (int i = 0; i < _player.bufferSize() - 1;  i++)
-//      {
-//        line(i, height - 50 - 8 - _player.left.get(i)*50, i+1, height - 100 - 8 - _player.left.get(i+1)*10);
-//      }
  
-     //float x = map(_player.position(), 0, _player.length(), 0, width);
      //float x = map(_player.position(), 0, _player.length(), 0, width);
     float _position = map(_player.position(), 0, _player.length(), 0, 400);
      stroke(255, 0, 0);
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     if (_gui.systemisVisible())
+     if (_gui.systemisActive())
        line(_position + 110, 110, _position + 110, 400);
 
       //_player.removeListener(_visuals[0]);
@@ -171,29 +161,7 @@ class audio {
       //_visuals[0].setup();
       //_visuals[0].draw();
 
-//      for(int i = 0; i < _out.bufferSize() - 1; i++)
-//      {
-//        line( i, 50 + _out.left.get(i)*50, i+1, 50 + _out.left.get(i+1)*50 );
-//        line( i, 150 + _out.right.get(i)*50, i+1, 150 + _out.right.get(i+1)*50 );
-//      }
-  
-//        // draw the waveform we are using in the oscillator
-//        stroke( 128, 0, 0 );
-//        strokeWeight(4);
-//        
-//        // draw the waveform of the output
-//        for(int i = 0; i < _out.bufferSize() - 1; i++)
-//        {
-//          line( i, 50  - _out.left.get(i)*50,  i+1, 50  - _out.left.get(i+1)*50 );
-//          line( i, 150 - _out.right.get(i)*50, i+1, 150 - _out.right.get(i+1)*50 );
-//        }
-
-//        for( int i = 0; i < width-1; ++i )
-//        {
-//          point( i, height/2 - (height*0.49) * _wave.getWaveform().value( (float)i / width ) );
-//        }
-
-  }
+}
   
   void close() {
     _player.removeListener(_visuals[0]);

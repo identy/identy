@@ -558,14 +558,15 @@ class gui {
 
           //.addItem("debug", 0)
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
-
+            saveJSONObject(serializerjson, "data/alpheny.json");
           //.addItem("draw", 1)     
             serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
           //.addItem("mute", 2)
             serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
           //.addItem("repeat", 3)
             serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
-            
             saveJSONObject(serializerjson, "data/alpheny.json");
 
            this.debugToggle(debugisActive());
@@ -602,14 +603,15 @@ class gui {
 
           //.addItem("debug", 0)
             serializerjson.setBoolean("debug", (int)checkboxDebugger.getArrayValue()[0] == 1);
-           
+            saveJSONObject(serializerjson, "data/alpheny.json");           
           //.addItem("draw", 1)     
             serializerjson.setBoolean("draw", (int)checkboxDebugger.getArrayValue()[1] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
           //.addItem("mute", 2)
             serializerjson.setBoolean("mute", (int)checkboxDebugger.getArrayValue()[2] == 1);
+            saveJSONObject(serializerjson, "data/alpheny.json");
           //.addItem("repeat", 3)
             serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
-            
             saveJSONObject(serializerjson, "data/alpheny.json");
 
            this.debugToggle(debugisActive());            

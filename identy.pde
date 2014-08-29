@@ -44,9 +44,7 @@ void setup() {
 
 void draw() {
   
-  _gui.set();
-
-  _gui.draw();
+  if (_gui.set()) _gui.draw();
   
 }
 

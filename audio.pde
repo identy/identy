@@ -162,7 +162,7 @@ class audio {
       strokeWeight(1);
       stroke(204, 102, 0);
           
-       if (_gui.FFTisActive()) {
+       if (_gui.debugisActive()) {
          
           _fft.forward( _player.mix );
                

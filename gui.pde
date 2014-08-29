@@ -391,7 +391,7 @@ class gui {
           
   }
 
-  void set() {
+  boolean set() {
 
      try {
        
@@ -412,7 +412,7 @@ class gui {
     catch (Exception e) {
       //
     } 
-
+    return _audio.isPlaying() || !this.systemisActive();
   }
 
   void close() {
@@ -441,10 +441,10 @@ class gui {
     offscreen.background(0);
     offscreen.stroke(204, 102, 0);
     
-    if (_audio.isPlaying() && this.FFTisActive()) _audio.drawFFT(offscreen);
+    if (_audio.isPlaying() && this.debugisActive()) _audio.drawFFT(offscreen);
    
         //_environment.draw();
-        if (_logo) _environment.draw(offscreen);
+        if (_logo && this.drawisActive()) _environment.draw(offscreen);
 
     offscreen.endDraw();
     surface.render(offscreen);
@@ -525,7 +525,7 @@ class gui {
     }
   }
 
-  boolean FFTisActive() {
+  boolean drawisActive() {
     return checkboxDebugger.getItem(1).getState();
   }
   

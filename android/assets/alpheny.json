@@ -1,0 +1,60 @@
+{
+  "font": "Fonts/KaiTi-30.vlw",
+  "font.secuence": "Fonts/Moire-Light-48.vlw",
+  "rangeRelay8": {
+    "value0": 1514317,
+    "value1": 1730648
+  },
+  "rangeRelay9": {
+    "value0": 1730648,
+    "value1": 1946979
+  },
+  "debug": true,
+  "repeat": false,
+  "rangeRelay6": {
+    "value0": 1081655,
+    "value1": 1297986
+  },
+  "rangeRelay7": {
+    "value0": 422334.9375,
+    "value1": 635404.75
+  },
+  "rangeRelay4": {
+    "value0": 41853.01171875,
+    "value1": 258727.703125
+  },
+  "rangeRelay5": {
+    "value0": 865324,
+    "value1": 1081655
+  },
+  "draw": false,
+  "rangeRelay1": {
+    "value0": 19024.095703125,
+    "value1": 232093.953125
+  },
+  "id": 0,
+  "rangeRelay0": {
+    "value0": -216331,
+    "value1": 0
+  },
+  "rangeRelay3": {
+    "value0": 57072.28515625,
+    "value1": 273946.96875
+  },
+  "specie.description": "algunas canciones",
+  "environment": "Objects/cassini.obj",
+  "rangeRelay2": {
+    "value0": 7609.63818359375,
+    "value1": 224484.328125
+  },
+  "rangeRelay10": {
+    "value0": 1946979,
+    "value1": 2163310
+  },
+  "rangeRelay11": {
+    "value0": 2163310,
+    "value1": 2379641
+  },
+  "specie": "Audio/soft.mp3",
+  "mute": true
+}

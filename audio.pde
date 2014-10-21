@@ -14,7 +14,7 @@ import ddf.minim.signals.*;
 import ddf.minim.analysis.*;
 import ddf.minim.ugens.*;
 
-import voce.*;
+//import voce.*;
 
 //import com.getflourish.stt.*;
 
@@ -51,7 +51,7 @@ class audio {
     
     meta = _player.getMetaData();
     
-    voce.SpeechInterface.init("library", true, true, "library/gram", "bit");
+    //voce.SpeechInterface.init("library", true, true, "library/gram", "bit");
     
 //  tts = new TTS();
 //  //the following settings control the voice sound
@@ -114,14 +114,14 @@ class audio {
   }
   
   void volume(float value) {
-    if (_player.hasControl(ddf.minim.Controller.VOLUME)) {
-      //_player.setVolume(value);
-      _player.setVolume(_player.getVolume() + value);
-    }
-    else { 
-      //_player.setGain(value);
-      _player.setGain(_player.getGain() + value);
-    }
+//    if (_player.hasControl(ddf.minim.Controller.VOLUME)) {
+//      //_player.setVolume(value);
+//      _player.setVolume(_player.getVolume() + value);
+//    }
+//    else { 
+//      //_player.setGain(value);
+//      _player.setGain(_player.getGain() + value);
+//    }
 
   }
 
@@ -143,17 +143,17 @@ class audio {
   }
 
   void speech() {
-    if (voce.SpeechInterface.getRecognizerQueueSize() > 0)
-      {
-        String s = voce.SpeechInterface.popRecognizedString();
-        
-        if(-1 != s.indexOf("true")){}
-        else if(-1 != s.indexOf("false")) {}
-        
-        if (-1 != s.indexOf("quit")) {}
-
-        //voce.SpeechInterface.synthesize(s);
-      }
+//    if (voce.SpeechInterface.getRecognizerQueueSize() > 0)
+//      {
+//        String s = voce.SpeechInterface.popRecognizedString();
+//        
+//        if(-1 != s.indexOf("true")){}
+//        else if(-1 != s.indexOf("false")) {}
+//        
+//        if (-1 != s.indexOf("quit")) {}
+//
+//        //voce.SpeechInterface.synthesize(s);
+//      }
       
   }
   
@@ -191,7 +191,7 @@ class audio {
 
        stroke(102, 153, 51);
        fill(0, 102, 153, 51);
-       line(_position, 110, _position, 400);
+       line(_position, 70, _position, 110);
      }
      
       //_player.removeListener(_visuals[0]);
@@ -210,9 +210,10 @@ class audio {
   float length() {
     return _player.length();
   }
+  
   void close() {
     
-    voce.SpeechInterface.destroy();
+    //voce.SpeechInterface.destroy();
     
     _player.removeListener(_visuals[0]);
     _player.close();

@@ -1,0 +1,19 @@
+#JSGF V1.0;
+
+/**
+* Grammar File example for Animatronic Tree
+*/
+
+grammar tree;
+
+public <tree> = <address> <request> <requestTypes>;
+
+public <vocabulary> = (<address> hello | hello <address>| thank you) * ;
+
+public <extra> = (know | how | why | who | you | hoo | shoo);
+
+<address> = (tree);
+
+<request> = (tell | get the | what);
+
+<requestTypes> = (a joke | weather | time is it | day is it);

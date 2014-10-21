@@ -12,20 +12,20 @@
 // driver :: arduino
 driver _driver;
 // driver :: serial
-driver357 _driver357;
+//driver357 _driver357;
 
 // gui
 gui _gui;
 
 void setup() {
 
-  size(800, 600, P3D);  
+  size(1280, 1024, P3D);  
   //size(800, 600, P2D) colorMode(HSB) frameRate(30);
       
-    smooth();
-    lights();
-    
-      noStroke();
+//    smooth();
+//    lights();
+//    
+//      noStroke();
       
   //cursor(CROSS);
   
@@ -34,7 +34,7 @@ void setup() {
   _driver = new driver(this);
   _driver.setup();
 
-  _driver357 = new driver357(this);
+  //_driver357 = new driver357(this);
   //_driver357.setup();
   
   _gui = new gui(this);
@@ -61,13 +61,13 @@ void keyPressed() {
     case ' ':
       break;
     case 'c':
-      _gui.ks.toggleCalibration();
+      //_gui.ks.toggleCalibration();
       break;
     case 'l':
-      _gui.ks.load();
+      //_gui.ks.load();
       break;
     case 's':
-      _gui.ks.save();
+      //_gui.ks.save();
       break;
   }
   

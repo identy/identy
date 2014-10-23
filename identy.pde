@@ -18,10 +18,10 @@ driver _driver;
 gui _gui;
 
 void setup() {
-
-  size(800, 600, P3D);  
-  //size(800, 600, P2D) colorMode(HSB) frameRate(30);
-      
+ 
+  //size(800, 600, P3D) colorMode(HSB) frameRate(30);
+  size(800, 600, P2D);
+  
 //    smooth();
 //    lights();
 //    

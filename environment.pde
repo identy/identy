@@ -42,10 +42,10 @@ class environment
 //    
 //    model.enableDebug();
  
-    model = loadShape(name);
+    //model = loadShape(name);
     
-    nebula = loadShader("nebula.glsl");
-    nebula.set("resolution", float(width), float(height));
+//    nebula = loadShader("nebula.glsl");
+//    nebula.set("resolution", float(width), float(height));
   
   }
   
@@ -65,8 +65,8 @@ class environment
 //      popMatrix();
   
       //noStroke();
-    nebula.set("time", millis() / 500.0);  
-    view.shader(nebula); 
+    //nebula.set("time", millis() / 500.0);  
+    //view.shader(nebula); 
   
 //    for(int i = 0; i < model.getUVCount(); i ++)
 //    {
@@ -78,7 +78,7 @@ class environment
 //      
 //    }
   
-      view.rect(0, 0, width, height);
+      //view.rect(0, 0, width, height);
   }
   
 }

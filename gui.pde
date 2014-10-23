@@ -138,7 +138,7 @@ class gui {
    }
 
     _audio = new audio(context);   
-    //_audio.setup(serializerjson.getString("sound"));
+    _audio.setup(serializerjson.getString("sound"));
                  
     //_environment = new environment(context);
     _environment = new environment(serializerjson.getString("environment"), context);
@@ -149,8 +149,9 @@ class gui {
     //ks = new Keystone(context);
     //surface = ks.createCornerPinSurface(width, height, 2);
     
-    offscreen = createGraphics(width, height, P3D);
-
+    //offscreen = createGraphics(width, height, P3D);
+    offscreen = createGraphics(width, height, P2D);
+    
     titleTextlabel = new Textlabel(_gui,"untitled .1" , 110, 40, width - 40, height - 220);
     titleTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.title")), 48));
 

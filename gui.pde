@@ -59,7 +59,7 @@ class gui {
   //Keystone ks;
   
   //CornerPinSurface surface;
-  //PGraphics offscreen;
+  PGraphics offscreen;
 
   private PApplet context;
 
@@ -138,7 +138,7 @@ class gui {
    }
 
     _audio = new audio(context);   
-    _audio.setup(serializerjson.getString("sound"));
+    //_audio.setup(serializerjson.getString("sound"));
                  
     //_environment = new environment(context);
     _environment = new environment(serializerjson.getString("environment"), context);
@@ -436,7 +436,7 @@ class gui {
   void close() {
     
     _time.stop();
-    _audio.close();
+    //_audio.close();
     
     //saveJSONObject(serializerjson, "data/alpheny.json");
     
@@ -465,7 +465,7 @@ class gui {
       if (this.drawisActive()) _audio.drawPosition(offscreen);
       if (this.drawisActive()) _environment.draw(offscreen);
 
-      _audio.mute(muteisActive());
+      //if (_audio.isPlaying()) _audio.mute(muteisActive());
     
     }
     
@@ -494,7 +494,9 @@ class gui {
   }
   
   void sequencePlay() {
-       
+    
+    if (_audio == null) return;
+    
     if (!_audio.isPlaying()) {
       
         if (!this.isActive())

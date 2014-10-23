@@ -40,10 +40,12 @@ class audio {
   AudioRenderer[] _visuals; 
 
   public audio(PApplet context) {
-    _minim = new Minim(context);
+    //_minim = new Minim(context);
   }
 
   void setup(String sound) {
+    
+    if (_minim == null) return;
     
     _player = _minim.loadFile(sound, 1024);
     _input = _minim.getLineIn();

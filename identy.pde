@@ -19,7 +19,7 @@ gui _gui;
 
 void setup() {
 
-  size(1280, 1024, P3D);  
+  size(800, 600, P3D);  
   //size(800, 600, P2D) colorMode(HSB) frameRate(30);
       
 //    smooth();
@@ -29,7 +29,7 @@ void setup() {
       
   //cursor(CROSS);
   
-  //H.init(this).background(#202020).autoClear(true);
+  H.init(this).background(#202020).autoClear(true);
   
   _driver = new driver(this);
   _driver.setup();
@@ -45,6 +45,7 @@ void setup() {
 void draw() {
   
   if (_gui.set()) _gui.draw();
+  else _gui.draw();
   
 }
 
@@ -55,22 +56,28 @@ void stop() {
   super.stop();
 }
 
-void keyPressed() {
-  
-  switch(key) {
-    case ' ':
-      break;
-    case 'c':
-      //_gui.ks.toggleCalibration();
-      break;
-    case 'l':
-      //_gui.ks.load();
-      break;
-    case 's':
-      //_gui.ks.save();
-      break;
-  }
-  
-}
+//void keyPressed() {
+//  
+//  switch(key) {
+//    case ' ':
+//      break;
+//    case 'm' | 'M':
+//      _gui.systemToggle(_gui.systemisActive());
+//      break;
+//    case 'd' | 'D':
+//      _gui.debugToggle(_gui.debugisActive());
+//      break;
+//    case 'c':
+//      _gui.ks.toggleCalibration();
+//      break;
+//    case 'l':
+//      _gui.ks.load();
+//      break;
+//    case 's':
+//      _gui.ks.save();
+//      break;
+//  }
+//  
+//}
 
 void mouseMoved() { }

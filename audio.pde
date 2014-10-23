@@ -119,8 +119,8 @@ class audio {
 //      _player.setVolume(_player.getVolume() + value);
 //    }
 //    else { 
-//      //_player.setGain(value);
-//      _player.setGain(_player.getGain() + value);
+      //_player.setGain(value);
+      _player.setGain(_player.getGain() + value);
 //    }
 
   }
@@ -162,21 +162,27 @@ class audio {
       strokeWeight(1);
       stroke(204, 102, 0);
           
-       if (_gui.debugisActive()) {
+       //if (_gui.debugisActive()) {
          
           _fft.forward( _player.mix );
                
           for(int i = 0; i < _fft.specSize(); i++)
           {
             float _position = map(i, 0, _fft.specSize(), 0, width);
+            //view.line(_position, 100, _position, 110 - _fft.getBand(i)*8 );
+            
+            //float __position = map(_position, 0, _player.length(), 0, 400) + 110;
+            //view.line(__position, 100, __position, 110 - _fft.getBand(i)*8 );
+            
             view.line( _position, height, _position, height - _fft.getBand(i)*8 );
+            
           }
           
-       }
+       //}
   
   }
   
-  void drawPosition() {
+  void drawPosition(PGraphics view) {
     
 //      stroke( 128, 0, 0 );
 //      
@@ -184,15 +190,18 @@ class audio {
      //stroke(102, 153, 51);
        
      //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     if (_gui.systemisActive()) {
-       
+     
+     //if (_gui.systemisActive()) {
       //float x = map(_player.position(), 0, _player.length(), 0, width);
       float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
 
-       stroke(102, 153, 51);
-       fill(0, 102, 153, 51);
-       line(_position, 70, _position, 110);
-     }
+       view.stroke(102, 153, 51);
+       view.fill(0, 102, 153, 51);
+       view.line(_position, 100, _position, 110);
+       
+       view.text(Float.toString(_player.position()), _position, 100, _position, 110);
+
+     //}
      
       //_player.removeListener(_visuals[0]);
       //_player.addListener(_visuals[0]);

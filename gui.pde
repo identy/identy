@@ -7,12 +7,14 @@
  *
  */
 
+//import org.json.*; 
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+
 //import java.awt.Frame;
 //import java.awt.BorderLayout;
 
 import controlP5.*;
-
-//import org.json.*; 
 
 //import deadpixel.keystone.*;
 
@@ -43,8 +45,7 @@ class gui {
   private controlP5.CheckBox checkboxDebugger;
   
   private controlP5.Textlabel titleTextlabel;
-  private controlP5.Textlabel positionTextlabel;
-  
+    
   //controlP5.Knob audioVolume;
   //controlP5.Knob servoAngle;
   
@@ -56,9 +57,9 @@ class gui {
   JSONObject serializerjson;
 
   //Keystone ks;
-  //CornerPinSurface surface;
   
-  PGraphics offscreen;
+  //CornerPinSurface surface;
+  //PGraphics offscreen;
 
   private PApplet context;
 
@@ -99,19 +100,19 @@ class gui {
       serializerjson = new JSONObject();
       
 //      int __id = serializerjson.getInt("id");
-//      String __specie = serializerjson.getString("specie");
-//      String __environment = serializerjson.getString("environment");
-
-        serializerjson.setString("environment", "Objects/cassini.obj");
-        serializerjson.setInt("id", 0);
-        
+      
+      serializerjson.setString("sound", "Audio/soft.mp3");
+      serializerjson.setString("environment", "Objects/cassini.obj");
+              
       serializerjson.setBoolean("debug", false);
-      serializerjson.setBoolean("draw", true);
+      serializerjson.setBoolean("draw", false);
       serializerjson.setBoolean("mute", true);
       serializerjson.setBoolean("repeat", false);
       
       serializerjson.setString("font", "Fonts/KaiTi-30.vlw");
-      serializerjson.setString("font.secuence", "Fonts/Moire-Light-48.vlw");
+      serializerjson.setString("font.title", "Fonts/Moire-Light-48.vlw");
+      
+      //saveJSONObject(serializerjson, "data/alpheny.json");
 
    } 
    catch (Exception E) 
@@ -119,46 +120,48 @@ class gui {
  
       serializerjson = new JSONObject();
   
-      serializerjson.setInt("id", 0);
-      //serializerjson.setString("specie", "Audio/soft.mp3");
-      //serializerjson.setString("specie.description", _audio.meta.title());
-      //serializerjson.setString("environment", "Objects/cassini.obj");
+      //serializerjson.setInt("id", 0);
+      
+      serializerjson.setString("sound", "Audio/soft.mp3");
+      serializerjson.setString("environment", "Objects/cassini.obj");
            
       serializerjson.setBoolean("debug", false);
-      serializerjson.setBoolean("draw", true);
+      serializerjson.setBoolean("draw", false);
       serializerjson.setBoolean("mute", true);
       serializerjson.setBoolean("repeat", false);
       
       serializerjson.setString("font", "Fonts/KaiTi-30.vlw");
-      serializerjson.setString("font.secuence", "Fonts/Moire-Light-48.vlw");
+      serializerjson.setString("font.title", "Fonts/Moire-Light-48.vlw");
       
       //saveJSONObject(serializerjson, "data/alpheny.json");
       
    }
 
-    //_audio = new audio(context);
-
-    //_audio.setup("soft.mp3");    
-    //_audio.setup(serializerjson.getString("specie"));
-    
-    //serializerjson.setString("specie.description", _audio.meta.title());
-    //saveJSONObject(serializerjson, "data/alpheny.json");
-             
-    //_environment = new environment(serializerjson.getString("environment"), context);
-    //_environment.setup();
+    _audio = new audio(context);   
+    _audio.setup(serializerjson.getString("sound"));
+                 
+    //_environment = new environment(context);
+    _environment = new environment(serializerjson.getString("environment"), context);
+    _environment.setup();
 
     _gui.setControlFont(loadFont(serializerjson.getString("font")), 13);
-
-    titleTextlabel = new Textlabel(_gui,"untitled .1" , 80, 180, width - 10, height - 40);
-    titleTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.secuence")), 32));
-
-    positionTextlabel = new Textlabel(_gui,"." , 80, 180, 100, 40);
-    positionTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.secuence")), 14));
     
     //ks = new Keystone(context);
-    //surface = ks.createCornerPinSurface(800, 600, 2);
+    //surface = ks.createCornerPinSurface(width, height, 2);
     
-    offscreen = createGraphics(1280, 1024, P3D);
+    offscreen = createGraphics(width, height, P3D);
+
+    titleTextlabel = new Textlabel(_gui,"untitled .1" , 110, 40, width - 40, height - 220);
+    titleTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.title")), 48));
+
+    consoleDebug = _gui.addTextarea("consoleDebug")
+      .setPosition(4, height - 100 - 8)
+      .setSize(width - 8 - 4, 100)
+      .setColorBackground(color(27, 27, 27))
+      .setFont(new ControlFont(createFont("Helvetica", 10, true)))
+      .setLineHeight(14);
+
+    console = _gui.addConsole(consoleDebug);          
 
     _buttonSystem = _gui.addButton("system", 1, 1, 1, 100, 20);
     _buttonSystem.getCaptionLabel().set("system ");
@@ -183,16 +186,17 @@ class gui {
       .setBroadcast(true)
       .updateSize();
 
-    _gui.addTextlabel("PortArduino", "arduino port", 110, 20)
-      .moveTo(_groupSystem);
-    
-    _listArduinoPort = _gui.addListBox("arduinoPort", 110, 60, 200, 60);
+//    _gui.addTextlabel("PortArduino", "arduino port", 110, 20)
+//      .moveTo(_groupSystem);
+//    
+    _listArduinoPort = _gui.addListBox("arduinoPort", 580, 40, 200, 80);
     _listArduinoPort.moveTo(_groupSystem);
-    _listArduinoPort.setBarHeight(18);
+    //_listArduinoPort.setPosition(110, 40);
+    _listArduinoPort.setBarHeight(24);
     _listArduinoPort.toUpperCase(false);
     _listArduinoPort.getCaptionLabel().set("port");
     _listArduinoPort.actAsPulldownMenu(true);
-    _listArduinoPort.setItemHeight(20);
+    _listArduinoPort.setItemHeight(24);
     _listArduinoPort.enableCollapse();
     
     for (int i = 0; i < _driver.list().length; i++) {
@@ -227,13 +231,14 @@ class gui {
         .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(20, 60 + (40 * index) + 50)
+        .setPosition(20, 60 + (40 * index) + 30)
         .setSize(50, 20)
         .setValue(false)
         .setBroadcast(true)
         .setMode(ControlP5.SWITCH);
         
-      relayToggle.getCaptionLabel().set("relay " + index);
+      //relayToggle.getCaptionLabel().set("relay " + index);
+      relayToggle.getCaptionLabel().set(" ");
       relayToggle.getCaptionLabel().toUpperCase(false);
       
       _gui.getController("relayToggle" + index).addListener(new relayToggleListener());
@@ -242,16 +247,16 @@ class gui {
         .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(110, 60 + (40 * index) + 50)
+        .setPosition(110, 60 + (40 * index) + 30)
         .setSize(400, 20)
         .setHandleSize(1)
         
-        //.setRange(0, _audio._player.length())
-        .setRange(0, 700)
+        .setRange(0, _audio._player.length())
+        //.setRange(0, 700)
         //.setRange(0, _audio._player.bufferSize())
         
-        //.setRangeValues(((_audio._player.length() / 7) * (index - 1)), ((_audio._player.length() / 7) * (index - 1 )) + (_audio._player.length() / 7))
-        .setRangeValues(((700 / 7) * (index - 1)), ((700 / 7) * (index - 1 )) + (700 / 7))
+        .setRangeValues(((_audio._player.length() / 7) * (index - 1)), ((_audio._player.length() / 7) * (index - 1 )) + (_audio._player.length() / 7))
+        //.setRangeValues(((700 / 7) * (index - 1)), ((700 / 7) * (index - 1 )) + (700 / 7))
         
         .setSliderMode(Slider.FLEXIBLE)
         .setBroadcast(true)
@@ -277,7 +282,8 @@ class gui {
            
          } 
              
-      rangeRelay.getCaptionLabel().set("range " + index);
+      //rangeRelay.getCaptionLabel().set("range " + index);
+      rangeRelay.getCaptionLabel().set(" " + index);
       rangeRelay.getCaptionLabel().toUpperCase(false);
       
       _gui.getController("rangeRelay" + index).addListener(new relayRangeListener());
@@ -377,19 +383,7 @@ class gui {
     for(Toggle toggle:checkboxDebugger.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
     }
-        
-    _gui.getTooltip().setDelay(300);   
-    _gui.getTooltip().register("buttonSystem", "system define");
-
-    consoleDebug = _gui.addTextarea("consoleDebug")
-      .setPosition(4, height - 100 - 8)
-      .setSize(width - 8 - 4, 100)
-      .setColorBackground(color(27, 27, 27))
-      .setFont(new ControlFont(createFont("Helvetica", 10, true)))
-      .setLineHeight(14);
-
-    console = _gui.addConsole(consoleDebug);
-
+                
     if (serializerjson.getBoolean("debug"))
       checkboxDebugger.activate("debug");
       else checkboxDebugger.deactivate("debug");
@@ -405,11 +399,14 @@ class gui {
     if (serializerjson.getBoolean("repeat"))
       checkboxDebugger.activate("repeat");
       else checkboxDebugger.deactivate("repeat");
-          
-          
+
+    _gui.getTooltip().setDelay(300);   
+    _gui.getTooltip().register("buttonSystem", "system define");
+      
     _time = new time(context);
     _time.setup();
-    _time.play();
+    
+//    _time.play();
 
   }
 
@@ -424,113 +421,99 @@ class gui {
       //    for (int relay = 0; relay <= 7; relay++) {
       //      ((Toggle)(_gui.getController("relayControl" + (relay)))).setState(_driver357._portRelay[relay]);
       //    }
-      
-          //if (_audio.isPlaying())
-         if (this.isActive()) 
-            sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
-          else 
-            sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
-  
+        
+          //_audio.speech();
+          
        }
     catch (Exception e) {
       //
     } 
+    
     return this.isActive();
+    
   }
 
   void close() {
     
     _time.stop();
+    _audio.close();
     
     //saveJSONObject(serializerjson, "data/alpheny.json");
-    //_audio.close();
+    
   }
   
   void draw() {   
 
+
     //camera(width/2.0  + 300 * cos(frameCount/300.0), height/2.0 - 100, height/2.0 + 300 * sin(frameCount/300.0), width/2.0, height/2.0, 0, 0, 1, 0);
+    
     //rotate(frameCount*0.001);
     
     background(backgroundColor);
     stroke(strokeColor);
     fill(fillColor);
-
-    //_audio.mute(muteisActive());
-        
+          
     //PVector surfaceMouse = surface.getTransformedMouse();
     
-    // scene, offscreen
     offscreen.beginDraw();
     offscreen.background(0);
     offscreen.stroke(204, 102, 0);
+           
+    if (this.isActive()) {
+           
+      //if (this.drawisActive()) _audio.drawFFT(offscreen);
+      if (this.drawisActive()) _audio.drawPosition(offscreen);
+      if (this.drawisActive()) _environment.draw(offscreen);
+
+      _audio.mute(muteisActive());
     
-    //if (this.isActive() && this.debugisActive()) _audio.drawFFT(offscreen);
-   
-        //_environment.draw();
-        //if (_logo && this.drawisActive()) _environment.draw(offscreen);
-
+    }
+    
     offscreen.endDraw();
+    image(offscreen, width, height);
     //surface.render(offscreen);
-
+    
     titleTextlabel.draw();
     
-//    if (_audio.isActive()) {
-//      
-//      //_audio.drawPosition();
-//      
-//      float __position = map(_audio.position(), 0, _audio.length(), 0, 400) + 110;
-//      
-//      positionTextlabel.setText(Float.toString(_audio.position()));
-//      positionTextlabel.setPosition(__position, positionTextlabel.getPosition().y);
-//      positionTextlabel.draw(context);
-//      
-//      stroke(102, 153, 51);
-//      fill(0, 102, 153, 51);
-//      line(80, 170, 400, 170);
-//      //line(_position, 70, __position, 110);
-//
-//    }
+    float _position = map(_audio.position(), 0, _audio.length(), 0, 400);
+      
+    for (int index = 0; index <= 7; index++) {
+
+    float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio.length(), 0, 400);
+    float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio.length(), 0, 400);
     
-//    _audio.speech();
-    
-//    float _position = map(_audio.position(), 0, _audio.length(), 0, 400);
-    
-//    for (int index = 0; index <= 7; index++) {
-//
-//    float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio.length(), 0, 400);
-//    float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio.length(), 0, 400);
-//    
-//    int _id =_gui.getController("rangeRelay" + index).getId();
-//
-//      //if (_audio.isPlaying())
-//      if (_audio.isPlaying())
-//      
-//        if (_position > _init  &&  _done > _position) _driver.write(_id, true);
-//        else _driver.write(_id, false);
-//        
-//        //println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
-//
-//    }
-         
-    //_gui.show();
-    //_gui.draw();
-    
+    int _id =_gui.getController("rangeRelay" + index).getId();
+
+      if (this.isActive())     
+        if (_position > _init  &&  _done > _position) _driver.write(_id, true); else _driver.write(_id, false);
+        
+        //println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+        
+    }
+             
   }
   
   void sequencePlay() {
-    
-    //_audio.mute(this.muteDebug());
-    
-//    if (!_audio.isPlaying()) {
-//        _audio.play();
-//      //sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
-//    }
-//    else {
-//      _audio.stop();
-//      //sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
-//    }
+       
+    if (!_audio.isPlaying()) {
+      
+        if (!this.isActive())
+        checkboxDebugger.activate("active");
+        
+        if(this.repeatisActive()) _audio.loop();
+        else _audio.play();
+        
+        sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
+    }
+    else {
+
+        if (this.isActive())
+        checkboxDebugger.deactivate("active");
+        
+      _audio.stop();
+      sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
+    }
    
-     checkboxDebugger.activate("active");
   }
   
   boolean systemisActive() {
@@ -541,7 +524,6 @@ class gui {
       if (!_groupSystem.isVisible()) _groupSystem.show();
     } 
     else {
-      //saveJSONObject(serializerjson, "data/alpheny.json");
       if (_groupSystem.isVisible()) _groupSystem.hide();
     }
   }
@@ -550,7 +532,6 @@ class gui {
       return checkboxDebugger.getItem(0).getState();
   }
   void debugToggle(boolean activate) {
-    //if (consoleDebug.isVisible()) {
     if (activate) {
       if (!consoleDebug.isVisible()) consoleDebug.show();
     } 
@@ -558,7 +539,7 @@ class gui {
       if (consoleDebug.isVisible()) consoleDebug.hide();
     }
   }
-
+    
   boolean drawisActive() {
     return checkboxDebugger.getItem(1).getState();
   }
@@ -607,7 +588,9 @@ class gui {
             serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
             //saveJSONObject(serializerjson, "data/alpheny.json");
 
-           this.debugToggle(debugisActive());
+           //saveJSONObject(serializerjson, "data/alpheny.json");
+           
+           this.debugToggle(this.debugisActive());
            
         }
 
@@ -652,8 +635,10 @@ class gui {
             serializerjson.setBoolean("repeat", (int)checkboxDebugger.getArrayValue()[3] == 1);
             //saveJSONObject(serializerjson, "data/alpheny.json");
 
-           this.debugToggle(debugisActive());            
+           //saveJSONObject(serializerjson, "data/alpheny.json");
            
+           this.debugToggle(this.debugisActive());            
+
         }
         
     }
@@ -729,7 +714,8 @@ class relayRangeListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
     if (_event.isController()) {
       
-      if (_gui.debugisActive()) println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
+      if (_gui.debugisActive()) 
+        println(" index :: " + _event.getController().getId() + " | " + _event.getController().getArrayValue(0) + " | " + _event.getController().getArrayValue(1));
       
       //_step.delay(_event.getController().getId(), _event.getController().getArrayValue(1) - _event.getController().getArrayValue(0));
       //_step.duration(_event.getController().getId(), _event.getController().getArrayValue(0));

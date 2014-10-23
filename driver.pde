@@ -38,11 +38,14 @@ class driver {
       this._arduino = new Arduino(context, Arduino.list()[0]);
     }
     catch (Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
 
   void setup() {
+    
+    if (this._arduino == null) return;
+    
     try {
       //this._arduino.pinMode(pinInit, Arduino.OUTPUT);
 
@@ -52,7 +55,7 @@ class driver {
       
       for (int relay = 0; relay <= 7; relay++) {
         this._arduino.pinMode(relay, Arduino.OUTPUT);
-        this._arduino.digitalWrite(relay + 1, Arduino.LOW);
+        this._arduino.digitalWrite(relay + 2, Arduino.LOW);
       }
       
       //this._arduino.pinMode(pinServo, Arduino.OUTPUT);
@@ -67,14 +70,14 @@ class driver {
 
   void setup(String port) {
    try {
-      //this._arduino.dispose();
+      if (this._arduino != null) this._arduino.dispose();
       this._arduino = null;
       
       this._arduino = new Arduino(context, port);
       this.setup();
     }
     catch (Exception e) {
-      e.printStackTrace();
+      //e.printStackTrace();
     }
   }
    
@@ -97,7 +100,7 @@ class driver {
       this._arduinoRelay[index] = Arduino.LOW;
     }
     for (int relay = 0; relay <= 7; relay++) {
-      this._arduino.digitalWrite(relay + 1, Arduino.LOW);
+      this._arduino.digitalWrite(relay + 2, Arduino.LOW);
     }
     //this._arduino.digitalWrite(pinDone, Arduino.LOW);
   }
@@ -107,14 +110,14 @@ class driver {
     this.reset();
     
     this._arduinoRelay[relay] = Arduino.HIGH;
-    this._arduino.digitalWrite(relay + 1, Arduino.HIGH);
+    this._arduino.digitalWrite(relay + 2, Arduino.HIGH);
       
   }
   
   void write(int relay, boolean state) {
 
     this._arduinoRelay[relay] = state ? Arduino.HIGH : Arduino.LOW;    
-    this._arduino.digitalWrite(relay + 1, state ? Arduino.HIGH : Arduino.LOW);
+    this._arduino.digitalWrite(relay + 2, state ? Arduino.HIGH : Arduino.LOW);
     
   }
 

@@ -14,6 +14,11 @@ class environment
    PShader nebula;
    
    private PApplet context;
+
+  environment(PApplet parent)
+  {
+    context = parent;
+  }
  
   environment(String s, PApplet parent)
   {

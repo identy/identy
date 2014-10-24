@@ -20,7 +20,7 @@ gui _gui;
 void setup() {
  
   //size(800, 600, P3D) colorMode(HSB) frameRate(30);
-  size(800, 600, P2D);
+  size(800, 500, P3D);
   
 //    smooth();
 //    lights();
@@ -56,28 +56,35 @@ void stop() {
   super.stop();
 }
 
-//void keyPressed() {
-//  
-//  switch(key) {
-//    case ' ':
-//      break;
-//    case 'm' | 'M':
-//      _gui.systemToggle(_gui.systemisActive());
-//      break;
-//    case 'd' | 'D':
-//      _gui.debugToggle(_gui.debugisActive());
-//      break;
-//    case 'c':
-//      _gui.ks.toggleCalibration();
-//      break;
-//    case 'l':
-//      _gui.ks.load();
-//      break;
-//    case 's':
-//      _gui.ks.save();
-//      break;
-//  }
-//  
-//}
+void keyPressed() {
+  
+  switch(key) {
+    case ' ':
+      break;
+    case 'a' | 'A':
+    case 'p' | 'P':
+      _gui.sequencePlay();
+      break;
+    case 'm' | 'M':
+      _gui.systemToggle(!_gui.systemisActive());
+      break;
+    case 'd' | 'D':
+      _gui.drawToggle(!_gui.drawisActive());
+      break;
+    case 'g' | 'G':
+      _gui.debugToggle(!_gui.debugisActive());
+      break;
+    case 'c':
+      _gui.ks.toggleCalibration();
+      break;
+    case 'l':
+      _gui.ks.load();
+      break;
+    case 's':
+      _gui.ks.save();
+      break;
+  }
+  
+}
 
 void mouseMoved() { }

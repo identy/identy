@@ -13,6 +13,9 @@ class environment
    
    PShader nebula;
    
+   PImage _label;
+   PShape _can;
+
    private PApplet context;
 
   environment(PApplet parent)
@@ -44,15 +47,18 @@ class environment
  
     //model = loadShape(name);
     
-//    nebula = loadShader("nebula.glsl");
-//    nebula.set("resolution", float(width), float(height));
+    //_label = loadImage("tree.jpg");
+    //_can = can(100, 200, 32, _label);
+  
+    nebula = loadShader("nebula.glsl");
+    nebula.set("resolution", float(width), float(height));
   
   }
   
   void draw(PGraphics view)
   {
-          
-    //model.draw(); 
+  
+      //model.draw(view); 
     
 //      pushMatrix();
 //      noStroke();
@@ -64,10 +70,9 @@ class environment
         
 //      popMatrix();
   
-      //noStroke();
-    //nebula.set("time", millis() / 500.0);  
-    //view.shader(nebula); 
-  
+      nebula.set("time", millis() / 500.0);  
+      view.shader(nebula); 
+
 //    for(int i = 0; i < model.getUVCount(); i ++)
 //    {
 //  
@@ -77,8 +82,32 @@ class environment
 //      u.x = stable_u.x + sin(radians(frameCount))/2;
 //      
 //    }
+
+      //view.shape(_can);
+      
+      view.rect(0, 0, width, height);
+ 
+      //resetShader();
+      
+  }
   
-      //view.rect(0, 0, width, height);
+  PShape can(float r, float h, int detail, PImage tex) {
+    textureMode(NORMAL);
+    PShape sh = createShape();
+    sh.beginShape(QUAD_STRIP);
+    sh.noStroke();
+    sh.texture(tex);
+    for (int i = 0; i <= detail; i++) {
+      float angle = TWO_PI / detail;
+      float x = sin(i * angle);
+      float z = cos(i * angle);
+      float u = float(i) / detail;
+      sh.normal(x, 0, z);
+      sh.vertex(x * r, -h/2, z * r, u, 0);
+      sh.vertex(x * r, +h/2, z * r, u, 1);    
+    }
+    sh.endShape(); 
+    return sh;
   }
   
 }

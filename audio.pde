@@ -161,9 +161,9 @@ class audio {
   
   void drawFFT(PGraphics view) {
 
-      strokeWeight(1);
-      stroke(204, 102, 0);
-          
+      //strokeWeight(1);
+      //stroke(204, 102, 0);
+
        //if (_gui.debugisActive()) {
          
           _fft.forward( _player.mix );
@@ -197,11 +197,16 @@ class audio {
       //float x = map(_player.position(), 0, _player.length(), 0, width);
       float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
 
-       view.stroke(102, 153, 51);
-       view.fill(0, 102, 153, 51);
-       view.line(_position, 100, _position, 110);
+       //view.stroke(102, 153, 51);
+       //view.fill(0, 102, 153, 51);
+       view.line(_position, 80, _position, 90);
        
-       view.text(Float.toString(_player.position()), _position, 100, _position, 110);
+      //strokeWeight(1);
+      //stroke(204, 102, 0);
+
+       //view.fill(0, 102, 153, 204);
+       view.textSize(8);
+       view.text(Integer.toString((int)ceil(_player.position())), _position, 100);
 
      //}
      

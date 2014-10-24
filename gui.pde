@@ -14,9 +14,9 @@
 //import java.awt.Frame;
 //import java.awt.BorderLayout;
 
-import controlP5.*;
+import deadpixel.keystone.*;
 
-//import deadpixel.keystone.*;
+import controlP5.*;
 
 class gui {
 
@@ -24,8 +24,11 @@ class gui {
   
   private color backgroundColor = color(0, 0, 0);
   
-  private color strokeColor = color(0xff660000); // color(225, 225, 225);
-  private color fillColor = color(0xffdddddd); // color(245, 245, 245);
+  //private color strokeColor = color(0xff660000); // color(225, 225, 225);
+  private color strokeColor = color(102, 153, 51);
+  
+  //private color fillColor = color(0xffdddddd); // color(245, 245, 245);
+  private color fillColor = color(204, 102, 0);
   
   private controlP5.ControlP5 _gui;
 
@@ -56,9 +59,9 @@ class gui {
   
   JSONObject serializerjson;
 
-  //Keystone ks;
+  Keystone ks;
   
-  //CornerPinSurface surface;
+  CornerPinSurface surface;
   PGraphics offscreen;
 
   private PApplet context;
@@ -106,7 +109,7 @@ class gui {
               
       serializerjson.setBoolean("debug", false);
       serializerjson.setBoolean("draw", false);
-      serializerjson.setBoolean("mute", true);
+      serializerjson.setBoolean("mute", false);
       serializerjson.setBoolean("repeat", false);
       
       serializerjson.setString("font", "Fonts/KaiTi-30.vlw");
@@ -146,11 +149,11 @@ class gui {
 
     _gui.setControlFont(loadFont(serializerjson.getString("font")), 13);
     
-    //ks = new Keystone(context);
-    //surface = ks.createCornerPinSurface(width, height, 2);
+    ks = new Keystone(context);
+    surface = ks.createCornerPinSurface(width, height, 2);
     
     //offscreen = createGraphics(width, height, P3D);
-    offscreen = createGraphics(width, height, P2D);
+    offscreen = createGraphics(width, height, P3D);
     
     titleTextlabel = new Textlabel(_gui,"untitled .1" , 110, 40, width - 40, height - 220);
     titleTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.title")), 48));
@@ -161,19 +164,19 @@ class gui {
       .setColorBackground(color(27, 27, 27))
       .setFont(new ControlFont(createFont("Helvetica", 10, true)))
       .setLineHeight(14);
-
+    
     console = _gui.addConsole(consoleDebug);          
 
-    _buttonSystem = _gui.addButton("system", 1, 1, 1, 100, 20);
+    _buttonSystem = _gui.addButton("system", 1, 1, 1, 70, 20);
     _buttonSystem.getCaptionLabel().set("system ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
     _buttonSystem.getCaptionLabel().setLetterSpacing(2);
     _buttonSystem.getCaptionLabel().toUpperCase(false);
     
     _groupSystem = _gui.addGroup("groupSystem", 1, 22, width - 2);
-    _groupSystem.setBackgroundHeight(height - 140);
+    _groupSystem.setBackgroundHeight(height - 44);
     //_groupSystem.setBackgroundColor(color(17, 17, 17));
-    _groupSystem.setBackgroundColor(color(0,51,102,100));
+    //_groupSystem.setBackgroundColor(color(0,51,102,100));
     _groupSystem.activateEvent(true);
     _groupSystem.hideBar();
     _groupSystem.hide();
@@ -190,12 +193,13 @@ class gui {
 //    _gui.addTextlabel("PortArduino", "arduino port", 110, 20)
 //      .moveTo(_groupSystem);
 //    
-    _listArduinoPort = _gui.addListBox("arduinoPort", 580, 40, 200, 80);
+    _listArduinoPort = _gui.addListBox("arduinoPort", 580, 40, 110, 80);
     _listArduinoPort.moveTo(_groupSystem);
     //_listArduinoPort.setPosition(110, 40);
     _listArduinoPort.setBarHeight(24);
     _listArduinoPort.toUpperCase(false);
     _listArduinoPort.getCaptionLabel().set("port");
+    _listArduinoPort.getCaptionLabel().align(LEFT,CENTER);
     _listArduinoPort.actAsPulldownMenu(true);
     _listArduinoPort.setItemHeight(24);
     _listArduinoPort.enableCollapse();
@@ -384,22 +388,11 @@ class gui {
     for(Toggle toggle:checkboxDebugger.getItems()) {
       toggle.getCaptionLabel().toUpperCase(false);
     }
-                
+
+    // this.debugToggle(false);
     if (serializerjson.getBoolean("debug"))
       checkboxDebugger.activate("debug");
       else checkboxDebugger.deactivate("debug");
-      
-    if (serializerjson.getBoolean("draw"))
-      checkboxDebugger.activate("draw");
-      else checkboxDebugger.deactivate("draw");
-      
-    if (serializerjson.getBoolean("mute"))
-      checkboxDebugger.activate("mute");
-      else checkboxDebugger.deactivate("mute");
-      
-    if (serializerjson.getBoolean("repeat"))
-      checkboxDebugger.activate("repeat");
-      else checkboxDebugger.deactivate("repeat");
 
     _gui.getTooltip().setDelay(300);   
     _gui.getTooltip().register("buttonSystem", "system define");
@@ -437,7 +430,7 @@ class gui {
   void close() {
     
     _time.stop();
-    //_audio.close();
+    _audio.close();
     
     //saveJSONObject(serializerjson, "data/alpheny.json");
     
@@ -451,28 +444,32 @@ class gui {
     //rotate(frameCount*0.001);
     
     background(backgroundColor);
+    
     stroke(strokeColor);
     fill(fillColor);
           
-    //PVector surfaceMouse = surface.getTransformedMouse();
+    PVector surfaceMouse = surface.getTransformedMouse();
     
     offscreen.beginDraw();
     offscreen.background(0);
-    offscreen.stroke(204, 102, 0);
-           
+    
+    offscreen.stroke(strokeColor);
+    offscreen.fill(fillColor);
+    
     if (this.isActive()) {
            
-      //if (this.drawisActive()) _audio.drawFFT(offscreen);
-      if (this.drawisActive()) _audio.drawPosition(offscreen);
       if (this.drawisActive()) _environment.draw(offscreen);
 
-      //if (_audio.isPlaying()) _audio.mute(muteisActive());
-    
+      if (_audio.isPlaying()) _audio.mute(muteisActive());
+      if (_audio.isPlaying()) _audio.drawPosition(offscreen);
+
+      if (this.drawisActive() && _audio.isPlaying()) _audio.drawFFT(offscreen);
+      
     }
     
     offscreen.endDraw();
-    image(offscreen, width, height);
-    //surface.render(offscreen);
+    //image(offscreen, width, height);
+    surface.render(offscreen);
     
     titleTextlabel.draw();
     
@@ -532,7 +529,7 @@ class gui {
   }
   
   boolean debugisActive() {
-      return checkboxDebugger.getItem(0).getState();
+      return consoleDebug.isVisible();
   }
   void debugToggle(boolean activate) {
     if (activate) {
@@ -545,6 +542,10 @@ class gui {
     
   boolean drawisActive() {
     return checkboxDebugger.getItem(1).getState();
+  }
+  void drawToggle(boolean activate) {
+      if (activate) checkboxDebugger.activate("draw");
+      else checkboxDebugger.deactivate("draw");
   }
   
   boolean muteisActive() {
@@ -593,7 +594,7 @@ class gui {
 
            //saveJSONObject(serializerjson, "data/alpheny.json");
            
-           this.debugToggle(this.debugisActive());
+           this.debugToggle(checkboxDebugger.getArrayValue()[0] == 1);
            
         }
 
@@ -640,7 +641,7 @@ class gui {
 
            //saveJSONObject(serializerjson, "data/alpheny.json");
            
-           this.debugToggle(this.debugisActive());            
+           this.debugToggle(checkboxDebugger.getArrayValue()[0] == 1);            
 
         }
         

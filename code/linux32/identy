@@ -1,0 +1,4 @@
+#!/bin/sh
+
+APPDIR=$(dirname "$0")
+java -Xms64m -Xmx512m -Djna.nosys=true -Djava.library.path="$APPDIR:$APPDIR/lib" -cp "$APPDIR/lib/identy.jar:$APPDIR/lib/core.jar:$APPDIR/lib/jogl-all.jar:$APPDIR/lib/gluegen-rt.jar:$APPDIR/lib/jogl-all-natives-linux-i586.jar:$APPDIR/lib/gluegen-rt-natives-linux-i586.jar:$APPDIR/lib/jl1.0.jar:$APPDIR/lib/jsminim.jar:$APPDIR/lib/minim.jar:$APPDIR/lib/mp3spi1.9.4.jar:$APPDIR/lib/tritonus_aos.jar:$APPDIR/lib/tritonus_share.jar:$APPDIR/lib/Arduino.jar:$APPDIR/lib/jssc.jar:$APPDIR/lib/serial.jar:$APPDIR/lib/OBJLoader.jar:$APPDIR/lib/jai_core.jar:$APPDIR/lib/keystone.jar:$APPDIR/lib/controlP5.jar:$APPDIR/lib/ijeomamotion.jar" identy "$@"

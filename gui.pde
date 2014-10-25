@@ -23,6 +23,7 @@ class gui {
   final static int CONTROLLER = 0, TAB = 1, GROUP = 2;
   
   private color backgroundColor = color(0, 0, 0);
+  private PImage backgroundImage = null;
   
   //private color strokeColor = color(0xff660000); // color(225, 225, 225);
   private color strokeColor = color(102, 153, 51);
@@ -50,6 +51,7 @@ class gui {
   private controlP5.Textlabel titleTextlabel;
     
   //controlP5.Knob audioVolume;
+  
   //controlP5.Knob servoAngle;
   
   audio _audio;
@@ -92,10 +94,6 @@ class gui {
 
   void setup() {
 
-    background(backgroundColor);
-    stroke(strokeColor);
-    fill(fillColor);
-
      try 
    { 
    
@@ -106,7 +104,8 @@ class gui {
       
       serializerjson.setString("sound", "Audio/soft.mp3");
       serializerjson.setString("environment", "Objects/cassini.obj");
-              
+      serializerjson.setString("background", "back.png");
+      
       serializerjson.setBoolean("debug", false);
       serializerjson.setBoolean("draw", false);
       serializerjson.setBoolean("mute", false);
@@ -127,7 +126,8 @@ class gui {
       
       serializerjson.setString("sound", "Audio/soft.mp3");
       serializerjson.setString("environment", "Objects/cassini.obj");
-           
+      serializerjson.setString("background", "back.png");
+      
       serializerjson.setBoolean("debug", false);
       serializerjson.setBoolean("draw", false);
       serializerjson.setBoolean("mute", true);
@@ -140,22 +140,29 @@ class gui {
       
    }
 
+    if (_logo) backgroundImage = loadImage(serializerjson.getString("background"));
+    
+    if (backgroundImage == null) background(backgroundColor);
+    else background(backgroundImage);
+    
+    stroke(strokeColor);
+    fill(fillColor);
+
     _audio = new audio(context);   
     _audio.setup(serializerjson.getString("sound"));
                  
-    //_environment = new environment(context);
-    _environment = new environment(serializerjson.getString("environment"), context);
+    _environment = new environment(context);
+    //_environment = new environment(serializerjson.getString("environment"), context);
     _environment.setup();
 
     _gui.setControlFont(loadFont(serializerjson.getString("font")), 13);
     
     ks = new Keystone(context);
-    surface = ks.createCornerPinSurface(width, height, 20);
+    surface = ks.createCornerPinSurface(width, height, 2);
     
-    //offscreen = createGraphics(width, height, P3D);
     offscreen = createGraphics(width, height, P3D);
     
-    titleTextlabel = new Textlabel(_gui,"untitled .1" , 110, 40, width - 40, height - 220);
+    titleTextlabel = new Textlabel(_gui,"untited." , 110, 40, width - 40, height - 220);
     titleTextlabel.setControlFont(new ControlFont(loadFont(serializerjson.getString("font.title")), 48));
 
     consoleDebug = _gui.addTextarea("consoleDebug")
@@ -483,7 +490,8 @@ class gui {
     int _id =_gui.getController("rangeRelay" + index).getId();
 
       if (this.isActive())     
-        if (_position > _init  &&  _done > _position) _driver.write(_id, true); else _driver.write(_id, false);
+        if (_position > _init  &&  _done > _position) _driver.write(_id, true); 
+        else _driver.write(_id, false);
         
         //println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
         

@@ -57,7 +57,7 @@ class driver {
       }
       
       for (int relay = 0; relay <= 7; relay++) {
-        this._arduino.pinMode(relay, Arduino.OUTPUT);
+        this._arduino.pinMode(relay + 2, Arduino.OUTPUT);
         this._arduino.digitalWrite(relay + 2, Arduino.LOW);
       }
       

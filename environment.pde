@@ -45,10 +45,13 @@ class environment
 //    
 //    model.enableDebug();
  
-    //model = loadShape(name);
+ //textureMode(NORMAL);
+ 
+    if (name != "_environment")
+      model = loadShape(name);
     
-    //_label = loadImage("tree.jpg");
-    //_can = can(100, 200, 32, _label);
+    _label = loadImage("tree.jpg");
+    _can = can(100, 200, 32, _label);
   
     nebula = loadShader("nebula.glsl");
     nebula.set("resolution", float(width), float(height));
@@ -57,22 +60,24 @@ class environment
   
   void draw(PGraphics view)
   {
-  
-      //model.draw(view); 
-    
+      
 //      pushMatrix();
 //      noStroke();
 //      translate(width - 80, 80, 0);
 //        rotateY(radians(frameCount)/2);
 
-        // not logos view.shape(model);
-        // _logo .. if (_logo) _environment.draw();
-        
-//      popMatrix();
-  
       nebula.set("time", millis() / 500.0);  
       view.shader(nebula); 
 
+//        // not logos view.shape(model);
+//        // _logo .. if (_logo) _environment.draw();
+//
+//      //if (model != null) model.draw(view); 
+//  //
+//      //view.shape(_can);
+//        
+//      popMatrix();
+      
 //    for(int i = 0; i < model.getUVCount(); i ++)
 //    {
 //  
@@ -82,8 +87,6 @@ class environment
 //      u.x = stable_u.x + sin(radians(frameCount))/2;
 //      
 //    }
-
-      //view.shape(_can);
       
       view.rect(0, 0, width, height);
  
@@ -92,7 +95,7 @@ class environment
   }
   
   PShape can(float r, float h, int detail, PImage tex) {
-    textureMode(NORMAL);
+    //textureMode(NORMAL);
     PShape sh = createShape();
     sh.beginShape(QUAD_STRIP);
     sh.noStroke();

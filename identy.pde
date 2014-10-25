@@ -29,7 +29,7 @@ void setup() {
       
   //cursor(CROSS);
   
-  H.init(this).background(#202020).autoClear(true);
+  //H.init(this).background(#202020).autoClear(true);
   
   _driver = new driver(this);
   _driver.setup();

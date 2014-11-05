@@ -32,6 +32,9 @@ class gui {
   private color fillColor = color(204, 102, 0);
   
   private controlP5.ControlP5 _gui;
+  
+  private controlP5.Button _buttonAbout;
+  private controlP5.Button _buttonExit;
 
   private controlP5.Button _buttonSystem;
   private controlP5.ControlGroup _groupSystem;
@@ -174,11 +177,25 @@ class gui {
     
     console = _gui.addConsole(consoleDebug);          
 
-    _buttonSystem = _gui.addButton("system", 1, 1, 1, 70, 20);
-    _buttonSystem.getCaptionLabel().set("system ");
+    _buttonAbout = _gui.addButton("about", 1, 1, 1, 20, 20);
+    _buttonAbout.getCaptionLabel().set("? ");
+    _buttonAbout.getCaptionLabel().align(LEFT,CENTER);
+    _buttonAbout.getCaptionLabel().setLetterSpacing(2);
+    _buttonAbout.getCaptionLabel().toUpperCase(false);
+    //_buttonAbout.setImages(loadImage("Texture/about.png"), loadImage("Texture/about.png"), loadImage("Texture/about.png"));
+    
+    _buttonSystem = _gui.addButton("system", 1, 21, 1, 70, 20);
+    _buttonSystem.getCaptionLabel().set(" system ");
     _buttonSystem.getCaptionLabel().align(LEFT,CENTER);
     _buttonSystem.getCaptionLabel().setLetterSpacing(2);
     _buttonSystem.getCaptionLabel().toUpperCase(false);
+
+    _buttonExit = _gui.addButton("exit", 1, width - 18 -1, 1, 18, 18);
+    _buttonExit.getCaptionLabel().set("x ");
+    _buttonExit.getCaptionLabel().align(LEFT,CENTER);
+    _buttonExit.getCaptionLabel().setLetterSpacing(2);
+    _buttonExit.getCaptionLabel().toUpperCase(false);
+    //_buttonExit.setImages(loadImage("Texture/exit.png"), loadImage("Texture/exit.png"), loadImage("Texture/exit.png"));
     
     _groupSystem = _gui.addGroup("groupSystem", 1, 22, width - 2);
     _groupSystem.setBackgroundHeight(height - 44);
@@ -618,7 +635,11 @@ class gui {
 
         if (_event.isFrom(_buttonSystem))
           if (_event.getName() == "system") this.systemToggle(!_groupSystem.isVisible());
-
+        if (_event.isFrom(_buttonExit))
+          if (_event.getName() == "exit") exit();
+        //if (_event.isFrom(_buttonAbout))
+          //if (_event.getName() == "about") this.showABout();
+          
         if (_event.isFrom(sequencePlay))
           if (_event.getName() == "sequencePlay") this.sequencePlay();
 

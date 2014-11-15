@@ -9,8 +9,10 @@
  *
  */
 
+// driver :: Mqtt
+driverMqtt _driverMqtt;
 // driver :: arduino
-driver _driver;
+//driver _driver;
 // driver :: serial
 //driver357 _driver357;
 
@@ -31,8 +33,11 @@ void setup() {
   
   //H.init(this).background(#202020).autoClear(true);
   
-  _driver = new driver(this);
-  _driver.setup();
+  _driverMqtt = new driverMqtt(this);
+  //_driverMqtt.setup();
+
+  //_driver = new driver(this);
+  //_driver.setup();
 
   //_driver357 = new driver357(this);
   //_driver357.setup();
@@ -52,9 +57,14 @@ void draw() {
 void stop() {
   
   _gui.close();
-  
+  _driverMqtt.close();
+  //_driver.close();
   super.stop();
 }
+
+void exit(){
+  super.exit();
+}  
 
 void keyPressed() {
   
@@ -75,16 +85,18 @@ void keyPressed() {
       _gui.debugToggle(!_gui.debugisActive());
       break;
     case 'c':
-      _gui.ks.toggleCalibration();
+      //_gui.ks.toggleCalibration();
       break;
     case 'l':
-      _gui.ks.load();
+      //_gui.ks.load();
       break;
     case 's':
-      _gui.ks.save();
+      //_gui.ks.save();
       break;
   }
-  
+
 }
 
 void mouseMoved() { }
+
+

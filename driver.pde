@@ -108,33 +108,38 @@ class driver {
     //this._arduino.digitalWrite(pinDone, Arduino.LOW);
   }
 
-  void toggle(int relay) {
-
-    this.reset();
-    
-    this._arduinoRelay[relay] = Arduino.HIGH;
-    this._arduino.digitalWrite(relay + 2, Arduino.HIGH);
-      
-  }
-  
   void write(int relay, boolean state) {
 
+    if (this._arduinoRelay[relay] == Arduino.HIGH ? true : false || state) this._arduino.digitalWrite(relay + 2, state ? Arduino.HIGH : Arduino.LOW);
     this._arduinoRelay[relay] = state ? Arduino.HIGH : Arduino.LOW;    
-    this._arduino.digitalWrite(relay + 2, state ? Arduino.HIGH : Arduino.LOW);
     
   }
 
+  void toggle(int relay) {
+
+    this._arduinoRelay[relay] = this._arduinoRelay[relay] == Arduino.HIGH ? Arduino.LOW : Arduino.HIGH;
+    //if (this._arduinoRelay[relay] == Arduino.HIGH ? true : false || this.read(relay) == 0 ? false : true) this._arduino.digitalWrite(relay + 2, this._arduinoRelay[relay]);
+    this._arduino.digitalWrite(relay + 2, this._arduinoRelay[relay]);
+
+  }
+  
 //  void servo(int value) {
 //    this._arduino.servoWrite(pinServo, value);
 //  }
   
-  void read() {}
+  int read(int relay) {
+    return this._arduino.digitalRead(relay + 2);
+  }
+  
+  void close() {}
   
   void digitalEvent(int pin, int value) {
-    println("Digital pin "+pin+" has new value "+value);}
+    //println("Digital pin "+pin+" has new value "+value);
+  }
   
   void analogEvent(int pin, int value) {
-    println("Analog pin "+pin+" has new value "+value);
+    //println("Analog pin "+pin+" has new value "+value);
   }
 
 }
+

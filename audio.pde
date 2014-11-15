@@ -40,7 +40,7 @@ class audio {
   AudioRenderer[] _visuals; 
 
   public audio(PApplet context) {
-    _minim = new Minim(context);
+    //_minim = new Minim(context);
   }
 
   void setup(String sound) {

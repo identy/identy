@@ -113,6 +113,8 @@ class driver357 {
   void read() {
     this._port.write(new byte[] {new String("*").getBytes()[0], new String("*").getBytes()[0], _write, new String("#").getBytes()[0]});
   }
+ 
+  void close() {}
   
 }
 

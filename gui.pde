@@ -14,7 +14,7 @@
 //import java.awt.Frame;
 //import java.awt.BorderLayout;
 
-import deadpixel.keystone.*;
+//import deadpixel.keystone.*;
 
 import controlP5.*;
 
@@ -44,8 +44,8 @@ class gui {
   
   private controlP5.Button sequencePlay;
   
-  private controlP5.Button sequenceRewind;
-  private controlP5.Button sequenceForward;
+  //private controlP5.Button sequenceRewind;
+  //private controlP5.Button sequenceForward;
   
   private controlP5.Textarea consoleDebug;
   
@@ -64,9 +64,9 @@ class gui {
   
   JSONObject serializerjson;
 
-  Keystone ks;
+  //Keystone ks;
+  //CornerPinSurface surface;
   
-  CornerPinSurface surface;
   PGraphics offscreen;
 
   private PApplet context;
@@ -131,9 +131,9 @@ class gui {
       serializerjson.setString("environment", "Objects/cassini.obj");
       serializerjson.setString("background", "back.png");
       
-      serializerjson.setBoolean("debug", false);
+      serializerjson.setBoolean("debug", true);
       serializerjson.setBoolean("draw", false);
-      serializerjson.setBoolean("mute", true);
+      serializerjson.setBoolean("mute", false);
       serializerjson.setBoolean("repeat", false);
       
       serializerjson.setString("font", "Fonts/KaiTi-30.vlw");
@@ -152,16 +152,16 @@ class gui {
     fill(fillColor);
 
     _audio = new audio(context);   
-    _audio.setup(serializerjson.getString("sound"));
+    //_audio.setup(serializerjson.getString("sound"));
                  
-    _environment = new environment(context);
+    //_environment = new environment(context);
     //_environment = new environment(serializerjson.getString("environment"), context);
-    _environment.setup();
+    //_environment.setup();
 
     _gui.setControlFont(loadFont(serializerjson.getString("font")), 13);
     
-    ks = new Keystone(context);
-    surface = ks.createCornerPinSurface(width, height, 2);
+    //ks = new Keystone(context);
+    //surface = ks.createCornerPinSurface(width, height, 2);
     
     offscreen = createGraphics(width, height, P3D);
     
@@ -190,7 +190,7 @@ class gui {
     _buttonSystem.getCaptionLabel().setLetterSpacing(2);
     _buttonSystem.getCaptionLabel().toUpperCase(false);
 
-    _buttonExit = _gui.addButton("exit", 1, width - 18 -1, 1, 18, 18);
+    _buttonExit = _gui.addButton("exit", 1, width - 16 - 1, height - 16 - 1, 14, 14);
     _buttonExit.getCaptionLabel().set("x ");
     _buttonExit.getCaptionLabel().align(LEFT,CENTER);
     _buttonExit.getCaptionLabel().setLetterSpacing(2);
@@ -209,11 +209,14 @@ class gui {
       .moveTo(_groupSystem)
       .setBroadcast(false)
       .setValue(0)
-      .setPosition(20, 20)
+      .setPosition(580, 46)
       .setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"))
       .setBroadcast(true)
       .updateSize();
-
+      //.hide();
+      
+    //sequencePlay.setVisible(false);
+    
 //    _gui.addTextlabel("PortArduino", "arduino port", 110, 20)
 //      .moveTo(_groupSystem);
 //    
@@ -228,13 +231,15 @@ class gui {
     _listArduinoPort.setItemHeight(24);
     _listArduinoPort.enableCollapse();
     
-    for (int i = 0; i < _driver.list().length; i++) {
-      _listArduinoPort.addItem(_driver.list()[i], i);
+    for (int i = 0; i < _driverMqtt.list().length; i++) {
+      _listArduinoPort.addItem(_driverMqtt.list()[i], i);
     }
-   
+       
     _listArduinoPort.addListener(new portListener());
     //_listArduinoPort.setValue(0);
 
+    //_listArduinoPort.setVisible(false);
+    
 //    _gui.addTextlabel("Port357", "serial357 port", 240, 20)
 //      .moveTo(_groupSystem);
 //    
@@ -260,7 +265,7 @@ class gui {
         .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(20, 60 + (40 * index) + 30)
+        .setPosition(20, 60 + (36 * index) + 16)
         .setSize(50, 20)
         .setValue(false)
         .setBroadcast(true)
@@ -276,16 +281,16 @@ class gui {
         .moveTo(_groupSystem)
         .setBroadcast(false)
         .setId(index)
-        .setPosition(110, 60 + (40 * index) + 30)
+        .setPosition(110, 60 + (36 * index) + 16)
         .setSize(400, 20)
         .setHandleSize(1)
         
-        //.setRange(0, 700)
+        .setRange(0, 700)
         //.setRange(0, _audio._player.bufferSize())
-        .setRange(0, _audio._player.length())
+        //.setRange(0, _audio._player.length())
         
-        .setRangeValues(((_audio._player.length() / 8) * (index)), ((_audio._player.length() / 8) * (index)) + (_audio._player.length() / 8))
-        //.setRangeValues(((700 / 8) * (index - 1)), ((700 / 8) * (index - 1 )) + (700 / 8))
+        //.setRangeValues(((_audio._player.length() / 8) * (index)), ((_audio._player.length() / 8) * (index)) + (_audio._player.length() / 8))
+        .setRangeValues(((700 / 8) * (index)), ((700 / 8) * (index)) + (700 / 8))
         
         .setSliderMode(Slider.FLEXIBLE)
         .setBroadcast(true)
@@ -395,7 +400,7 @@ class gui {
 
     checkboxDebugger = _gui.addCheckBox("checkboxDebugger")
       .moveTo(_groupSystem)
-      .setPosition(670, 280)
+      .setPosition(580, 160)
       .setColorForeground(color(120))
       .setColorActive(color(255))
       .setColorLabel(color(255))
@@ -416,7 +421,8 @@ class gui {
     // this.debugToggle(false);
     if (serializerjson.getBoolean("debug"))
       checkboxDebugger.activate("debug");
-      else checkboxDebugger.deactivate("debug");
+      else 
+      checkboxDebugger.deactivate("debug");
 
     _gui.getTooltip().setDelay(300);   
     _gui.getTooltip().register("buttonSystem", "system define");
@@ -432,9 +438,9 @@ class gui {
 
      try {
        
-          for (int relay = 0; relay <= 7; relay++) {
-            ((Toggle)(_gui.getController("relayToggle" + (relay)))).setState(_driver._arduinoRelay[relay] == Arduino.HIGH);
-          }
+//          for (int relay = 0; relay <= 7; relay++) {
+//            ((Toggle)(_gui.getController("relayToggle" + (relay)))).setState(_driver._arduinoRelay[relay] == Arduino.HIGH);
+//          }
       
       //    for (int relay = 0; relay <= 7; relay++) {
       //      ((Toggle)(_gui.getController("relayControl" + (relay)))).setState(_driver357._portRelay[relay]);
@@ -450,15 +456,6 @@ class gui {
     return this.isActive();
     
   }
-
-  void close() {
-    
-    _time.stop();
-    _audio.close();
-    
-    //saveJSONObject(serializerjson, "data/alpheny.json");
-    
-  }
   
   void draw() {   
 
@@ -472,71 +469,103 @@ class gui {
     stroke(strokeColor);
     fill(fillColor);
           
-    PVector surfaceMouse = surface.getTransformedMouse();
+    //PVector surfaceMouse = surface.getTransformedMouse();
     
-    offscreen.beginDraw();
-    offscreen.background(0);
-    
-    offscreen.stroke(strokeColor);
-    offscreen.fill(fillColor);
-    
-    if (this.isActive()) {
-           
-      if (this.drawisActive()) _environment.draw(offscreen);
-
-      if (_audio.isPlaying()) _audio.mute(this.muteisActive());
-      if (_audio.isPlaying()) _audio.drawPosition(offscreen);
-
-      // if (this.drawisActive() && _audio.isPlaying() && !this.muteisActive()) _audio.drawFFT(offscreen);
-      
-    }
-    
-    offscreen.endDraw();
-    //image(offscreen, width, height);
-    surface.render(offscreen);
+//    offscreen.beginDraw();
+//    offscreen.background(0);
+//    
+//    offscreen.stroke(strokeColor);
+//    offscreen.fill(fillColor);
+//    
+//    if (this.isActive()) {
+//           
+//      //if (this.drawisActive()) _environment.draw(offscreen);
+//
+//      if (_audio.isPlaying()) _audio.mute(this.muteisActive());
+//      //if (_audio.isPlaying()) _audio.drawPosition(offscreen);
+//
+//      // if (this.drawisActive() && _audio.isPlaying() && !this.muteisActive()) _audio.drawFFT(offscreen);
+//      
+//    }
+//    
+//    offscreen.endDraw();
+//    image(offscreen, width, height);
+//    //surface.render(offscreen);
     
     titleTextlabel.draw();
+    
+    // mqtt action
+    
+    if (!this.isActive()) return;
     
     float _position = map(_audio.position(), 0, _audio.length(), 0, 400);
       
     for (int index = 0; index <= 7; index++) {
 
-    float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio.length(), 0, 400);
-    float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio.length(), 0, 400);
+      float _init = map(_gui.getController("rangeRelay" + index).getArrayValue(0), 0, _audio.length(), 0, 400);
+      float _done = map(_gui.getController("rangeRelay" + index).getArrayValue(1), 0, _audio.length(), 0, 400);
     
-    int _id =_gui.getController("rangeRelay" + index).getId();
+      int _id =_gui.getController("rangeRelay" + index).getId();
 
-      if (this.isActive())     
-        if (_position > _init  &&  _done > _position) _driver.write(_id, true); 
-        else _driver.write(_id, false);
-        
-        //println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+//      if (this.isActive()) {
+//      
+//        if (_position > _init  &&  _done > _position) {
+//        //if (_position == _init  ||  _position == _done) {
+//          
+//          //_driver.write(_id, true); 
+//          _driverMqtt.write(_id, true);
+//          
+//          //_driverMqtt.toggle(_id);
+//          
+//        }
+//        else {
+//          
+//          //_driver.write(_id, false);
+//          _driverMqtt.write(_id, false);
+//          
+//        }
+//        
+//        //println(" index :: " + _id + " | " + _init + " | " + _done + " | position " + _position);
+//        
+//      }
         
     }
              
   }
   
+    void close() {
+    
+    _time.stop();
+    _audio.close();
+    
+    //saveJSONObject(serializerjson, "data/alpheny.json");
+    
+  }
+
   void sequencePlay() {
     
     if (_audio == null) return;
     
     if (!_audio.isPlaying()) {
       
-        if (!this.isActive())
+        //if (!this.isActive())
         checkboxDebugger.activate("active");
         
-        if(this.repeatisActive()) _audio.loop();
-        else _audio.play();
+        if(this.repeatisActive()) 
+          _audio.loop();
+        else 
+          _audio.play();
         
         sequencePlay.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
+        
     }
     else {
-
-        if (this.isActive())
-        checkboxDebugger.deactivate("active");
-        
       _audio.stop();
+      
+      //if (this.isActive())
+      checkboxDebugger.deactivate("active");
       sequencePlay.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
+      
     }
    
   }
@@ -558,10 +587,16 @@ class gui {
   }
   void debugToggle(boolean activate) {
     if (activate) {
-      if (!consoleDebug.isVisible()) consoleDebug.show();
+      if (!consoleDebug.isVisible()) {
+        consoleDebug.show();
+        _buttonExit.setVisible(true);
+       }
     } 
     else {
-      if (consoleDebug.isVisible()) consoleDebug.hide();
+      if (consoleDebug.isVisible()) {
+        consoleDebug.hide();
+        _buttonExit.setVisible(false);
+      }
     }
   }
     
@@ -629,9 +664,9 @@ class gui {
         value = (int) _controller.getValue();
         id = _controller.getId();
         
-        if (_event.isController()) {
-          println(_event.getController().getName() + ".controller");
-        }
+        //if (_event.isController()) {
+          //println(_event.getController().getName() + ".controller");
+        //}
 
         if (_event.isFrom(_buttonSystem))
           if (_event.getName() == "system") this.systemToggle(!_groupSystem.isVisible());
@@ -643,10 +678,10 @@ class gui {
         if (_event.isFrom(sequencePlay))
           if (_event.getName() == "sequencePlay") this.sequencePlay();
 
-        if (_event.isFrom(sequenceRewind))
-          if (_event.getName() == "sequenceRewind") _audio.rewind();
-        if (_event.isFrom(sequenceForward))
-          if (_event.getName() == "sequenceRewind") _audio.forward();
+//        if (_event.isFrom(sequenceRewind))
+//          if (_event.getName() == "sequenceRewind") _audio.rewind();
+//        if (_event.isFrom(sequenceForward))
+//          if (_event.getName() == "sequenceRewind") _audio.forward();
 
         //if (_event.isFrom(audioVolume)) 
         //  if (_event.getName() == "audioVolume") this.audioVolume(value);
@@ -704,7 +739,8 @@ class portListener implements ControlListener {
         
         if (_gui.debugisActive()) println(_event);
       
-        _driver.setup(_driver.list()[(int)_event.getGroup().getValue()]);
+        //_driver.setup(_driver.list()[(int)_event.getGroup().getValue()]);
+        _driverMqtt.setup(_driverMqtt.list()[(int)_event.getGroup().getValue()]);
       }
       if (_event.isController()) {}       
     }
@@ -734,7 +770,10 @@ class relayToggleListener implements ControlListener {
       //if (_gui.consoleDebug()) println(_event);
       
       try {      
-        _driver.write(_event.getController().getId(), _event.getController().getValue() > 0);
+        //_driver.write(_event.getController().getId(), _event.getController().getValue() > 0);
+        //_driver.toggle(_event.getController().getId());
+        //_driverMqtt.write(_event.getController().getId(), _event.getController().getValue() > 0);
+        _driverMqtt.toggle(_event.getController().getId());
       }
       catch(Exception e) {}
       

@@ -50,7 +50,7 @@ void setup() {
 void draw() {
   
   if (_gui.set()) _gui.draw();
-  else _gui.draw();
+  //else _gui.draw();
   
 }
 
@@ -98,5 +98,3 @@ void keyPressed() {
 }
 
 void mouseMoved() { }
-
-

@@ -248,28 +248,28 @@ void onTimedEventGenerator() {
   
 }
 
-void onTickEvent(int timerId, long timeLeftUntilFinish) {
-
-  switch (timerId) {
-    case 0:
-      break;
-    case 1:
-      break;
-    }
-    
-}
-
-void onFinishEvent(int timerId) {
-
-  switch (timerId) {
-    case 0:
-      break;
-    case 1:
-      break;
-  }
-  
-  println("[timerId:" + timerId + "] finished");
-}
+//void onTickEvent(int timerId, long timeLeftUntilFinish) {
+//
+//  switch (timerId) {
+//    case 0:
+//      break;
+//    case 1:
+//      break;
+//    }
+//    
+//}
+//
+//void onFinishEvent(int timerId) {
+//
+//  switch (timerId) {
+//    case 0:
+//      break;
+//    case 1:
+//      break;
+//  }
+//  
+//  println("[timerId:" + timerId + "] finished");
+//}
 
 //void tweenStarted(Tween _t) {
 //  println(_t + " started");

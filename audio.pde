@@ -24,6 +24,8 @@ import ddf.minim.ugens.*;
 
 class audio {
 
+  private PApplet context;
+    
   ddf.minim.Minim _minim;
   ddf.minim.AudioPlayer _player;
   ddf.minim.AudioMetaData meta;
@@ -33,7 +35,7 @@ class audio {
 
   //Oscil       _wave;
 
-  FFT         _fft;
+  private FFT         _fft;
 
   AudioRenderer _vortex, _iso, _radar;
   
@@ -41,12 +43,15 @@ class audio {
 
   public audio(PApplet context) {
     //_minim = new Minim(context);
+    this.context = context;
   }
 
   void setup(String sound) {
     
-    if (_minim == null) 
-      return;
+    if (_minim == null) {
+      _minim = new Minim(context);
+    }
+    //return;
     
     _player = _minim.loadFile(sound, 1024);
     _input = _minim.getLineIn();
@@ -196,18 +201,19 @@ class audio {
      
      //if (_gui.systemisActive()) {
       //float x = map(_player.position(), 0, _player.length(), 0, width);
-      float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
-
+      //float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
+      float _position = map(second(), 0, round(_gui.rangeGauge.getValue()), 0, 400);
+      
        //view.stroke(102, 153, 51);
        //view.fill(0, 102, 153, 51);
-       view.line(_position, 10, _position, 20);
+       view.line(_position + 110, 10, _position + 110, 20);
        
       //strokeWeight(1);
       //stroke(204, 102, 0);
 
        //view.fill(0, 102, 153, 204);
-       view.textSize(7);
-       view.text(Integer.toString((int)ceil(_player.position())), _position, 30);
+       //view.textSize(14);
+       view.text(round(_position), _position + 110 + 4, 18);
 
      //}
      
@@ -217,8 +223,17 @@ class audio {
       //_visuals[0].setup();
       //_visuals[0].draw();
 
-}
+  }
   
+  void drawScale(PGraphics view) {
+    
+       for (int relay = 0; relay <= 7; relay++) {
+         JSONObject jrangeRelay = _gui.serializerjson.getJSONObject("relayToggle" + relay);
+         //if (jrangeRelay.getJSONObject("position" + _position) == null) continue;
+         //view.line(_position  + 110, 10, _position  + 110, 20);
+       }              
+
+  }
   float position() {
     //return map(_player.position(), 0, _player.length(), 0, 400) + 110;
     return _player.position();

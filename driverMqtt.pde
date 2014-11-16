@@ -97,21 +97,22 @@ class driverMqtt {
     
   }
 
-  void read() {}
+  int read(int relay) {
+    return 0;
+  }
   
   void close() {
    this._client.disconnect();
   }
   
-  void mqttCallback(MQTTPublish message){
-    
-    String payload = new String(message.getPayload());
-    String[] coords = split(payload, ",");
-    
-    //x = parseInt(coords[0]); y = parseInt(coords[1]);
-    println("mqtt Callback relay " + coords[0] + ", bit " + coords[1]);
-    
-  }
-  
 }
 
+void mqttCallback(MQTTPublish message){
+  
+  String payload = new String(message.getPayload());
+  String[] coords = split(payload, ",");
+  
+  //x = parseInt(coords[0]); y = parseInt(coords[1]);
+  println("mqtt Callback relay " + coords[0] + ", bit " + coords[1]);
+  
+}

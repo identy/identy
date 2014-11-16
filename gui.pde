@@ -426,8 +426,8 @@ class gui {
     rangeGauge = _gui.addKnob("rangeGauge")
       .setBroadcast(false)
       .moveTo(_groupSystem)
-      .setRange(0, 30*60)
-      .setValue((30*60)/2)
+      .setRange(0, 60000)
+      .setValue(60000)
       .setPosition(580, 340)
       .setRadius(40)
       .setNumberOfTickMarks(20)
@@ -445,7 +445,7 @@ class gui {
     //_TimedEventGenerator = new TimedEventGenerator(context, "onRangeTimedEventGenerator", false);
     //_TimedEventGenerator.setIntervalMs(100);
     timer = CountdownTimer.getNewCountdownTimer(context);
-    timer.configure(10, (30*60)/2);
+    timer.configure(100, 60000);
     
     checkboxDebugger = _gui.addCheckBox("checkboxDebugger")
       .moveTo(_groupSystem)
@@ -495,8 +495,8 @@ class gui {
 //     }
 
        //serializerjson = loadJSONObject("data/alpheny.json");
-       int _position; 
-       
+//       int _position; 
+//       
 //       if (this.isActive()) { 
 //         
 //         //if (_audio.isPlaying()) 
@@ -561,6 +561,7 @@ class gui {
     //}
     
     if (this.drawisActive()) _environment.draw(offscreen);
+    
     if (this.isActive()) if (this.drawisActive()) _audio.drawPosition(offscreen);
     //if (this.drawisActive()) _audio.drawScale(offscreen);
 
@@ -929,13 +930,14 @@ void onTickEvent(int timerId, long timeLeftUntilFinish) {
          //if (_audio.isPlaying()) 
            //_position = round(map(_audio.position(), 0, _audio.length(), 0, 400));
          //else
-         int _position = round(map(second(), 0, round(_gui._gui.getController("rangeGauge").getValue()), 0, 400));
+         int _position = round(map(millis(), 0, round(_gui._gui.getController("rangeGauge").getValue()), 0, 400));
          
          for (int relay = 0; relay <= 7; relay++) {
+           
            JSONObject jrangeRelay = _gui.serializerjson.getJSONObject("relayToggle" + relay);
            
            //JSONObject jrangePosition = jrangeRelay.getJSONObject("position" + _position);
-           println(" index :: " + relay + " | " + jrangeRelay);
+           //println(" index :: " + relay + " | " + jrangeRelay);
            try {
              //if (jrangeRelay.getJSONObject("" + _position) == null) continue;
              ((Toggle)(_gui._gui.getController("relayToggle" + relay))).setState(jrangeRelay.getBoolean(str(_position)));

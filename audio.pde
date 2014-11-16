@@ -202,7 +202,7 @@ class audio {
      //if (_gui.systemisActive()) {
       //float x = map(_player.position(), 0, _player.length(), 0, width);
       //float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
-      float _position = map(second(), 0, round(_gui.rangeGauge.getValue()), 0, 400);
+      float _position = map(millis(), 0, round(_gui.rangeGauge.getValue()), 0, 400);
       
        //view.stroke(102, 153, 51);
        //view.fill(0, 102, 153, 51);

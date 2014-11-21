@@ -59,6 +59,8 @@ class audio {
     
     meta = _player.getMetaData();
     
+    if (_player == null) return;
+    
     //voce.SpeechInterface.init("library", true, true, "library/gram", "bit");
     
 //  tts = new TTS();
@@ -98,7 +100,7 @@ class audio {
   }
   
   void loop() {
-    _player.loop();
+    if (_player != null) _player.loop();
   }
 
   void pause() {
@@ -113,7 +115,7 @@ class audio {
   }
 
   void mute(boolean activate) {
-    this.volume(activate? -255: 255);
+    this.volume(activate? -255 * 4: 255 * 4);
   }
   
   boolean isPlaying() {
@@ -128,12 +130,12 @@ class audio {
 //    }
 //    else { 
       //_player.setGain(value);
-      _player.setGain(_player.getGain() + value);
+      if (_player != null) _player.setGain(_player.getGain() + value);
 //    }
 
   }
 
-  void move() {
+  void seek() {
 
   }
   
@@ -190,50 +192,6 @@ class audio {
   
   }
   
-  void drawPosition(PGraphics view) {
-    
-//      stroke( 128, 0, 0 );
-//      
-     //stroke(255, 0, 0);
-     //stroke(102, 153, 51);
-       
-     //line(_position, height - 100 - 8 - 20, _position, height - 100 - 8 + 20);
-     
-     //if (_gui.systemisActive()) {
-      //float x = map(_player.position(), 0, _player.length(), 0, width);
-      //float _position = map(_player.position(), 0, _player.length(), 0, 400) + 110;
-      float _position = map(millis(), 0, round(_gui.rangeGauge.getValue()), 0, 400);
-      
-       //view.stroke(102, 153, 51);
-       //view.fill(0, 102, 153, 51);
-       view.line(_position + 110, 10, _position + 110, 20);
-       
-      //strokeWeight(1);
-      //stroke(204, 102, 0);
-
-       //view.fill(0, 102, 153, 204);
-       //view.textSize(14);
-       view.text(round(_position), _position + 110 + 4, 18);
-
-     //}
-     
-      //_player.removeListener(_visuals[0]);
-      //_player.addListener(_visuals[0]);
-      
-      //_visuals[0].setup();
-      //_visuals[0].draw();
-
-  }
-  
-  void drawScale(PGraphics view) {
-    
-       for (int relay = 0; relay <= 7; relay++) {
-         JSONObject jrangeRelay = _gui.serializerjson.getJSONObject("relayToggle" + relay);
-         //if (jrangeRelay.getJSONObject("position" + _position) == null) continue;
-         //view.line(_position  + 110, 10, _position  + 110, 20);
-       }              
-
-  }
   float position() {
     //return map(_player.position(), 0, _player.length(), 0, 400) + 110;
     return _player.position();

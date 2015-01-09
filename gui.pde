@@ -517,7 +517,7 @@ class gui extends Canvas {
     _timedEventGenerator = new TimedEventGenerator(context, "onRangeTimedEventGenerator", false);
     _timedEventGenerator.setIntervalMs(600);
     
-    //_timedEventGenerator.setEnabled(true);
+    _timedEventGenerator.setEnabled(true);
     
   }
 
@@ -532,8 +532,8 @@ class gui extends Canvas {
     }
     catch (Exception e) {} 
     
-    //return this.isActive();
-    return true;
+    return this.isActive();
+    //return true;
   }
   
   void draw(PApplet context) {   
@@ -546,6 +546,8 @@ class gui extends Canvas {
     strokeWeight(1);
     
     fill(fillColor);
+    
+    smooth();
     
     //PVector surfaceMouse = surface.getTransformedMouse();
    
@@ -578,13 +580,17 @@ class gui extends Canvas {
     image(offscreen, 0, 0, width, height);
     //surface.render(offscreen);
     
+    //if (!_gui._audio.isPlaying()) onRangeTimedEventGenerator();
+    //_timedEventGenerator.setEnabled(!_audio.isPlaying());
     // mqtt action
   }
   
   void close() {
     saveJSONObject(serializerjson, "data/alpheny.json");
+    _timedEventGenerator.setEnabled(false);
     
     _audio.close();
+
   }
       
   void Sequence() {
@@ -607,9 +613,11 @@ class gui extends Canvas {
 //      _gui.get(Matrix.class, "scaleMatrix").play();
 //    }
 
-    _timedEventGenerator.setEnabled(!_timedEventGenerator.isEnabled());
-        
-    if (this.isActive())
+    //_timedEventGenerator.setEnabled(!_timedEventGenerator.isEnabled());
+    //_timedEventGenerator.setEnabled(_audio.isPlaying());
+    //_timedEventGenerator.setEnabled(true);
+    
+    if (_audio.isPlaying()) 
       _buttonSequence.setImages(loadImage("Texture/pause_red.png"), loadImage("Texture/pause_blue.png"), loadImage("Texture/pause_green.png"));
     else              
       _buttonSequence.setImages(loadImage("Texture/play_red.png"), loadImage("Texture/play_blue.png"), loadImage("Texture/play_green.png"));
@@ -682,7 +690,7 @@ class gui extends Canvas {
         value = (int) _group.getValue();
         
         if (_event.isGroup()) {
-          println(_event.getGroup().getName() + ".group");
+          println(" control Event " + " | " + ".group " + _event.getGroup().getName());
         }
 
 //        if (_event.getName() == "scaleMatrix") {
@@ -700,6 +708,7 @@ class gui extends Canvas {
             serializerjson.setBoolean("debug", (int)_checkOptions.getArrayValue()[0] == 1);
             //saveJSONObject(serializerjson, "data/alpheny.json");
             this.selectDebug(_checkOptions.getArrayValue()[0] == 1);
+            
           //.addItem("mute", 1)
             serializerjson.setBoolean("mute", (int)_checkOptions.getArrayValue()[1] == 1);
             //saveJSONObject(serializerjson, "data/alpheny.json");
@@ -717,7 +726,7 @@ class gui extends Canvas {
         value = (int) _controller.getValue();
         
         if (_event.isController()) {
-          println(_event.getController().getName() + ".controller");
+          println(" control Event " + " | " + ".controller " + _event.getController().getName());
         }
 
         if (_event.isFrom(_buttonAbout))
@@ -758,6 +767,7 @@ class portListener implements ControlListener {
 
 class relayToggleListener implements ControlListener {
   public void controlEvent(ControlEvent _event) {
+    
     if (_event.isController()) {
       
       //if (_gui.consoleDebug()) println(_event);
@@ -781,6 +791,8 @@ class relayToggleListener implements ControlListener {
          
          saveJSONObject(_gui.serializerjson, "data/alpheny.json");
 
+         println(" relay Toggle. " + " | " + round(_event.getController().getValue()));
+           
       }
       catch(Exception e) {}
       
@@ -801,29 +813,35 @@ class relayRangeListener implements ControlListener {
       
       //if (!_gui.isActive()) {
         
-         try {
+      try {
             //JSONObject jrangeRelay = _gui.serializerjson.getJSONObject("rangeRelay");
             //jrangeRelay.setInt("value", int(_event.getController().getValue()));
             //_event.getController().setValue(round(jrangeRelay.getInt("value")));
-         } 
-         catch (Exception E) {           
-            try {
+            
+            //if (!_gui._audio.isPlaying()) onRangeTimedEventGenerator();
+            
+      } 
+      catch (Exception E) {           
+        try {
               //JSONObject jrangeRelay = new JSONObject();
               //jrangeRelay.setInt("value", int(_event.getController().getValue()));
             
               //_gui.serializerjson.setJSONObject("rangeRelay", jrangeRelay);
-            }
-            catch (Exception _E) {}
-         }
-      
-        try {
-           //saveJSONObject(_gui.serializerjson, "data/alpheny.json");
         }
-        catch (Exception E) {}
+        catch (Exception _E) {}
+      }
+      
+      println(" relay Range. " + " | " + round(_event.getController().getValue()));
+      
+      try {
+           //saveJSONObject(_gui.serializerjson, "data/alpheny.json");
+      }
+      catch (Exception E) {}
    
       //}  
                
-      //if (_gui._audio.isPlaying()) _driver.write(_event.getController().getId(), _event.getController().getArrayValue(0) > _gui._audio._player.position() &  _event.getController().getArrayValue(1) < _gui._audio._player.position());
+      //if (_gui._audio.isPlaying()) 
+        //_driver.write(_event.getController().getId(), _event.getController().getArrayValue(0) > _gui._audio._player.position() &  _event.getController().getArrayValue(1) < _gui._audio._player.position());
       
       
     }
@@ -859,19 +877,23 @@ void onRangeTimedEventGenerator() {
                
                //if (((Toggle)(_gui._gui.getController("relayToggle" + relay))).getState() != jrangeRelay.getBoolean(str(_position))) 
                  //((Slider2D)(_gui._gui.getController("scaleSlider2D"))).setArrayValue(new float[] {_position, relay});
-               
-               if ((boolean)((Toggle)(_gui._gui.getController("relayToggle" + relay))).getState());
-                 _gui.dong[_position][relay].update();
-               
-               if (((Toggle)(_gui._gui.getController("relayToggle" + relay))).getState() != jrangeRelay.getBoolean(str(_position)))
-                 ((Toggle)(_gui._gui.getController("relayToggle" + relay))).setState(jrangeRelay.getBoolean(str(_position)));
 
+               //if ((boolean)((Toggle)(_gui._gui.getController("relayToggle" + relay))).getState() || jrangeRelay.getBoolean(str(_position)))
+               if (jrangeRelay.getBoolean(str(_position))) _gui.dong[_position][relay].update();
+                 
+               //((Toggle)(_gui._gui.getController("relayToggle" + relay))).setState(jrangeRelay.getJSONObject(str(_position)) != null);
+               
+               //if (((Toggle)(_gui._gui.getController("relayToggle" + relay))).getState() != jrangeRelay.getBoolean(str(_position)))
+               ((Toggle)(_gui._gui.getController("relayToggle" + relay))).setState(jrangeRelay.getBoolean(str(_position)));
+                 
+               //println(" relay Toggle . " + " | " + round(_gui._gui.getController("rangeRelay").getValue()) + " | " + jrangeRelay.getBoolean(str(_position)));
+           
              }
              catch (Exception E) {};
              
            }
        
-           //println(" range relay . " + " | " + round(_gui._gui.getController("rangeRelay").getValue()));
+           println(" timed Event . " + " | " + round(_gui._gui.getController("rangeRelay").getValue()));
            
 }
 

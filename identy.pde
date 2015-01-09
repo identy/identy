@@ -9,7 +9,18 @@
  *
  */
 
-import ketai.ui.*;
+// processing.*;
+//import processing.opengl.*;
+//import processing.data;
+
+//import org.json.*; 
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+
+
+//import java.awt.Frame;
+
+// import ketai.ui.*;
 
 // driver :: Mqtt
 driverMqtt _driverMqtt;
@@ -23,18 +34,19 @@ gui _gui;
 
 void setup() {
  
-  orientation(LANDSCAPE);
+  //orientation(LANDSCAPE);
+
   //size(800, 600, P3D) colorMode(HSB) frameRate(30);
-  size(800, 500, P3D);
+  //size(600, 400, P3D);
   
-//    smooth();
+  size(800, 500, OPENGL);
+  H.init(this).background(#202020).autoClear(true);
+  
+  smooth();
+    
 //    lights();
-//    
-//      noStroke();
-      
-  //cursor(CROSS);
-  
-  //H.init(this).background(#202020).autoClear(true);
+//    noStroke();
+//    cursor(CROSS);
   
   _driverMqtt = new driverMqtt(this);
   //_driverMqtt.setup();
@@ -60,7 +72,6 @@ void draw() {
 }
 
 void stop() {
-  
   _gui.close();
   _driverMqtt.close();
   //_driver.close();
@@ -68,6 +79,7 @@ void stop() {
 }
 
 void exit(){
+  this.stop();
   super.exit();
 }  
 
@@ -102,4 +114,5 @@ void keyPressed() {
 
 }
 
-void mouseMoved() { }
+void mouseMoved() {}
+

@@ -1,9 +1,26 @@
 {
-  "relayToggle7": {"1": true},
-  "relayToggle6": {"1": true},
-  "relayToggle5": {"1": true},
+  "relayToggle7": {
+    "1": true,
+    "0": false,
+    "6": false,
+    "5": true,
+    "4": false
+  },
+  "relayToggle6": {
+    "1": true,
+    "0": false,
+    "6": false,
+    "5": false,
+    "4": false
+  },
+  "relayToggle5": {
+    "3": true,
+    "2": true,
+    "1": true,
+    "0": false
+  },
   "font": "Fonts/KaiTi-30.vlw",
-  "debug": false,
+  "debug": true,
   "rangeRelay": {
     "range0": 0,
     "range1": 9
@@ -11,11 +28,39 @@
   "environment": "Objects/cassini.obj",
   "sound": "Audio/soft.mp3",
   "background": "back.png",
-  "relayToggle0": {"1": true},
+  "relayToggle0": {
+    "1": true,
+    "0": false
+  },
   "font.title": "Fonts/Moire-Light-48.vlw",
-  "relayToggle3": {"1": true},
-  "relayToggle4": {"1": true},
-  "relayToggle1": {"1": true},
-  "relayToggle2": {"1": true},
-  "mute": true
+  "relayToggle3": {
+    "3": false,
+    "2": true,
+    "1": true,
+    "0": false,
+    "6": false,
+    "5": true,
+    "4": false
+  },
+  "relayToggle4": {
+    "1": true,
+    "0": false,
+    "6": false,
+    "5": true,
+    "4": false
+  },
+  "relayToggle1": {
+    "3": true,
+    "2": true,
+    "1": false,
+    "0": false,
+    "4": false
+  },
+  "relayToggle2": {
+    "3": true,
+    "2": false,
+    "1": true,
+    "0": false
+  },
+  "mute": false
 }

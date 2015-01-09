@@ -13,8 +13,8 @@ class environment
    
    PShader nebula;
    
-   PImage _label;
-   PShape _can;
+   //PImage _label;
+   //PShape _can;
 
    private PApplet context;
 
@@ -23,9 +23,9 @@ class environment
     context = parent;
   }
  
-  environment(String s, PApplet parent)
+  environment(String name, PApplet parent)
   {
-    name = s;
+    this.name = name;
     context = parent;
   }
 
@@ -47,11 +47,11 @@ class environment
  
  //textureMode(NORMAL);
  
-    if (name != "_environment")
-      model = loadShape(name);
+    //if (name != "_environment")
+      //model = loadShape(name);
     
-    _label = loadImage("tree.jpg");
-    _can = can(100, 200, 32, _label);
+    //_label = loadImage("tree.jpg");
+    //_can = can(100, 200, 32, _label);
   
     nebula = loadShader("nebula.glsl");
     nebula.set("resolution", float(width), float(height));
@@ -121,8 +121,8 @@ class Dong {
 
   Dong() {
     float f= random(-PI, PI);
-    x = cos(f)*random(100, 150);
-    y = sin(f)*random(100, 150);
+    x = cos(f)*random(80, 140);
+    y = sin(f)*random(80, 140);
     s0 = random(2, 10);
   }
 
@@ -134,4 +134,5 @@ class Dong {
   void update() {
     s1 = 50;
   }
+  
 }
